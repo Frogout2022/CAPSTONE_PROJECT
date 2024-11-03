@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".actividades.actividades.admin.MantenimientoLosas_Activity">
+
+    <LinearLayout
+        android:layout_width="352dp"
+        android:layout_height="401dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="44dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MANTENIMIENTO DE LOSAS"
+            android:textAlignment="center"
+            android:textColor="#FFC107"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="245dp"
+            android:layout_height="43dp"
+            android:text="Seleccione una losa:"
+            android:textStyle="italic" />
+
+        <Spinner
+            android:id="@+id/spnListarLosas_MngAdmin"
+            android:layout_width="295dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="En mantenimiento:" />
+
+        <RadioGroup
+            android:id="@+id/rg_nmgLosas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtn_si_mngLosas"
+                android:layout_width="161dp"
+                android:layout_height="wrap_content"
+                android:text="SÍ" />
+
+            <RadioButton
+                android:id="@+id/rbtn_no_mngLosas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NO" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PRECIO:" />
+
+        <EditText
+            android:id="@+id/txtPrecio_AdminLosas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/txtHorario_AdminLosas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HORARIO:" />
+
+        <Button
+            android:id="@+id/btnGuardar_AdminLosas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GUARDAR" />
+
+        <Button
+            android:id="@+id/btnSalir_ManteLosas_Admin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SALIR" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
