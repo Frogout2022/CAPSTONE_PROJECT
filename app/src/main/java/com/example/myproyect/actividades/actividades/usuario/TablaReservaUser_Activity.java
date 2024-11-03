@@ -184,57 +184,62 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
     }
     private void reservar(){
-        //PROCESO DE RESERVA EN BD
 
-        cantidadReservas = listaChkS.size();
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        /*
+        {
+            //PROCESO DE RESERVA EN BD
 
-        String msg = null;
-        List<String> lista = Fecha.getFechas();
-        String tabla = getIntent().getStringExtra("tabla");
+            cantidadReservas = listaChkS.size();
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String msg = null;
+            List<String> lista = Fecha.getFechas();
+            String tabla = getIntent().getStringExtra("tabla");
 
 
-        int[][] casos = {
-                {0, 1, 2},     // Casos 0, 1, 2
-                {3, 4, 5},     // Casos 3, 4, 5
-                {6, 7, 8},     // Casos 6, 7, 8
-                {9, 10, 11},   // Casos 9, 10, 11
-                {12, 13, 14},  // Casos 12, 13, 14
-                {15, 16, 17}   // Casos 15, 16, 17
-        };
+            int[][] casos = {
+                    {0, 1, 2},     // Casos 0, 1, 2
+                    {3, 4, 5},     // Casos 3, 4, 5
+                    {6, 7, 8},     // Casos 6, 7, 8
+                    {9, 10, 11},   // Casos 9, 10, 11
+                    {12, 13, 14},  // Casos 12, 13, 14
+                    {15, 16, 17}   // Casos 15, 16, 17
+            };
 
-        for (int i = 0; i < listaChkS.size(); i++) {
-            int numOrden = listaChkS.get(i);
-            int grupo = -1;
-            String dia;
+            for (int i = 0; i < listaChkS.size(); i++) {
+                int numOrden = listaChkS.get(i);
+                int grupo = -1;
+                String dia;
 
-            // Determinar el grupo al que pertenece numOrden
-            for (int j = 0; j < casos.length; j++) {
-                if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
-                    grupo = j;
-                    break;
+                // Determinar el grupo al que pertenece numOrden
+                for (int j = 0; j < casos.length; j++) {
+                    if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
+                        grupo = j;
+                        break;
+                    }
+                }
+
+                if (grupo != -1) {
+                    dia = lista.get(grupo);
+                    int hora = 15 + ((numOrden - grupo * 3) * 2);
+
+                    if (listaSemanal.get(i).getArrayDni()[1] != null) {
+                        //verificar disponibilidad en tiempo real
+                        msg = "Hora selecciona ya OCUPADA";
+
+                    } else {
+                        //insertar reserva
+                        msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
+                    }
                 }
             }
 
-            if (grupo != -1) {
-                dia = lista.get(grupo);
-                int hora = 15 + ((numOrden - grupo * 3) * 2);
 
-                if(listaSemanal.get(i).getArrayDni()[1] != null){
-                    //verificar disponibilidad en tiempo real
-                    msg = "Hora selecciona ya OCUPADA";
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            updateChk(); //actualizar vista
 
-                }else{
-                    //insertar reserva
-                    msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
-                }
-            }
-        }
-
-
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        updateChk(); //actualizar vista
+        }*/
 
         Intent iPago= new Intent(this, PagoActivity.class);
         startActivity(iPago);
