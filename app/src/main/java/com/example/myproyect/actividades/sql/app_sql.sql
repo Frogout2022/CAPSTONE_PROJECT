@@ -159,6 +159,12 @@ foreign key(id_losa) references tb_losa(id)
 );
 
 
+create procedure sp_EditarLosas(#-----------------------
+Id_losa char(8) ,
+mante boolean,
+precio decimal)
+update tb_losa set mantenimiento=mante, precio_hora=precio where id=Id_losa;
+
 #----SP TABLA RESERVA--------
 DELIMITER //
 CREATE PROCEDURE LLenarTablaReservas(in id_cancha int)
