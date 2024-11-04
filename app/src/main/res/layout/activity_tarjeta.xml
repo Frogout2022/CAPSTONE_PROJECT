@@ -35,24 +35,26 @@
             android:ems="10"
             android:hint="Nombre"
             android:inputType="text"
+            android:nextFocusForward="@id/txtApellidoPAY"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtMesAnoPAY" />
+            app:layout_constraintTop_toBottomOf="@+id/txtVencimientoPAY" />
 
         <EditText
             android:id="@+id/txtNumTarjetaPAY"
-            android:layout_width="254dp"
+            android:layout_width="265dp"
             android:layout_height="48dp"
             android:layout_marginStart="80dp"
             android:layout_marginTop="224dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:hint="Número de Tarjeta"
-            android:background="@android:color/transparent"
+            android:nextFocusForward="@id/txtVencimientoPAY"
             android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/txtMesAnoPAY"
+            android:id="@+id/txtVencimientoPAY"
             android:layout_width="110dp"
             android:layout_height="48dp"
             android:layout_marginStart="80dp"
@@ -61,6 +63,7 @@
             android:ems="10"
             android:hint="MM/AA"
             android:inputType="number"
+            android:nextFocusForward="@+id/txtCvvPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />
 
@@ -74,7 +77,8 @@
             android:ems="10"
             android:hint="CVV"
             android:inputType="number"
-            app:layout_constraintStart_toEndOf="@+id/txtMesAnoPAY"
+            android:nextFocusForward="@+id/txtNomPAY"
+            app:layout_constraintStart_toEndOf="@+id/txtVencimientoPAY"
             app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />
 
         <EditText
@@ -87,6 +91,7 @@
             android:ems="10"
             android:hint="Email"
             android:inputType="textEmailAddress"
+            android:nextFocusForward="@+id/txtNumTarjetaPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtApellidoPAY" />
 
@@ -98,6 +103,7 @@
             android:layout_marginTop="20dp"
             android:text="Pagar S/ 0.00"
             android:textAlignment="center"
+            android:background="@android:color/transparent"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -114,8 +120,18 @@
             android:ems="10"
             android:hint="Apellido"
             android:inputType="text"
+            android:nextFocusForward="@+id/txtEmailPAY"
             app:layout_constraintStart_toEndOf="@+id/txtNomPAY"
             app:layout_constraintTop_toBottomOf="@+id/txtCvvPAY" />
+
+        <TextView
+            android:id="@+id/btnSalirPAY"
+            android:layout_width="49dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

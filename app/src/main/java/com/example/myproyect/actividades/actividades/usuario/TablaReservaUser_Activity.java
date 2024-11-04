@@ -17,6 +17,7 @@ import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.usuario.pago.PagoActivity;
 import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.entidades.Usuario;
@@ -240,10 +241,14 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
             updateChk(); //actualizar vista
 
         }*/
+        if (cantidadPagar==0){
+            Toast.makeText(TablaReservaUser_Activity.this, "Elija almenos un horario", Toast.LENGTH_SHORT).show();
+        }else{
+            Intent iPago= new Intent(this, PagoActivity.class);
+            iPago.putExtra("MontoPagar",cantidadPagar);
+            startActivity(iPago);
+        }
 
-        Intent iPago= new Intent(this, PagoActivity.class);
-        iPago.putExtra("MontoPagar",cantidadPagar);
-        startActivity(iPago);
 
 
     }
