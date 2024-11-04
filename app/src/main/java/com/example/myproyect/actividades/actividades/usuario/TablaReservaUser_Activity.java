@@ -242,6 +242,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         }*/
 
         Intent iPago= new Intent(this, PagoActivity.class);
+        iPago.putExtra("MontoPagar",cantidadPagar);
         startActivity(iPago);
 
 

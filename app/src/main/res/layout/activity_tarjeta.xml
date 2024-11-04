@@ -26,20 +26,20 @@
             app:srcCompat="@drawable/pagar" />
 
         <EditText
-            android:id="@+id/editTextText5"
-            android:layout_width="126dp"
+            android:id="@+id/txtNomPAY"
+            android:layout_width="108dp"
             android:layout_height="48dp"
             android:layout_marginStart="80dp"
             android:layout_marginTop="4dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:hint="Nombre"
             android:inputType="text"
-            android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber5" />
+            app:layout_constraintTop_toBottomOf="@+id/txtMesAnoPAY" />
 
         <EditText
-            android:id="@+id/editTextNumber4"
+            android:id="@+id/txtNumTarjetaPAY"
             android:layout_width="254dp"
             android:layout_height="48dp"
             android:layout_marginStart="80dp"
@@ -52,46 +52,46 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextNumber5"
-            android:layout_width="127dp"
+            android:id="@+id/txtMesAnoPAY"
+            android:layout_width="110dp"
             android:layout_height="48dp"
             android:layout_marginStart="80dp"
             android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:hint="MM/AA"
             android:inputType="number"
-            android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber4" />
+            app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />
 
         <EditText
-            android:id="@+id/editTextNumber6"
+            android:id="@+id/txtCvvPAY"
             android:layout_width="98dp"
             android:layout_height="48dp"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="44dp"
             android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:hint="CVV"
             android:inputType="number"
-            android:background="@android:color/transparent"
-            app:layout_constraintStart_toEndOf="@+id/editTextNumber5"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber4" />
+            app:layout_constraintStart_toEndOf="@+id/txtMesAnoPAY"
+            app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress2"
+            android:id="@+id/txtEmailPAY"
             android:layout_width="269dp"
             android:layout_height="48dp"
             android:layout_marginStart="80dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="4dp"
             android:background="@android:color/transparent"
             android:ems="10"
             android:hint="Email"
             android:inputType="textEmailAddress"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText6" />
+            app:layout_constraintTop_toBottomOf="@+id/txtApellidoPAY" />
 
         <TextView
-            android:id="@+id/textView26"
+            android:id="@+id/txtvPagarPAY"
             android:layout_width="312dp"
             android:layout_height="34dp"
             android:layout_marginStart="36dp"
@@ -102,20 +102,20 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress2" />
+            app:layout_constraintTop_toBottomOf="@+id/txtEmailPAY" />
 
         <EditText
-            android:id="@+id/editTextText6"
-            android:layout_width="112dp"
+            android:id="@+id/txtApellidoPAY"
+            android:layout_width="113dp"
             android:layout_height="48dp"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="44dp"
             android:layout_marginTop="4dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:hint="Apellido"
-            android:background="@android:color/transparent"
             android:inputType="text"
-            app:layout_constraintStart_toEndOf="@+id/editTextText5"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber6" />
+            app:layout_constraintStart_toEndOf="@+id/txtNomPAY"
+            app:layout_constraintTop_toBottomOf="@+id/txtCvvPAY" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

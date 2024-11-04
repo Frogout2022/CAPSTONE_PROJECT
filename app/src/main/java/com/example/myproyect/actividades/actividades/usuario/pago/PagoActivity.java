@@ -53,7 +53,11 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void ingresarTarjeta() {
+        Intent retorno = getIntent();
+        Double cantidadPagar = retorno.getDoubleExtra("MontoPagar",0.0);
+
         Intent iTarjeta= new Intent(this, Tarjeta_Activity.class);
+        iTarjeta.putExtra("MontoPagar", cantidadPagar);
         startActivity(iTarjeta);
         finish();
     }
