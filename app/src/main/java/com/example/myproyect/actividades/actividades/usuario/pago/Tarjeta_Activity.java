@@ -114,11 +114,10 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
                             txtVencimiento.setText(venci.substring(0,2)+"/"+venci.substring(2));
                             //txtCvv.requestFocus();
                         }
-
                     }else {
                         //txtCvv.requestFocus();
-                    }
 
+                    }
                 }
             }
         });
@@ -267,7 +266,6 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     private void reservarBD(){
 
         {
-
             //PROCESO DE RESERVA EN BD
 
             ArrayList<Reserva> listaSemanal = TablaReservaUser_Activity.listaSemanal;
@@ -318,8 +316,8 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
                     }
                 }
             }
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
 
 
             Intent intent = new Intent(this, BienvenidoActivity.class);

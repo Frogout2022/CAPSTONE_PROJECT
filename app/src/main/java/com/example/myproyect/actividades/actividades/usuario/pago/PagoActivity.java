@@ -86,7 +86,11 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void ingresarYape() {
+        Intent retorno = getIntent();
+        Double cantidadPagar = retorno.getDoubleExtra("MontoPagar",0.0);
+
         Intent iYape = new Intent(this, Yape_Activity.class);
+        iYape.putExtra("MontoPagar", cantidadPagar);
         startActivity(iYape);
         finish();
     }
