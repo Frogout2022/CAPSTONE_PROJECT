@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myproyect.R;
@@ -15,42 +18,61 @@ import com.example.myproyect.actividades.actividades.usuario.pago.Tarjeta_Activi
 import com.example.myproyect.actividades.actividades.usuario.pago.Yape_Activity;
 
 public class PagoActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btnYape, btnTarjeta, btnRegresar;
+    TextView txtContinuar, txtvSalir;
+    RadioGroup rgOpcion;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pago);
+        asignarReferencias();
 
-        //asociacion de la parte
-        //logica con la grafica
-        //button de tipo de transacion
-        btnTarjeta = findViewById(R.id.biepagBtnTarjeta);
-        btnYape = findViewById(R.id.biepagBtnYape);
-        //button de  regresar
-        btnRegresar = findViewById(R.id.biepagBtnReg);
-        //asciar el evento on click a los controles
-        btnTarjeta.setOnClickListener(this);
-        btnYape.setOnClickListener(this);
-        btnRegresar.setOnClickListener(this);
+
     }
+    private void asignarReferencias(){
+        rgOpcion = findViewById(R.id.rgPay);
+        txtContinuar = findViewById(R.id.txtvContinuarPay);
+        txtContinuar.setOnClickListener(view -> {
+            continuar();
+        });
+        txtvSalir = findViewById(R.id.txtvSalirPay);
+        txtvSalir.setOnClickListener(view -> {
+            regresarMenu();
+        });
+    }
+    private void continuar(){
+        rgOpcion.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i){
+                case R.id.rbTarjetaPay:
 
+                    break;
+                case R.id.rbYape:
+
+                    break;
+
+            }
+        });
+        int selectedId = rgOpcion.getCheckedRadioButtonId();
+        if(selectedId !=-1){
+            RadioButton selectedRadioButton = findViewById(selectedId);
+            int id = selectedRadioButton.getId();
+            if(id == R.id.rbTarjetaPay) {
+                ingresarTarjeta();
+            }
+            if(id == R.id.rbYape){
+                ingresarYape();
+            }
+
+        }else{
+            Toast.makeText(this, "Ninguna opción seleccionada", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.biepagBtnTarjeta:
-                ingresarTarjeta();
-                break;
 
-            case R.id.biepagBtnYape:
-                ingresarYape();
-                break;
-            case R.id.biepagBtnReg:
-                regresarMenu();
-                break;
-        }
     }
 
     private void ingresarTarjeta() {
