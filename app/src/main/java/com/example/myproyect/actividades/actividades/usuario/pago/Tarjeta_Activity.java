@@ -2,32 +2,34 @@ package com.example.myproyect.actividades.actividades.usuario.pago;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.List;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.ConsultarReservaUser_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
-import com.example.myproyect.actividades.clases.MostrarMensaje;
+import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.entidades.Reserva;
+import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 
 public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickListener {
 
     EditText txtNombre, txtApellido, txtCorreo, txtNumeroTarjeta, txtCvv, txtVencimiento;
     TextView txtvMontoPago, txtvSalir;
+    Button btnTest;
 
 
     @Override
@@ -239,6 +241,11 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
             regresar();
         });
 
+        btnTest = findViewById(R.id.btnTestRsvPay);
+        btnTest.setOnClickListener(view -> {
+            reservarBD();
+        });
+
     }
     private void validarPago(){
         String num, fecha, cvv, nom, ape,email;
@@ -258,13 +265,67 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void reservarBD(){
+
         {
 
+            //PROCESO DE RESERVA EN BD
 
-        }
+            ArrayList<Reserva> listaSemanal = TablaReservaUser_Activity.listaSemanal;
+            List<Integer> listaChkS = TablaReservaUser_Activity.listaChkS;
+
+            String tabla = TablaReservaUser_Activity.tabla;
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String msg = null;
+            List<String> lista = Fecha.getFechas();
+
+
+            int[][] casos = {
+                    {0, 1, 2},     // Casos 0, 1, 2
+                    {3, 4, 5},     // Casos 3, 4, 5
+                    {6, 7, 8},     // Casos 6, 7, 8
+                    {9, 10, 11},   // Casos 9, 10, 11
+                    {12, 13, 14},  // Casos 12, 13, 14
+                    {15, 16, 17}   // Casos 15, 16, 17
+            };
+
+            for (int i = 0; i < listaChkS.size(); i++) {
+                int numOrden = listaChkS.get(i);
+                int grupo = -1;
+                String dia;
+
+                // Determinar el grupo al que pertenece numOrden
+                for (int j = 0; j < casos.length; j++) {
+                    if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
+                        grupo = j;
+                        break;
+                    }
+                }
+
+                if (grupo != -1) {
+                    dia = lista.get(grupo);
+                    int hora = 15 + ((numOrden - grupo * 3) * 2);
+
+                    if (listaSemanal.get(i).getArrayDni()[1] != null) {
+                        //verificar disponibilidad en tiempo real
+                        msg = "Hora selecciona ya OCUPADA";
+
+                    } else {
+                        //insertar reserva
+                        msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
+                    }
+                }
+            }
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            }
+
+
+            Intent intent = new Intent(this, BienvenidoActivity.class);
+            startActivity(intent);
+            this.finish();
+
     }
-
-
-
 
 }

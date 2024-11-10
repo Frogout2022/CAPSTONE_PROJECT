@@ -406,4 +406,14 @@
         app:layout_constraintStart_toEndOf="@+id/btnReservarTablaUser"
         app:layout_constraintTop_toBottomOf="@+id/tabla2_reserva" />
 
+    <Button
+        android:id="@+id/btnTestReservar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="37dp"
+        android:text="R"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCantidadPagar_TRU" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,8 +10,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="377dp"
         android:layout_height="638dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -48,8 +52,8 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:hint="Número de Tarjeta"
-            android:nextFocusForward="@id/txtVencimientoPAY"
             android:inputType="number"
+            android:nextFocusForward="@id/txtVencimientoPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,9 +105,9 @@
             android:layout_height="34dp"
             android:layout_marginStart="36dp"
             android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
             android:text="Pagar S/ 0.00"
             android:textAlignment="center"
-            android:background="@android:color/transparent"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -132,6 +136,16 @@
             android:layout_marginEnd="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnTestRsvPay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="84dp"
+            android:text="testR"
+            app:layout_constraintStart_toStartOf="@+id/txtvPagarPAY"
+            app:layout_constraintTop_toBottomOf="@+id/txtvPagarPAY" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

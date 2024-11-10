@@ -45,13 +45,13 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     int cantidadReservas=0;
     Usuario usuario = Login_Activity.getUsuario();
 
-    ArrayList<Reserva> listaSemanal = new ArrayList<>();
+    public static ArrayList<Reserva> listaSemanal = new ArrayList<>();
 
-    Button btnReservar,btnVolver;
+    Button btnReservar,btnVolver, btnTest;
     List<CheckBox> listaChk = new ArrayList<>();
-    List<Integer> listaChkS = new ArrayList<>();
+     public static List<Integer> listaChkS = new ArrayList<>();
     List<TextView> listaTxtv = new ArrayList<>();
-
+    public static String tabla;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         List<CanchaDeportiva> lista = new ArrayList<>();
         lista = DAO_Losa.listarLosas();
-        String tabla = getIntent().getStringExtra("tabla");
+        tabla = getIntent().getStringExtra("tabla");
         int i=0;
         for(CanchaDeportiva canchaDeportiva : lista){
             if(canchaDeportiva.getNombre_tabla().equals(tabla)) break;
@@ -166,6 +166,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
                             int color = ContextCompat.getColor(TablaReservaUser_Activity.this, R.color.white);
                             checkBox.setTextColor(color); // Establecer el color del texto utilizando un recurso de color
                             cantidadPagar -= precio_hora;
+
                             if(listaChkS.size()!=0){//buscar y borrar de la lista
                                 for(int j=0; j<listaChkS.size(); j++){
                                     if(listaChkS.get(j) == i){
@@ -186,7 +187,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     }
     private void reservar(){
 
-        /*
+/*
         {
             //PROCESO DE RESERVA EN BD
 
@@ -241,12 +242,15 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
             updateChk(); //actualizar vista
 
         }*/
+
+
         if (cantidadPagar==0){
             Toast.makeText(TablaReservaUser_Activity.this, "Elija almenos un horario", Toast.LENGTH_SHORT).show();
         }else{
             Intent iPago= new Intent(this, PagoActivity.class);
             iPago.putExtra("MontoPagar",cantidadPagar);
             startActivity(iPago);
+            this.finish();
         }
 
 
@@ -277,9 +281,69 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
             reservar();
         });
 
+        btnTest = findViewById(R.id.btnTestReservar);
+        btnTest.setOnClickListener(view -> {
+            testReservar();
+        });
         referenciasChk();
 
 
+    }
+    private void testReservar(){
+        {
+            //PROCESO DE RESERVA EN BD
+
+            cantidadReservas = listaChkS.size();
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String msg = null;
+            List<String> lista = Fecha.getFechas();
+            String tabla = getIntent().getStringExtra("tabla");
+
+
+            int[][] casos = {
+                    {0, 1, 2},     // Casos 0, 1, 2
+                    {3, 4, 5},     // Casos 3, 4, 5
+                    {6, 7, 8},     // Casos 6, 7, 8
+                    {9, 10, 11},   // Casos 9, 10, 11
+                    {12, 13, 14},  // Casos 12, 13, 14
+                    {15, 16, 17}   // Casos 15, 16, 17
+            };
+
+            for (int i = 0; i < listaChkS.size(); i++) {
+                int numOrden = listaChkS.get(i);
+                int grupo = -1;
+                String dia;
+
+                // Determinar el grupo al que pertenece numOrden
+                for (int j = 0; j < casos.length; j++) {
+                    if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
+                        grupo = j;
+                        break;
+                    }
+                }
+
+                if (grupo != -1) {
+                    dia = lista.get(grupo);
+                    int hora = 15 + ((numOrden - grupo * 3) * 2);
+
+                    if (listaSemanal.get(i).getArrayDni()[1] != null) {
+                        //verificar disponibilidad en tiempo real
+                        msg = "Hora selecciona ya OCUPADA";
+
+                    } else {
+                        //insertar reserva
+                        msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
+                    }
+                }
+            }
+
+
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            updateChk(); //actualizar vista
+
+        }
     }
     private void referenciasChk(){
         chkL1 = findViewById(R.id.chkLunes_3pm_TRU);//0

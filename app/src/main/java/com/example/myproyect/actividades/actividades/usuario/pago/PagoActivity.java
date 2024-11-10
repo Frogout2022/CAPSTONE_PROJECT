@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.actividades.usuario.pago.Tarjeta_Activity;
 import com.example.myproyect.actividades.actividades.usuario.pago.Yape_Activity;
 
@@ -71,9 +72,15 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void regresarMenu() {
-        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+/*
+        Intent iBienvenido = new Intent(this, TablaReservaUser_Activity.class);
         startActivity(iBienvenido);
         finish();
+
+ */
+
+
+       onBackPressed();
     }
 
     private void ingresarYapeoTarjeta() {
