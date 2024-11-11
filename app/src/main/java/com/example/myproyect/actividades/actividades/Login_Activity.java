@@ -12,6 +12,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.myproyect.BuildConfig;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.admin.MenuAdmin_Activity;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
@@ -29,7 +31,7 @@ public class Login_Activity extends AppCompatActivity {
 
     EditText txtCorreo, txtClave, txtHola;
     CheckBox checkRecordar;
-    TextView lblRegistrate, lblRecuperarPass;
+    TextView lblRegistrate, lblRecuperarPass, lblVersion;
     Button btnIngresar, btnSalir;
 
     MostrarMensaje mostrarMensaje = new MostrarMensaje();
@@ -48,12 +50,13 @@ public class Login_Activity extends AppCompatActivity {
         txtClave.setText(null);
         txtCorreo.setText(null);
         txtCorreo.setText(null);
-
+        lblVersion.setText("v"+BuildConfig.VERSION_NAME);
         App.loadtDatos(this);
         validarRS();
 
     }
     private void asignarReferencias(){
+        lblVersion = findViewById(R.id.txtVersionLogin);
         txtCorreo = findViewById(R.id.logTxtCorreo);
         txtClave = findViewById(R.id.logTxtClave);
         checkRecordar = findViewById(R.id.logChkRecordar);

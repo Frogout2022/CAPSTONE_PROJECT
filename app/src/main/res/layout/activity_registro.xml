@@ -90,10 +90,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:autofillHints=""
-            android:hint="@string/regTxtClave"
+            android:hint="Contraseña"
             android:inputType="textPassword"
             android:maxLength="50"
             android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/regTxtClave2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Repetir Contraseña"
+            android:inputType="textPassword" />
 
         <LinearLayout
             android:layout_width="wrap_content"

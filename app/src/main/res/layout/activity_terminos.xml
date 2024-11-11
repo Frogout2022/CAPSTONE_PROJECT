@@ -34,13 +34,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/termTitTerminos"
                 android:gravity="center_horizontal"
+                android:text="@string/termTitTerminos"
                 android:textColor="@color/termTitTerminos"
-                android:textSize="25dp"/>
+                android:textSize="25dp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

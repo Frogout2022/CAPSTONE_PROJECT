@@ -121,8 +121,23 @@
             android:layout_height="32dp"
             android:layout_marginBottom="5dp"
             android:gravity="center_horizontal|bottom"
-            android:text="Cancha Facil ©" />
+            android:text="Cancha Facil ©2024" />
+
+        <TextView
+            android:id="@+id/txtVersionLogin"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="v1.0"
+            android:textAlignment="textEnd" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
