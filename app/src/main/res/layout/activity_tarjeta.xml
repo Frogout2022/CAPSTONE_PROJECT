@@ -146,7 +146,8 @@
             android:text="TEST PAGO"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/txtvPagarPAY"
-            app:layout_constraintTop_toBottomOf="@+id/txtvPagarPAY" />
+            app:layout_constraintTop_toBottomOf="@+id/txtvPagarPAY"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

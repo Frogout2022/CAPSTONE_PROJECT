@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.clases.Reservar;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
@@ -81,6 +83,7 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
         String tele = txtTelefono.getText().toString();
         if (!tele.isEmpty()) {
             passTele = tele.matches("\\d{9}");
+            if(tele.matches("\\d{3} \\d{3} \\d{3}")) return true;
             if (!passTele) {
                 Toast.makeText(this, "Número de telefono no valido", Toast.LENGTH_SHORT).show();
                 txtTelefono.setText("");
@@ -123,73 +126,19 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
         if(txtCodigo.getText().toString().isEmpty() || txtTelefono.getText().toString().isEmpty()){
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else{
-
             if(validarCodigo() && validarTelefono()){
                 reservarBD();
                 // regresa al menu principal
                 Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
                 startActivity(iBienvenido);
                 finish();
-            }else{
-                Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
-            }
+            }//else Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
 
         }
-
     }
     private void reservarBD(){
-        {
-            //PROCESO DE RESERVA EN BD
+        String msg = Reservar.realizar();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
-            ArrayList<Reserva> listaSemanal = TablaReservaUser_Activity.listaSemanal;
-            List<Integer> listaChkS = TablaReservaUser_Activity.listaChkS;
-
-            String tabla = TablaReservaUser_Activity.tabla;
-
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            String msg = null;
-            List<String> lista = Fecha.getFechas();
-
-
-            int[][] casos = {
-                    {0, 1, 2},     // Casos 0, 1, 2
-                    {3, 4, 5},     // Casos 3, 4, 5
-                    {6, 7, 8},     // Casos 6, 7, 8
-                    {9, 10, 11},   // Casos 9, 10, 11
-                    {12, 13, 14},  // Casos 12, 13, 14
-                    {15, 16, 17}   // Casos 15, 16, 17
-            };
-
-            for (int i = 0; i < listaChkS.size(); i++) {
-                int numOrden = listaChkS.get(i);
-                int grupo = -1;
-                String dia;
-
-                // Determinar el grupo al que pertenece numOrden
-                for (int j = 0; j < casos.length; j++) {
-                    if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
-                        grupo = j;
-                        break;
-                    }
-                }
-
-                if (grupo != -1) {
-                    dia = lista.get(grupo);
-                    int hora = 15 + ((numOrden - grupo * 3) * 2);
-
-                    if (listaSemanal.get(i).getArrayDni()[1] != null) {
-                        //verificar disponibilidad en tiempo real
-                        msg = "Hora selecciona ya OCUPADA";
-
-                    } else {
-                        //insertar reserva
-                        msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
-                    }
-                }
-            }
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        }
     }
 }

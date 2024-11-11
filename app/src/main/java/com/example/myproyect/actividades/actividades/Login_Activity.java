@@ -51,9 +51,20 @@ public class Login_Activity extends AppCompatActivity {
         txtCorreo.setText(null);
         txtCorreo.setText(null);
         lblVersion.setText("v"+BuildConfig.VERSION_NAME);
+        focos();
         App.loadtDatos(this);
         validarRS();
 
+    }
+    private void focos(){
+        txtClave.setOnFocusChangeListener((view, b) -> {
+            if(b){
+                //tiene foco
+                if(!txtClave.getText().toString().isEmpty()){
+                    txtClave.setText(null);
+                }
+            }
+        });
     }
     private void asignarReferencias(){
         lblVersion = findViewById(R.id.txtVersionLogin);

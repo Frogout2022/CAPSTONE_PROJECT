@@ -21,6 +21,7 @@ import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.ConsultarReservaUser_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.clases.Reservar;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
@@ -44,7 +45,6 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
         focosDeCampos();
 
-
     }
 
     @Override
@@ -52,7 +52,6 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void focosDeCampos(){
-
 
         txtNumeroTarjeta.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
@@ -213,8 +212,6 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-
-
     }
 
     private void regresar(){
@@ -256,74 +253,16 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
         if(num.isEmpty() || fecha.isEmpty() || nom.isEmpty() || ape.isEmpty() || email.isEmpty()){
             Toast.makeText(Tarjeta_Activity.this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
-        }else{
-            reservarBD();
-        }
-
-
+        }else reservarBD();
 
     }
     private void reservarBD(){
-
-        {
-            //PROCESO DE RESERVA EN BD
-
-            ArrayList<Reserva> listaSemanal = TablaReservaUser_Activity.listaSemanal;
-            List<Integer> listaChkS = TablaReservaUser_Activity.listaChkS;
-
-            String tabla = TablaReservaUser_Activity.tabla;
-
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            String msg = null;
-            List<String> lista = Fecha.getFechas();
-
-
-            int[][] casos = {
-                    {0, 1, 2},     // Casos 0, 1, 2
-                    {3, 4, 5},     // Casos 3, 4, 5
-                    {6, 7, 8},     // Casos 6, 7, 8
-                    {9, 10, 11},   // Casos 9, 10, 11
-                    {12, 13, 14},  // Casos 12, 13, 14
-                    {15, 16, 17}   // Casos 15, 16, 17
-            };
-
-            for (int i = 0; i < listaChkS.size(); i++) {
-                int numOrden = listaChkS.get(i);
-                int grupo = -1;
-                String dia;
-
-                // Determinar el grupo al que pertenece numOrden
-                for (int j = 0; j < casos.length; j++) {
-                    if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
-                        grupo = j;
-                        break;
-                    }
-                }
-
-                if (grupo != -1) {
-                    dia = lista.get(grupo);
-                    int hora = 15 + ((numOrden - grupo * 3) * 2);
-
-                    if (listaSemanal.get(i).getArrayDni()[1] != null) {
-                        //verificar disponibilidad en tiempo real
-                        msg = "Hora selecciona ya OCUPADA";
-
-                    } else {
-                        //insertar reserva
-                        msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
-                    }
-                }
-            }
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        }
-
-
-            Intent intent = new Intent(this, BienvenidoActivity.class);
-            startActivity(intent);
-            this.finish();
-
+        String msg = Reservar.realizar();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+        startActivity(iBienvenido);
+        finish();
     }
+
 
 }

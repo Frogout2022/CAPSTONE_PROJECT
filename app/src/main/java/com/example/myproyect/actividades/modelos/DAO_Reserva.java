@@ -1,5 +1,7 @@
 package com.example.myproyect.actividades.modelos;
 
+import android.util.Log;
+
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 import com.example.myproyect.actividades.entidades.Reserva;
@@ -47,6 +49,7 @@ public class DAO_Reserva {
         ConexionMySQL.cerrarConexion(cnx);
         return lista;
     }
+
     public static boolean LlenarTablaFEcha(){
         Connection cnx = ConexionMySQL.getConexion();
         Boolean b=false;
@@ -161,10 +164,12 @@ public class DAO_Reserva {
             csta.setString(4,dni); // '12345678'
 
             csta.executeUpdate();
+            //Log.d("DAO_RSV", "tabla: "+tabla+" dia: "+dia+" ,hora: "+hora_str+" dni: "+dni);
             msg="Reserva registrada correctamente";
             ConexionMySQL.cerrarConexion(cnx);
         }catch(Exception e){
             System.out.println("ERROR AC insertarRSV(): " +e);
+            Log.d("DAO_RSV", "ERROR insert: "+e);
             msg= "Error al reservar!";
         }
 

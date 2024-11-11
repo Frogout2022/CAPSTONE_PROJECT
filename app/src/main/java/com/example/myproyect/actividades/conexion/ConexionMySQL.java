@@ -10,7 +10,7 @@ public class ConexionMySQL {
         Connection conexion = null;
         try {
 
-            String url = "jdbc:mysql://milhos.kguard.org:3308/app_losjardines2";
+            String url = "jdbc:mysql://milhos.kguard.org:3308/app_canchafacil";
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(url, "root", "admin");
             System.out.println("Conexión exitosa a la base de datos.");

@@ -1,6 +1,6 @@
-#drop database app_losjardines2;
-create database if not exists app_losjardines2;
-use app_losjardines2;
+#drop database app_canchafacil;
+create database if not exists app_canchafacil;
+use app_canchafacil;
 SELECT NOW() AS fecha_hora_actual;
 SET lc_time_names = 'es_ES'; #CAMBIAR A ESPAÑOL EL IDIOMA
 
@@ -16,10 +16,10 @@ Fecha_registro datetime default current_timestamp
 
 
 insert into cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli) values
-('72673554', 'Milhos', 'Sihuay', 'mi@g.com', '123', '997653086' ),
-('70829460', 'Luiggi', 'Rebatta', 'lu@g.com', '123', '969599087' ),
-('12345677', 'Marcelo', 'Yabar', 'ma@g.com', '123', '986389628' ),
-('72647015', 'Michell', 'Del Pino', 'mi_dp@g.com', '123', '913428693');
+('72673554', 'Milhos', 'Sihuay', 'mi@gmail.com', '123', '997653086' ),
+('70829460', 'Luiggi', 'Rebatta', 'lu@gmail.com', '123', '969599087' ),
+('12345677', 'Marcelo', 'Yabar', 'ma@gmail.com', '123', '986389628' ),
+('72647015', 'Michell', 'Del Pino', 'mi_dp@gmail.com', '123', '913428693');
 
 
 create procedure sp_ListarCLI()#--------
@@ -157,13 +157,6 @@ fecha_rsv char(10) unique, #'2023-01-01'
 7pm char(8),
 foreign key(id_losa) references tb_losa(id)
 );
-
-
-create procedure sp_EditarLosas(#-----------------------
-Id_losa char(8) ,
-mante boolean,
-precio decimal)
-update tb_losa set mantenimiento=mante, precio_hora=precio where id=Id_losa;
 
 #----SP TABLA RESERVA--------
 DELIMITER //
