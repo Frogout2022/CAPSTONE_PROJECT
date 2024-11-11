@@ -56,46 +56,48 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
 
     private void  focos(){
         txtTelefono.setOnFocusChangeListener((view, b) -> {
-            if(!b) {//no tiene foco
-                boolean passTele = false;
-                String tele = txtTelefono.getText().toString();
-                if (!tele.isEmpty()) {
-                    passTele = tele.matches("\\d{9}");
-                    if (!passTele) {
-                        Toast.makeText(this, "Número de telefono no valido", Toast.LENGTH_SHORT).show();
-                        txtTelefono.setText("");
-                    }else{
-                        StringBuilder resultado = new StringBuilder();
-                        int longitud = tele.length();
-
-                        for (int i = 0; i < longitud; i++) {
-                            resultado.append(tele.charAt(i)); // Agregar el carácter actual a la nueva cadena
-                            // Agregar un espacio cada 3 caracteres, excepto después del último carácter
-                            if ((i + 1) % 3 == 0 && (i + 1) < longitud) resultado.append(" ");
-                        }
-                        txtTelefono.setText(resultado.toString());
-                    }
-                }
-            }
+            if(!b) validarTelefono();
         });
 
         txtCodigo.setOnFocusChangeListener((view, b) -> {
-            if(!b){
-                boolean passCod = false;
-                String cod = txtCodigo.getText().toString();
-
-                if(!cod.isEmpty()){
-                    passCod = cod.matches("\\d{6}");
-
-                    if(!passCod){
-                        Toast.makeText(this, "Código ingresado no valido", Toast.LENGTH_SHORT).show();
-                        txtCodigo.setText("");
-                    }
-
-                }
-            }
+            if(!b) validarCodigo();
         });
 
+    }
+    private boolean validarCodigo(){
+        boolean passCod = false;
+        String cod = txtCodigo.getText().toString();
+        if(!cod.isEmpty()) {
+            passCod = cod.matches("\\d{6}"); //true
+            if(!passCod) {
+                Toast.makeText(this, "Código ingresado no valido", Toast.LENGTH_SHORT).show();
+                txtCodigo.setText("");
+            }
+        }else passCod = false;
+        return passCod;
+    }
+    private boolean validarTelefono(){
+        boolean passTele = false;
+        String tele = txtTelefono.getText().toString();
+        if (!tele.isEmpty()) {
+            passTele = tele.matches("\\d{9}");
+            if (!passTele) {
+                Toast.makeText(this, "Número de telefono no valido", Toast.LENGTH_SHORT).show();
+                txtTelefono.setText("");
+            }else{
+                StringBuilder resultado = new StringBuilder();
+                int longitud = tele.length();
+
+                for (int i = 0; i < longitud; i++) {
+                    resultado.append(tele.charAt(i)); // Agregar el carácter actual a la nueva cadena
+                    // Agregar un espacio cada 3 caracteres, excepto después del último carácter
+                    if ((i + 1) % 3 == 0 && (i + 1) < longitud) resultado.append(" ");
+                }
+                txtTelefono.setText(resultado.toString());
+            }
+        }else passTele = false;
+
+        return passTele;
     }
 
     @Override
@@ -121,13 +123,16 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
         if(txtCodigo.getText().toString().isEmpty() || txtTelefono.getText().toString().isEmpty()){
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else{
-            // regresa al menu las 4 lozas (bienvenido)
-            reservarBD();
 
-            Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
-            startActivity(iBienvenido);
-            finish();
-
+            if(validarCodigo() && validarTelefono()){
+                reservarBD();
+                // regresa al menu principal
+                Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                startActivity(iBienvenido);
+                finish();
+            }else{
+                Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
+            }
 
         }
 

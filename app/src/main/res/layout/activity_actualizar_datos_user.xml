@@ -13,7 +13,7 @@
         android:layout_marginTop="37dp"
         android:text="ACTUALIZAR DATOS"
         android:textAlignment="center"
-        android:textColor="#FF9800"
+        android:textColor="#4CAF50"
         android:textSize="24sp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
             android:id="@+id/txtvFecha_registro_ActualizarDatosCLI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2023-10-10"
+            android:text="0000-00-00"
             android:textSize="20sp"
             android:textStyle="italic" />
 
@@ -91,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp" />
 
         <TextView
             android:id="@+id/textView19"
@@ -106,7 +107,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:minHeight="48dp" />
 
     </LinearLayout>
 
