@@ -110,10 +110,11 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
 
     private void salir(){
         Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, BienvenidoActivity.class);
-        startActivity(intent);
+        Reservar.realizar("borrar");
+        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+        startActivity(iBienvenido);
+        TablaReservaUser_Activity.preReserva = false;
         finish();
-
     }
     private void regresarpago() {
         Toast.makeText(getApplicationContext(),"El pago se verificara presencialmente", Toast.LENGTH_SHORT).show();
@@ -127,7 +128,8 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else{
             if(validarCodigo() && validarTelefono()){
-                reservarBD();
+                String msg = Reservar.realizar("aprobado"); //<--
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
                 // regresa al menu principal
                 Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
                 startActivity(iBienvenido);
@@ -135,10 +137,5 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
             }//else Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
 
         }
-    }
-    private void reservarBD(){
-        String msg = Reservar.realizar();
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
     }
 }

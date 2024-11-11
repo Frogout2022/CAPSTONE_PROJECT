@@ -53,6 +53,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     public static List<Integer> listaChkS = new ArrayList<>();
     List<TextView> listaTxtv = new ArrayList<>();
     public static String tabla;
+    public static boolean preReserva = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,12 +195,15 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         if (cantidadPagar==0)
             Toast.makeText(TablaReservaUser_Activity.this, "Elija almenos un horario", Toast.LENGTH_SHORT).show();
         else{
+            preReserva = true;
+            Reservar.realizar("separar");
             Intent iPago= new Intent(this, PagoActivity.class);
             iPago.putExtra("MontoPagar",cantidadPagar);
             startActivity(iPago);
             this.finish();
         }
     }
+
     private void asginarReferencias(){
 
         txtv_cl1 = findViewById(R.id.txtv_cl1_TRU);
@@ -233,7 +237,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
     }
     private void testReservar(){
-        String msg = Reservar.realizar();
+        String msg = Reservar.realizar("aprobado");
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
         updateChk(); //actualizar vista

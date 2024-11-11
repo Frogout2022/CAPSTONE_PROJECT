@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Reservar {
 
-    public static String realizar(){
+    public static String realizar(String estado){
         //PROCESO DE RESERVA EN BD
             //int dia_siguiente = Fecha.obtenerNumeroDiaActual()+1;
             String tabla = TablaReservaUser_Activity.tabla;
@@ -48,24 +48,20 @@ public class Reservar {
                     dia = lista.get(grupo);
                     int hora = 15 + ((numOrden - grupo * 3) * 2);
                    // Log.d("RESERVA","TABLA: "+tabla+" ,DIA: "+dia+" ,HORA: "+hora);
-                    if(validar(grupo,hora)){
-                        //verificar disponibilidad en tiempo real
-                        Log.d("RESERVA", "OCUPADO");
-                        msg = "Hora selecciona ya OCUPADA";
-                    }else {
-                        //insertar reserva
-                        Log.d("RESERVA", "NO OCUPADO");
-                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                        StrictMode.setThreadPolicy(policy);
-                        msg = DAO_Reserva.insertarRSV(tabla, dia, hora);
+                    if(!TablaReservaUser_Activity.preReserva){//false
+                        if(validar(grupo,hora)) msg = "Hora selecciona ya OCUPADA";
+                        else msg = insertarReserva(tabla, dia, hora, estado);
+                    }else{//true
+                        msg = insertarReserva(tabla, dia, hora, estado);
                     }
-                    Log.d("RESERVA", "-> numOrden:"+numOrden);
-                    Log.d("RESERVA", "-> i:"+i);
-                    Log.d("RESERVA", "--> group:"+grupo);
                 }
             }
-
         return msg;
+    }
+    static String insertarReserva(String tabla, String dia,int hora, String estado){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        return DAO_Reserva.insertarRSV(tabla, dia, hora,estado);
     }
 
     static Boolean validar(int dia,int hora){
@@ -78,5 +74,10 @@ public class Reservar {
         int posHora = (hora-13)/2;
         if(listaSemanal.get(dia).getArrayDni()[posHora-1]!=null) return true;
         else return false;
+    }
+
+    static Boolean separar(){
+
+        return false;
     }
 }

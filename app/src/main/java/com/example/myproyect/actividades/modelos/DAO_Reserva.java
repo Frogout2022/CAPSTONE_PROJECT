@@ -142,7 +142,7 @@ public class DAO_Reserva {
     }
 
 
-    public static String insertarRSV(String tabla, String dia, int hora){ //PARA ACTV. CLIENTE
+    public static String insertarRSV(String tabla, String dia, int hora, String estado){ //PARA ACTV. CLIENTE
         //editar-UPDATE
         String hora_str= "";
         switch (hora){
@@ -154,7 +154,10 @@ public class DAO_Reserva {
                 hora_str="7pm";break;
         }
         String msg=null;
-        String dni = Login_Activity.getUsuario().getDNI();
+        String dni = "";
+        if(estado.equals("separar")) dni ="00000000";
+        if(estado.equals("borrar" )) dni = null;
+        if(estado.equals("aprobado")) dni = Login_Activity.getUsuario().getDNI();
         try{
             Connection cnx=ConexionMySQL.getConexion();
             CallableStatement csta=	cnx.prepareCall("{call sp_Reservar(?,?,?,?)}");

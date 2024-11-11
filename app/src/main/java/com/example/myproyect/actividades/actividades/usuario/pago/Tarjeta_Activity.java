@@ -215,7 +215,13 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     private void regresar(){
-        super.onBackPressed();
+        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+        Reservar.realizar("borrar");
+        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+        startActivity(iBienvenido);
+        TablaReservaUser_Activity.preReserva = false;
+        finish();
+       // super.onBackPressed();
     }
 
     private void asignarReferencias(){
@@ -257,7 +263,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void reservarBD(){
-        String msg = Reservar.realizar();
+        String msg = Reservar.realizar("aprobado");
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
         startActivity(iBienvenido);

@@ -205,12 +205,19 @@ BEGIN
 END //
 DELIMITER ;
 
+select * from reserva_losa3;
+call sp_ListarRsv('reserva_losa3',316,321);
+
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
 DELIMITER //
 CREATE PROCEDURE sp_RESERVAR(IN tabla varchar(50), IN dia CHAR(10),IN hora char(5), IN dni_user CHAR(8) )
 BEGIN
 	SET @query =
-		CONCAT('UPDATE ', tabla, ' SET ', hora, '=\'', dni_user, '\' WHERE fecha_rsv=\'', dia, '\'');
+		CONCAT(
+        'UPDATE ', tabla, ' SET ', hora, ' = ',
+        IF(dni_user IS NULL, 'NULL', CONCAT('\'', dni_user, '\'')),
+        ' WHERE fecha_rsv = \'', dia, '\''
+    );
 	PREPARE stmt FROM @query;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
@@ -245,6 +252,8 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
+
+select * from reserva_losa1;
 
 SELECT 'FINISH' AS mensaje;
 ##############<----------------->###############

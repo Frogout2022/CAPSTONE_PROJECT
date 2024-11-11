@@ -16,6 +16,7 @@ import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.actividades.usuario.pago.Tarjeta_Activity;
 import com.example.myproyect.actividades.actividades.usuario.pago.Yape_Activity;
+import com.example.myproyect.actividades.clases.Reservar;
 
 public class PagoActivity extends AppCompatActivity implements View.OnClickListener {
     TextView txtContinuar, txtvSalir;
@@ -98,15 +99,14 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void regresarMenu() {
-/*
-        Intent iBienvenido = new Intent(this, TablaReservaUser_Activity.class);
+
+        Reservar.realizar("borrar");
+        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
         startActivity(iBienvenido);
+        TablaReservaUser_Activity.preReserva = false;
         finish();
-
- */
-
-
-       onBackPressed();
+       //onBackPressed();
     }
 
     private void ingresarYapeoTarjeta() {
