@@ -253,12 +253,8 @@ BEGIN
 END //
 DELIMITER ;
 
-select * from reserva_losa1;
 
 SELECT 'FINISH' AS mensaje;
 ##############<----------------->###############
-
-
-
 
 
