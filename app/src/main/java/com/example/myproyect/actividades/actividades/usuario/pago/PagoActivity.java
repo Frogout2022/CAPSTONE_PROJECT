@@ -99,12 +99,14 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void regresarMenu() {
-
+        //CANCELAR COMPRA
         Reservar.realizar("borrar");
         Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
         Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
         startActivity(iBienvenido);
         TablaReservaUser_Activity.preReserva = false;
+        //limpiar selecciones previas
+        TablaReservaUser_Activity.listaChkS.clear();
         finish();
        //onBackPressed();
     }

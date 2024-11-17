@@ -215,10 +215,14 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     private void regresar(){
+        //CANCELAR COMPRA
         Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
         Reservar.realizar("borrar");
+
         Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
         startActivity(iBienvenido);
+        //limpiar selecciones previas
+        TablaReservaUser_Activity.listaChkS.clear();
         TablaReservaUser_Activity.preReserva = false;
         finish();
        // super.onBackPressed();

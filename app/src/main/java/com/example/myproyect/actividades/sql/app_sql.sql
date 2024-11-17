@@ -98,7 +98,6 @@ nombre_tabla varchar(20) not null unique
 );
 
 
-
 insert into tb_losa (precio_hora,nombre_losa, horario, direccion,nombre_tabla) values
 (10.5,'La Bombonerita','L-D', 'Av. Eduardo de Habich, San Martín de Porres 15102','reserva_losa1'),
 (20.5,'La Bombonera','L-D', 'Jr. Riobamba 601, San Martín de Porres 15101' ,'reserva_losa2'),
@@ -206,7 +205,7 @@ END //
 DELIMITER ;
 
 
-#call sp_ListarRsv('reserva_losa1',321,330);
+#call sp_ListarRsv('reserva_losa1',322,328);
 
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
 DELIMITER //

@@ -260,13 +260,13 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         chkJ2 = findViewById(R.id.chkJueves_5pm_TRU);//10
         chkJ3 = findViewById(R.id.chkJueves_7pm_TRU);//11
 
-        chkV1 = findViewById(R.id.chkViernes_3pm_TRU);
-        chkV2 = findViewById(R.id.chkViernes_5pm_TRU);
-        chkV3 = findViewById(R.id.chkViernes_7pm_TRU);
+        chkV1 = findViewById(R.id.chkViernes_3pm_TRU);//12
+        chkV2 = findViewById(R.id.chkViernes_5pm_TRU);//13
+        chkV3 = findViewById(R.id.chkViernes_7pm_TRU);//14
 
-        chkS1 = findViewById(R.id.chkSabado_3pm_TRU);
-        chkS2 = findViewById(R.id.chkSabado_5pm_TRU);
-        chkS3 = findViewById(R.id.chkSabado_7pm_TRU);
+        chkS1 = findViewById(R.id.chkSabado_3pm_TRU);//15
+        chkS2 = findViewById(R.id.chkSabado_5pm_TRU);//16
+        chkS3 = findViewById(R.id.chkSabado_7pm_TRU);//17
     }
     private void agregarListaChk(){
         listaChk.add(chkL1);

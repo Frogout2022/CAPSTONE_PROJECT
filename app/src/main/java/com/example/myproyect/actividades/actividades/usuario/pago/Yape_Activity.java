@@ -109,10 +109,14 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void salir(){
+        //CANCELAR COMPRA
+
         Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
         Reservar.realizar("borrar");
         Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
         startActivity(iBienvenido);
+        //limpiar selecciones previas
+        TablaReservaUser_Activity.listaChkS.clear();
         TablaReservaUser_Activity.preReserva = false;
         finish();
     }
