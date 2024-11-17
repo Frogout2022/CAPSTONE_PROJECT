@@ -205,7 +205,7 @@ END //
 DELIMITER ;
 
 
-#call sp_ListarRsv('reserva_losa1',322,328);
+call sp_ListarRsv('reserva_losa3',322,328);
 
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
 DELIMITER //

@@ -2,6 +2,7 @@ package com.example.myproyect.actividades.actividades.usuario.pago;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -97,17 +98,28 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     private void regresarMenu() {
         //CANCELAR COMPRA
-        Reservar.realizar("borrar");
-        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
-        startActivity(iBienvenido);
-        TablaReservaUser_Activity.preReserva = false;
-        //limpiar selecciones previas
-        TablaReservaUser_Activity.listaChkS.clear();
-        finish();
+
+        // Mostrar un diálogo de confirmación
+        new AlertDialog.Builder(this)
+                .setTitle("Cancelar compra")
+                .setMessage("¿Estás seguro de que quieres salir?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+
+                    Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+                    Reservar.realizar("borrar");
+                    Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                    startActivity(iBienvenido);
+                    //limpiar selecciones previas
+                    TablaReservaUser_Activity.listaChkS.clear();
+                    TablaReservaUser_Activity.preReserva = false;
+                    // Cerrar la actividad manualmente
+                    finish();
+                })
+                .setNegativeButton("No", null)
+                .show();
+
        //onBackPressed();
     }
 

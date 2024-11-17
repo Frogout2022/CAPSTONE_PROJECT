@@ -2,6 +2,7 @@ package com.example.myproyect.actividades.actividades.usuario.pago;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -110,15 +111,24 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
 
     private void salir(){
         //CANCELAR COMPRA
+        // Mostrar un diálogo de confirmación
+        new AlertDialog.Builder(this)
+                .setTitle("Cancelar compra")
+                .setMessage("¿Estás seguro de que quieres salir?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    // Cerrar la actividad manualmente
+                    Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+                    Reservar.realizar("borrar");
+                    Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                    startActivity(iBienvenido);
+                    //limpiar selecciones previas
+                    TablaReservaUser_Activity.listaChkS.clear();
+                    TablaReservaUser_Activity.preReserva = false;
+                    finish();
+                })
+                .setNegativeButton("No", null)
+                .show();
 
-        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-        Reservar.realizar("borrar");
-        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
-        startActivity(iBienvenido);
-        //limpiar selecciones previas
-        TablaReservaUser_Activity.listaChkS.clear();
-        TablaReservaUser_Activity.preReserva = false;
-        finish();
     }
     private void regresarpago() {
         Toast.makeText(getApplicationContext(),"El pago se verificara presencialmente", Toast.LENGTH_SHORT).show();
@@ -132,11 +142,14 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else{
             if(validarCodigo() && validarTelefono()){
+                //PAGO ACEPTADO
                 String msg = Reservar.realizar("aprobado"); //<--
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
                 // regresa al menu principal
                 Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
                 startActivity(iBienvenido);
+                //limpiar listado
+                TablaReservaUser_Activity.listaChkS.clear();
                 finish();
             }//else Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
 

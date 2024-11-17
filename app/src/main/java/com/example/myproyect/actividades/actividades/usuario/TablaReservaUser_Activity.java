@@ -130,7 +130,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
                     index++;
                 }
             }
-            //listaChkS.clear();
+            listaChkS.clear();
         }
 
     }
@@ -220,6 +220,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
         btnVolver = findViewById(R.id.btnRegresar_TRU);
         btnVolver.setOnClickListener(view -> {
+            listaChkS.clear();
             super.onBackPressed();
 
         });

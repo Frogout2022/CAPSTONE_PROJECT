@@ -2,6 +2,7 @@ package com.example.myproyect.actividades.actividades.usuario.pago;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -216,15 +217,26 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     private void regresar(){
         //CANCELAR COMPRA
-        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-        Reservar.realizar("borrar");
 
-        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
-        startActivity(iBienvenido);
-        //limpiar selecciones previas
-        TablaReservaUser_Activity.listaChkS.clear();
-        TablaReservaUser_Activity.preReserva = false;
-        finish();
+        // Mostrar un diálogo de confirmación
+        new AlertDialog.Builder(this)
+                .setTitle("CANCELAR COMPRA")
+                .setMessage("¿Estás seguro de que quieres salir?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+
+                    Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+                    Reservar.realizar("borrar");
+                    Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                    startActivity(iBienvenido);
+                    //limpiar selecciones previas
+                    TablaReservaUser_Activity.listaChkS.clear();
+                    TablaReservaUser_Activity.preReserva = false;
+                    // Cerrar la actividad manualmente
+                    finish();
+                })
+                .setNegativeButton("No", null)
+                .show();
+
        // super.onBackPressed();
     }
 
@@ -267,10 +279,13 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void reservarBD(){
+        //COMPRA REALIZADA
         String msg = Reservar.realizar("aprobado");
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
         startActivity(iBienvenido);
+        //limpiar listado
+        TablaReservaUser_Activity.listaChkS.clear();
         finish();
     }
 
