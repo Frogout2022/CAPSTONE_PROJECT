@@ -1,8 +1,5 @@
 package com.example.myproyect.actividades.modelos;
 
-import android.os.StrictMode;
-import android.util.Log;
-
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
@@ -40,10 +37,14 @@ public class DAO_Cliente {
                 user = new Usuario(DNI, nom, ape, correo, clave, cel, fecha);
                 lista.add(user);
             }
+        //cerrar recursos
+            rs.close();
+            statement.close();
+            ConexionMySQL.cerrarConexion(cnx);
         } catch (Exception e) {
             System.out.println("ERROR[DAO_CLI] listarClientes(): " + e);
         }
-        ConexionMySQL.cerrarConexion(cnx);
+
         return lista;
     }
 
@@ -70,12 +71,15 @@ public class DAO_Cliente {
                 String cel = rs.getString(6);
                 String fecha = rs.getString(7);
 
-                //Log.d("mysql",claveHash);
                 // Verificar contraseña ingresada contra el hash almacenado
-                if (PasswordEncryptor.checkPassword(pass, claveHash))
+                if (PasswordEncryptor.checkPassword(pass, claveHash)){
                     user = new Usuario(dni, nom, ape, email, claveHash, cel, fecha);
-            }
+                }
 
+            }
+            //cerrar recursos
+            rs.close();
+            statement.close();
             ConexionMySQL.cerrarConexion(cnx);
         }catch(Exception e){System.out.println("ERROR[DAO_CLI] ObtenerCLI(): "+e);}
 
@@ -93,12 +97,17 @@ public class DAO_Cliente {
             csta.setString(4, user.getCorreo());
             csta.setString(5, user.getClave());
             csta.setString(6, user.getCelular());
-            csta.executeUpdate();
-            msg="Usuario registrado correctamente";
+
+            int filasAfectadas = csta.executeUpdate();
+            if(filasAfectadas>0) msg="Usuario registrado correctamente";
+            else msg= "Error al intentar registrar!";
+
+            //cerrar recursos
+            csta.close();
             ConexionMySQL.cerrarConexion(cnx);
         }catch(Exception e){
             System.out.println("ERROR[DAO_CLI] insertarCLI(): " +e);
-            msg= "Error al registrar!";
+            msg= "ERROR al registrar!";
         }
         return msg;
     }
@@ -172,6 +181,7 @@ public class DAO_Cliente {
         return msg;
     }
 
+
     public static  String updateDatos(String correo, String celular){
         String msg= "Error: ";
         String correo_login = Login_Activity.getUsuario().getCorreo();
@@ -200,9 +210,15 @@ public class DAO_Cliente {
                 psta.setString(1, dni);
                 psta.setString(2, correo);
                 psta.setString(3, celular);
-                psta.executeQuery();
+                int cambios = psta.executeUpdate();
+
+                if(cambios >0) msg = "Datos actualizados correctamente";
+                else msg = "Datos no actualizados!";
+
+                //cererar recursos
+                psta.close();
                 ConexionMySQL.cerrarConexion(cnx);
-                msg = "Datos actualizados correctamente";
+
                 Login_Activity.usuario.setCorreo(correo);
                 Login_Activity.usuario.setCelular(celular);
             } catch (Exception e) {
@@ -221,7 +237,7 @@ public class DAO_Cliente {
             Connection cnx = ConexionMySQL.getConexion();
             CallableStatement psta = cnx.prepareCall("{call sp_EliminarCLI(?)}");
             psta.setString(1, dni);
-            psta.executeQuery();
+            psta.executeUpdate();
             ConexionMySQL.cerrarConexion(cnx);
             msg = "Usuario eliminado correctamente";
 
