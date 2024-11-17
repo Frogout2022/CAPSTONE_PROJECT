@@ -195,36 +195,48 @@ public class DAO_Reserva {
                 hora_str="7pm";break;
         }
 
-        String msg=null;
-
+        String msg="ERROR!";
 
         String dni = "";
-        if(estado.equals("separar")) dni ="00000000";
+        if(estado.equals("separar")) dni ="11111111";
         if(estado.equals("borrar" )) dni = null;
         if(estado.equals("aprobado")) dni = Login_Activity.getUsuario().getDNI();
 
         Connection cnx = null;
         CallableStatement csta = null;
+        ResultSet rs = null;
 
         try{
-            cnx=ConexionMySQL.getConexion();
-            csta=	cnx.prepareCall("{call sp_Reservar(?,?,?,?)}");
+            cnx = ConexionMySQL.getConexion();
+            csta = cnx.prepareCall("{call sp_Reservar(?,?,?,?)}");
             csta.setString(1,tabla); // 'reserva_losa1'
             csta.setString(2,dia); // '2023-12-31'
             csta.setString(3,hora_str); // '3pm'
             csta.setString(4,dni); // '12345678'
+            rs = csta.executeQuery();
+            int fa = 0;
+            if(rs.next()){
+                 fa = rs.getInt(1);
+            }
+            if(fa>0){
+                //hubo alguna fila afecta por UPDATE
+                msg = "Reserva realizada correctamente";
+            }else{
+                msg="Error al reservar";
+                //nignuna fila afectada
+            }
 
-            int filasAfectadas = csta.executeUpdate();
-            if(filasAfectadas> 0) msg="Reserva registrada correctamente";
-            else msg= "Error al realizar tu reserva!";
 
         }catch(SQLException e){
             System.out.println("Error al INSERTAR RESERVAS: " + e.getMessage());
+            msg = "ERROR al realizar la reserva";
         }finally {
             try {
                 //cerrar recursos
+                if(rs!=null) rs.close();
                 if(csta!=null ) csta.close();
                 if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+
             } catch (Exception e) {
                 System.out.println("Error al cerrar recursos: " + e.getMessage());
             }

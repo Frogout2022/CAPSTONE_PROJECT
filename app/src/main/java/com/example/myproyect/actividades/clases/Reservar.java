@@ -49,7 +49,7 @@ public class Reservar {
                     int hora = 15 + ((numOrden - grupo * 3) * 2);
                    // Log.d("RESERVA","TABLA: "+tabla+" ,DIA: "+dia+" ,HORA: "+hora);
                     if(!TablaReservaUser_Activity.preReserva){//false
-                        if(validar(grupo,hora)) msg = "Hora selecciona ya OCUPADA";
+                        if(validar(grupo,hora)) msg = "Hora selecciona ya Ocupada";
                         else msg = insertarReserva(tabla, dia, hora, estado);
                     }else{//true
                         msg = insertarReserva(tabla, dia, hora, estado);
@@ -65,12 +65,13 @@ public class Reservar {
     }
 
     static Boolean validar(int dia,int hora){
+        //validar si la reserva esta ocupada
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ArrayList<Reserva> listaSemanal = new ArrayList<>();
         int dia_siguiente = Fecha.obtenerNumeroDiaActual()+1;
         String tabla = TablaReservaUser_Activity.tabla;
-        listaSemanal = DAO_Reserva.listarReservaSemanal(tabla, dia_siguiente, dia_siguiente+5);//+7
+        listaSemanal = DAO_Reserva.listarReservaSemanal(tabla, dia_siguiente, dia_siguiente+5);//+7(cantidad de dias visibles en la tabla)
         int posHora = (hora-13)/2;
         if(listaSemanal.get(dia).getArrayDni()[posHora-1]!=null) return true;
         else return false;

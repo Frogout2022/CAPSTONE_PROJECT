@@ -15,6 +15,7 @@ Fecha_registro datetime default current_timestamp
 );
 
 
+
 insert into cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli) values
 ('72673554', 'Milhos', 'Sihuay', 'milhos@gmail.com', '$2a$10$iaG6KXDK2RuTt5KEciOON.WF/KYHkgOGmP7zO.YARdpgREp0TUlqG', '997653086' ), #123
 ('70829460', 'Luiggi', 'Rebatta', 'luiggi@gmail.com', '$2a$10$Sxsf9v9K1njQI4bFtKdQUOACUJ3AmKc6eg1kUe0ABTi7X.3PsT1RW', '969599087' ), #123
@@ -205,24 +206,67 @@ END //
 DELIMITER ;
 
 
-call sp_ListarRsv('reserva_losa3',322,328);
+#call sp_ListarRsv('reserva_losa3',322,328);
 
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
 DELIMITER //
-CREATE PROCEDURE sp_RESERVAR(IN tabla varchar(50), IN dia CHAR(10),IN hora char(5), IN dni_user CHAR(8) )
+
+CREATE PROCEDURE sp_RESERVAR(IN tabla VARCHAR(50), IN dia CHAR(10), IN hora CHAR(5), IN dni_user CHAR(8))
 BEGIN
-	SET @query =
-		CONCAT(
-        'UPDATE ', tabla, ' SET ', hora, ' = ',
-        IF(dni_user IS NULL, 'NULL', CONCAT('\'', dni_user, '\'')),
-        ' WHERE fecha_rsv = \'', dia, '\''
-    );
-	PREPARE stmt FROM @query;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-	SELECT 'Reserva insertada correctamente.' AS mensaje;
+    DECLARE mensaje VARCHAR(255);
+    DECLARE dni_actual CHAR(8);
+
+    -- Obtener el valor actual del campo para la hora y la fecha
+    SET @query = CONCAT('SELECT ', hora, ' FROM ', tabla, ' WHERE fecha_rsv = \'', dia, '\'');
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    -- Verificar si se obtuvo un valor, y si es el mismo que el nuevo valor
+    SET @query = CONCAT('SELECT ', hora, ' INTO @dni_actual FROM ', tabla, ' WHERE fecha_rsv = \'', dia, '\'');
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    -- Comprobar si el valor actual es el mismo que el que se va a actualizar
+    IF @dni_actual = dni_user THEN
+        SET mensaje = 'La reserva ya está hecha con los mismos datos.';
+        SELECT mensaje AS Estado;
+    ELSE
+        -- Crear la consulta dinámica para el UPDATE
+        SET @query = CONCAT(
+            'UPDATE ', tabla, ' SET ', hora, ' = ',
+            IF(dni_user IS NULL, 'NULL', CONCAT('\'', dni_user, '\'')),
+            ' WHERE fecha_rsv = \'', dia, '\''
+        );
+
+        -- Ejecutar la actualización
+        PREPARE stmt FROM @query;
+        EXECUTE stmt;
+        
+        -- Comprobar si se actualizó alguna fila
+        IF ROW_COUNT() = 0 THEN
+            -- Si no se actualizó ninguna fila, lanzar un error
+             SET mensaje = 'Error al registrar su reserva.';
+            SELECT mensaje AS Estado;
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se encontró una reserva para actualizar o la fecha es incorrecta.';
+        ELSE
+            -- Si se actualizó una fila, enviar mensaje de éxito
+            SET mensaje = 'Reserva actualizada correctamente.';
+            SELECT mensaje AS Estado;
+        END IF;
+        
+        DEALLOCATE PREPARE stmt;
+    END IF;
 END //
+
 DELIMITER ;
+
+#drop procedure sp_RESERVAR;
+#call sp_RESERVAR('reserva_losa1', '2024-11-20','7pm','72673522');
+#update reserva_losa1 set 3pm ='1234578' where fecha_rsv= '2024-11-18';
+#select row_count();
+select * from reserva_losa1 where id=325;
 
 
 ### LISTAR RESERVAS INDIVIDUAL POR CLIENTE ###
