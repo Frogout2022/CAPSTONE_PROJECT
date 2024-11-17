@@ -175,21 +175,18 @@ public class Login_Activity extends AppCompatActivity {
     }
     private void guardarUsuario(String correo, String clave){
         usuario = DAO_Cliente.ObtenerCLI(correo,clave);
-
     }
     private void iniciarSesion(String correo, String clave){
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        if(DAO_Cliente.ObtenerCLI(correo, clave) != null ){
+        if(DAO_Cliente.ObtenerCLI(correo, clave) != null){
             //usuario encontrado
             guardarUsuario(correo,clave);
             //validar recordar sesion
             if(checkRecordar.isChecked()){
                 App.uploadDatos(this, true, correo, clave);
                 Toast.makeText(context, "Sesión guardada", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else{
                 if(App.recordarS){
                     Toast.makeText(context, "Sesión dejada de recordar", Toast.LENGTH_SHORT).show();
                 }

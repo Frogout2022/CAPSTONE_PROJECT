@@ -1,26 +1,39 @@
 package com.example.myproyect.actividades.modelos;
 
+import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 
 public class DAO_Administrador {
 
+    public static final String tabla = "ADMIN";
+    public static final String colum_correo = "CORREO_ADM"; //pos i:5
+
     public static boolean ConsultarAdm(String correo, String pass){ //consultar logueo
         //PARA V. LOGIN
         boolean b = false;
         try{
             Connection cnx= ConexionMySQL.getConexion();
-            CallableStatement csta=cnx.prepareCall("{call sp_consultarADM(?,?)}");
-            csta.setString(1, correo);
-            csta.setString(2, pass);
-            ResultSet rs= csta.executeQuery();
+            //Statement statement = cnx.createStatement();
+            String consulta = "SELECT * FROM "+tabla+" WHERE "+colum_correo+" = ?";
+            //CallableStatement csta=cnx.prepareCall("{call sp_consultarADM(?,?)}");
+            //csta.setString(1, correo);
+            //csta.setString(2, pass);
+            PreparedStatement statement = cnx.prepareStatement(consulta);
+            statement.setString(1, correo);
+
+            ResultSet rs= statement.executeQuery();
             if(rs.next()) {
                 //Tienda.setAdmin(true);
-                b = true;
+                String claveHash= rs.getString(5);
+                if(PasswordEncryptor.checkPassword(pass,claveHash )){
+                    b = true;
+                }
             }
             ConexionMySQL.cerrarConexion(cnx);
         }catch(Exception e){System.out.println("Error AE ConsultarADM(): "+e);}

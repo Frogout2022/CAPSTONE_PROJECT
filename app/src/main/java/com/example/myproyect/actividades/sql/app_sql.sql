@@ -9,17 +9,17 @@ Dni_Cli char(8) primary key,
 Nomb_Cli varchar(20) not null,
 Ape_Cli varchar(20) not null,
 Correo_Cli varchar(30) unique not null,
-Contra_Cli varchar(20) not null,
+Contra_Cli varchar(60) not null,
 Cel_Cli varchar(15) unique not null,
 Fecha_registro datetime default current_timestamp
 );
 
 
 insert into cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli) values
-('72673554', 'Milhos', 'Sihuay', 'mi@gmail.com', '123', '997653086' ),
-('70829460', 'Luiggi', 'Rebatta', 'lu@gmail.com', '123', '969599087' ),
-('12345677', 'Marcelo', 'Yabar', 'ma@gmail.com', '123', '986389628' ),
-('72647015', 'Michell', 'Del Pino', 'mi_dp@gmail.com', '123', '913428693');
+('72673554', 'Milhos', 'Sihuay', 'mi@gmail.com', '$2a$10$iaG6KXDK2RuTt5KEciOON.WF/KYHkgOGmP7zO.YARdpgREp0TUlqG', '997653086' ),
+('70829460', 'Luiggi', 'Rebatta', 'lu@gmail.com', '$2a$10$Sxsf9v9K1njQI4bFtKdQUOACUJ3AmKc6eg1kUe0ABTi7X.3PsT1RW', '969599087' ),
+('12345677', 'Marcelo', 'Yabar', 'ma@gmail.com', '$2a$10$Ed9u0YSX4MDvqISy5ueHHOAkF79I5XGK1SBz5QB1haGDA8NQlvsZ6', '986389628' ),
+('72647015', 'Michell', 'Del Pino', 'mi_dp@gmail.com', '$2a$10$3NeDSeeUSdqwYR39pnCC9.TkMGbMWFbjWNVbXS/nSbCqa7EB9i/Xu', '913428693');
 
 
 create procedure sp_ListarCLI()#--------
@@ -30,7 +30,7 @@ Dni char(8) ,
 Nombre varchar(20),
 Apellido varchar(20) ,
 Correo varchar(30) ,
-Contrasena varchar(20),
+Contrasena varchar(60),
 Celular varchar(10)
 ) insert into Cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli)
 values (Dni,Nombre,Apellido,Correo,Contrasena,Celular);
@@ -38,10 +38,10 @@ values (Dni,Nombre,Apellido,Correo,Contrasena,Celular);
 create procedure sp_EliminarCLI( Dni char(8) )
 delete from Cliente where Dni_Cli=Dni;
 
-create procedure sp_ConsultarCLI(Correo varchar(30),Pass varchar(20))
+create procedure sp_ConsultarCLI(Correo varchar(30),Pass varchar(60))
 select * from Cliente where Correo_Cli = Correo and Contra_Cli = Pass;
 
-create procedure sp_EditarPassCLI(Dni char(8) , Contra varchar(20))
+create procedure sp_EditarPassCLI(Dni char(8) , Contra varchar(60))
 update Cliente set Contra_Cli=Contra where Dni_Cli=Dni;
 
 create procedure sp_ConsultarDniCLI(Dni char(8))
@@ -65,24 +65,24 @@ Dni_Adm char(8) primary key,
 Nomb_Adm varchar(20) not null,
 Ape_Adm varchar(20) not null,
 Correo_Adm varchar(30) unique not null,
-Contra_Adm varchar(20) not null,
+Contra_Adm varchar(60) not null,
 Cel_Admin varchar(15) unique not null
 );
 
 insert into admin values
-('72673554', 'Milhos', 'Sihuay', 'mi_adm@g.com', '123', '997653086' ),
-('70829460', 'Luiggi', 'Rebatta', 'lu_adm@g.com', '123', '969599087' ),
-('12345677', 'Marcelo', 'Yabar', 'ma_adm@g.com', '123', '986389628' );
+('72673554', 'Milhos', 'Sihuay', 'mi_adm@g.com', '$2a$10$9qCHnNkbUuWqVU8C.gkX3uo4xzb4eZfHL7zyZHxTJ0Y2igkjrdAGG', '997653086' ), #321
+('70829460', 'Luiggi', 'Rebatta', 'lu_adm@g.com', '$2a$10$zeTmdX5EE7wCFGAmIaGdY.2t/Pm9YB8802bnDSNu1DS9PCd6rbKF2', '969599087' ), #321
+('12345677', 'Marcelo', 'Yabar', 'ma_adm@g.com', '$2a$10$oI58ZbDgq7BvmX6GOgJoRulSNGYVcnPeaMTth.jGH8oNB9iRtFdf.', '986389628' ); #321
 
 create procedure sp_ConsultarADM(
 Correo varchar(30),
-Pass varchar(20))
+Pass varchar(60))
 select * from Admin where Correo_Adm = Correo and Contra_Adm = Pass;
 
 create procedure sp_ConsultarDniADM(Dni char(9))
 select * from Admin where Dni_Adm=Dni;
 
-create procedure sp_ConsultarCorreoADM(Correo char(20))
+create procedure sp_ConsultarCorreoADM(Correo char(30))
 select * from Admin where Correo_Adm=Correo;
 
 #------------TABLA LOSA------------

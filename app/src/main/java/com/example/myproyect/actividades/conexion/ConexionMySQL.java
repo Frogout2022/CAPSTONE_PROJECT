@@ -10,7 +10,7 @@ public class ConexionMySQL {
         Connection conexion = null;
         try {
 
-            String url = "jdbc:mysql://milhos.kguard.org:3308/app_canchafacil";
+            String url = "jdbc:mysql://milhos.kguard.org:3308/app_canchafacil?useSSL=false";
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(url, "root", "admin");
             System.out.println("Conexión exitosa a la base de datos.");
@@ -20,8 +20,6 @@ public class ConexionMySQL {
         }
         return conexion;
     }
-
-
 
     public static void cerrarConexion(Connection conexion) {
         if (conexion != null) {

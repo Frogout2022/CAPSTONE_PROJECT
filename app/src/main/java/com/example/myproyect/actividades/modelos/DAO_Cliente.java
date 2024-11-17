@@ -1,13 +1,16 @@
 package com.example.myproyect.actividades.modelos;
 
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.example.myproyect.actividades.actividades.Login_Activity;
+import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 import com.example.myproyect.actividades.entidades.Usuario;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -46,23 +49,30 @@ public class DAO_Cliente {
     public static Usuario ObtenerCLI(String correo, String pass){
         //PARA V. LOGIN
         Usuario user = null;
-        boolean b= false;
         try{
             Connection cnx=ConexionMySQL.getConexion();
-            Statement statement = cnx.createStatement();
-            String consulta = "SELECT * FROM "+tabla+" WHERE CORREO_CLI= '"+correo+"' AND CONTRA_CLI = '"+pass+"' ";
 
+            //Statement statement = cnx.createStatement();
 
-            ResultSet rs= statement.executeQuery(consulta);
+            String consulta = "SELECT * FROM " + tabla + " WHERE CORREO_CLI = ?";
+            PreparedStatement statement = cnx.prepareStatement(consulta);
+            statement.setString(1, correo);
+
+            ResultSet rs= statement.executeQuery();
+
             if(rs.next()) {
                 String dni = rs.getString(1);
                 String nom = rs.getString(2);
                 String ape = rs.getString(3);
                 String email = rs.getString(4);
-                String clave = rs.getString(5);
+                String claveHash  = rs.getString(5);// Password encriptado
                 String cel = rs.getString(6);
                 String fecha = rs.getString(7);
-                user = new Usuario(dni,nom,ape,email,clave,cel,fecha);
+
+                Log.d("mysql",claveHash);
+                // Verificar contraseña ingresada contra el hash almacenado
+                if (PasswordEncryptor.checkPassword(pass, claveHash))
+                    user = new Usuario(dni, nom, ape, email, claveHash, cel, fecha);
             }
 
             ConexionMySQL.cerrarConexion(cnx);
@@ -89,7 +99,6 @@ public class DAO_Cliente {
             System.out.println("ERROR[DAO_CLI] insertarCLI(): " +e);
             msg= "Error al registrar!";
         }
-
         return msg;
     }
 

@@ -17,6 +17,7 @@ import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TerminosActivity;
 import com.example.myproyect.actividades.actividades.usuario.pago.Tarjeta_Activity;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
+import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.entidades.Usuario;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;
 
@@ -254,9 +255,13 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
                     if(DAO_Cliente.ConsultarCorreo(user.getCorreo())){
                         Toast.makeText(this, "CORREO ya registrado", Toast.LENGTH_SHORT).show();
                     }else{
-                        //USUARIO REGISTRADO CORRECTAMENTE
+                        //encriptar clave
+                        String hashedPassword = PasswordEncryptor.encryptPassword(user.getClave());
+                        user.setClave(hashedPassword);
+
                         String msg = DAO_Cliente.insertarCLI(user);
                         MostrarMensaje.mensaje(msg, this, Login_Activity.class);
+                        //USUARIO REGISTRADO CORRECTAMENTE
                     }
                 }
             }
