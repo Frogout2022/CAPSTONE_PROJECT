@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
+import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;
 
 public class RecuperarPassword_Activity extends AppCompatActivity {
@@ -22,6 +25,7 @@ public class RecuperarPassword_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_recuperar_password);
 
         asignarReferencias();
+        focosCampos();
     }
     void asignarReferencias(){
         btnConfirmar = findViewById(R.id.btnConfirmar_RecupPass);
@@ -45,6 +49,39 @@ public class RecuperarPassword_Activity extends AppCompatActivity {
         pass2 = findViewById(R.id.txtPass2_RecupPass);
 
     }
+    void focosCampos(){
+        pass1.setOnFocusChangeListener((view, b) -> {
+            if(!b){
+                //no tiene foco
+                String contra1 = pass1.getText().toString();
+                if(!contra1.isEmpty()){
+                    if(contra1.length()<5){
+                        Toast.makeText(this, "Contraseña demasiado corta", Toast.LENGTH_SHORT).show();
+                        pass1.setText("");
+                    }
+                }
+
+            }
+        });
+
+        pass2.setOnFocusChangeListener((view, b) -> {
+            if(!b){
+                //no tiene foco
+                String contra2 = pass2.getText().toString();
+                if(!contra2.isEmpty()){
+                    if(contra2.length()<5){
+                        Toast.makeText(this, "Contraseña demasiado corta", Toast.LENGTH_SHORT).show();
+                        pass2.setText("");
+                    }else{
+                        String clave1 = pass2.getText().toString();
+                        if(!clave1.isEmpty() && !clave1.equals(contra2)){
+                            Toast.makeText(this, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     void validarConfirmacion(){
         String p1,p2;
@@ -54,16 +91,22 @@ public class RecuperarPassword_Activity extends AppCompatActivity {
         if(!p1.equals(p2)){
             MostrarMensaje.mensaje("Contraseñas no coinciden", this);
         }else{
-            //pasa
-            String dni = getIntent().getStringExtra("dni");
-            String msg = DAO_Cliente.editarPass(dni, p1);
-            boolean b = getIntent().getBooleanExtra("login",false);
-            if(b ){
-                MostrarMensaje.mensajeToast(msg,this, Login_Activity.class);
+            if(!p1.isEmpty() && !p2.isEmpty()){
+                //pasa
+                String dni = getIntent().getStringExtra("dni");
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                //encriptar la contraeña antes de enviar
+                String msg = DAO_Cliente.editarPass(dni, p1);
+                boolean b = getIntent().getBooleanExtra("login",false);
+                if(b ){
+                    MostrarMensaje.mensajeToast(msg,this, Login_Activity.class);
+                }else{
+                    MostrarMensaje.mensajeToast(msg,this, ActualizarDatosUSER_Activity.class);
+                }
             }else{
-                MostrarMensaje.mensajeToast(msg,this, ActualizarDatosUSER_Activity.class);
+                Toast.makeText(this,"Rellene los campos", Toast.LENGTH_SHORT).show();
             }
-
 
         }
     }

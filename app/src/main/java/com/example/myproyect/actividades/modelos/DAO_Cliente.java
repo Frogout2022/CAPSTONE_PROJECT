@@ -12,6 +12,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public class DAO_Cliente {
                 String cel = rs.getString(6);
                 String fecha = rs.getString(7);
 
-                Log.d("mysql",claveHash);
+                //Log.d("mysql",claveHash);
                 // Verificar contraseña ingresada contra el hash almacenado
                 if (PasswordEncryptor.checkPassword(pass, claveHash))
                     user = new Usuario(dni, nom, ape, email, claveHash, cel, fecha);
@@ -146,18 +147,28 @@ public class DAO_Cliente {
 
     public static String editarPass(String dni, String pass){
         String msg=null;
+
         try {
             Connection cnx = ConexionMySQL.getConexion();
             CallableStatement psta = cnx.prepareCall("{call sp_editarPassCLI(?,?)}");
             psta.setString(1, dni);
-            psta.setString(2, pass);
-            psta.executeQuery();
+            String claveHash = PasswordEncryptor.encryptPassword(pass);
+            psta.setString(2, claveHash);
+            int filasAfectadas = psta.executeUpdate();
+
+            if(filasAfectadas>0)msg="Se actualizó su contraseña";
+            else msg="No se actualizó su contraseña";
+
+            // Cerrar recursos
+            psta.close();
             ConexionMySQL.cerrarConexion(cnx);
-            msg="Se actualizó su contraseña";
-        } catch (Exception e) {
-            System.out.println("ERROR[DAO_CLI] editarPass: "+e);
-            msg="Error al actualizar la contraseña";
+
+        } catch (SQLException e) {
+            System.out.println("Error en la base de datos: " + e.getMessage());
+        } catch (Exception e){
+            System.out.println("ERROR[DAO_CLI] editarPass: "+e.getMessage());
         }
+
         return msg;
     }
 

@@ -14,6 +14,8 @@ Cel_Cli varchar(15) unique not null,
 Fecha_registro datetime default current_timestamp
 );
 
+select * from cliente;
+
 
 insert into cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli) values
 ('72673554', 'Milhos', 'Sihuay', 'mi@gmail.com', '$2a$10$iaG6KXDK2RuTt5KEciOON.WF/KYHkgOGmP7zO.YARdpgREp0TUlqG', '997653086' ),

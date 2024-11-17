@@ -29,6 +29,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
     final String email = Login_Activity.getUsuario().getCorreo();
     final String cel = Login_Activity.getUsuario().getCelular();
     boolean Datos_iguales = false;
+    public  Usuario usuario = new Usuario();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +64,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
         btnReset.setOnClickListener(view -> {
             Intent intent = new Intent(this, RecuperarPassword_Activity.class);
             intent.putExtra("login",false);
+            intent.putExtra("dni", usuario.getDNI());
             startActivity(intent);
             finish();
         });
@@ -168,7 +170,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
 
     }
     private void mostrar(){
-        Usuario usuario = new Usuario();
+
         usuario = Login_Activity.getUsuario();
         String nombres = usuario.getNombre()+" "+usuario.getApellido();
 
@@ -178,7 +180,6 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
         txtCel.setText(usuario.getCelular());
         String fecha = usuario.getFecha_registro();
         txtFechaR.setText(fecha.substring(0,10));
-
 
     }
 }
