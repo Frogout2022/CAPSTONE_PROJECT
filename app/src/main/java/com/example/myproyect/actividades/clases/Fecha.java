@@ -87,6 +87,30 @@ public class Fecha {
         }
         return false; // No es la zona horaria de Lima, Perú
     }
+    public static boolean validarVenci(String fecha){
+
+        // Dividir la cadena en mes y año
+        String[] partes = fecha.split("/");
+        int mes = Integer.parseInt(partes[0]);
+        int anio = Integer.parseInt(partes[1]) + 2000; // Convertir AA a formato completo
+
+        // Verificar que el mes esté en el rango válido
+        if (mes < 1 || mes > 12) {
+            return false;
+        }
+
+        // Obtener el mes y año actuales
+        Calendar calendario = Calendar.getInstance();
+        int mesActual = calendario.get(Calendar.MONTH) + 1; // Los meses son de 0-11
+        int anioActual = calendario.get(Calendar.YEAR);
+
+        // Validar que la fecha sea futura o actual
+        if (anio > anioActual || (anio == anioActual && mes >= mesActual)) {
+            return true; // Fecha válida
+        }
+
+        return false; // Fecha vencida
+    }
 
 
 

@@ -39,6 +39,7 @@
             android:ems="10"
             android:hint="Nombre"
             android:inputType="text"
+            android:maxLength="12"
             android:nextFocusForward="@id/txtApellidoPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtVencimientoPAY" />
@@ -53,6 +54,7 @@
             android:ems="10"
             android:hint="Número de Tarjeta"
             android:inputType="number"
+            android:maxLength="16"
             android:nextFocusForward="@id/txtVencimientoPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -67,6 +69,7 @@
             android:ems="10"
             android:hint="MM/AA"
             android:inputType="number"
+            android:maxLength="4"
             android:nextFocusForward="@+id/txtCvvPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />
@@ -81,6 +84,7 @@
             android:ems="10"
             android:hint="CVV"
             android:inputType="number"
+            android:maxLength="3"
             android:nextFocusForward="@+id/txtNomPAY"
             app:layout_constraintStart_toEndOf="@+id/txtVencimientoPAY"
             app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />
@@ -95,6 +99,7 @@
             android:ems="10"
             android:hint="Email"
             android:inputType="textEmailAddress"
+            android:maxLength="30"
             android:nextFocusForward="@+id/txtNumTarjetaPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtApellidoPAY" />
@@ -124,6 +129,7 @@
             android:ems="10"
             android:hint="Apellido"
             android:inputType="text"
+            android:maxLength="15"
             android:nextFocusForward="@+id/txtEmailPAY"
             app:layout_constraintStart_toEndOf="@+id/txtNomPAY"
             app:layout_constraintTop_toBottomOf="@+id/txtCvvPAY" />

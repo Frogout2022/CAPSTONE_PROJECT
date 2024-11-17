@@ -26,5 +26,12 @@
             android:text="@string/carLblMensaje"
             android:textSize="20sp"
             tools:text="Cargando...." />
+
+        <TextView
+            android:id="@+id/txtvVersionCargaLoad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="v1.0"
+            android:textAlignment="textEnd" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

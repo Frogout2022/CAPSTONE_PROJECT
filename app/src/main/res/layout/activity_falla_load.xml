@@ -7,88 +7,84 @@
     android:layout_height="match_parent"
     tools:context=".actividades.actividades.usuario.FallaLoad_Activity">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="192dp"
-        android:layout_height="181dp"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView26"
-        app:srcCompat="@drawable/falla_carga" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView26"
-        android:layout_width="329dp"
-        android:layout_height="83dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="26dp"
-        android:text="DISCULPE LAS MOLESTIAS"
-        android:textAlignment="center"
-        android:textColor="#9C27B0"
-        android:textSize="34sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="356dp"
+            android:layout_height="663dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btnRecargar_FallaLoad"
-        android:layout_width="176dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="118dp"
-        android:text="RECARGAR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtvZoneFailLoad" />
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DISCULPE LAS MOLESTIAS"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="#9C27B0"
+                android:textSize="34sp"
+                android:textStyle="bold|italic" />
 
-    <TextView
-        android:id="@+id/txtvBdFailLoad"
-        android:layout_width="236dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="91dp"
-        android:text="bd"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtvInternetFailLoad" />
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="173dp"
 
-    <TextView
-        android:id="@+id/txtvZoneFailLoad"
-        android:layout_width="238dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="89dp"
-        android:text="zone"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtvBdFailLoad" />
+                android:layout_marginTop="15dp"
+                app:srcCompat="@drawable/falla_carga" />
 
-    <TextView
-        android:id="@+id/txtvInternetFailLoad"
-        android:layout_width="231dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="96dp"
-        android:text="GOOGLE"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            <TextView
+                android:id="@+id/txtvInternetFailLoad"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="15dp"
+                android:text="GOOGLE"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtvBdFailLoad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="bd"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtvZoneFailLoad"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="zone"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnRecargar_FallaLoad"
+                android:layout_width="match_parent"
+                android:layout_height="61dp"
+                android:layout_marginTop="15dp"
+                android:text="RECARGAR"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtvVersionFailLoad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="v1.0"
+                android:textAlignment="textEnd"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

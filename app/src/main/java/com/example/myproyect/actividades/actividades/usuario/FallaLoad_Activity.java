@@ -13,13 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.myproyect.BuildConfig;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.CargaActivity;
 
 public class FallaLoad_Activity extends AppCompatActivity {
 
     Button btnRefresh;
-    TextView txtvBD, txtvZone, txtvWifi;
+    TextView txtvBD, txtvZone, txtvWifi, txtvVersion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -33,10 +34,12 @@ public class FallaLoad_Activity extends AppCompatActivity {
             return insets;
         });
         asginarReferencias();
+        txtvVersion.setText("v"+ BuildConfig.VERSION_NAME);
         validar();
 
     }
     void asginarReferencias(){
+        txtvVersion = findViewById(R.id.txtvVersionFailLoad);
         txtvBD = findViewById(R.id.txtvBdFailLoad);
         txtvZone = findViewById(R.id.txtvZoneFailLoad);
         txtvWifi = findViewById(R.id.txtvInternetFailLoad);

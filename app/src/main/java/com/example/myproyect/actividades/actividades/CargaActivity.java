@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
+import com.example.myproyect.BuildConfig;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.FallaLoad_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
@@ -15,11 +17,16 @@ import java.sql.Connection;
 
 public class CargaActivity extends AppCompatActivity {
 
+    TextView txtvVersion;
     boolean pass1 = false, pass2 = false, pass3=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carga);
+
+
+        txtvVersion = findViewById(R.id.txtvVersionCargaLoad);
+        txtvVersion.setText("v"+ BuildConfig.VERSION_NAME);
 
         Thread tCarga = new Thread(){
             @Override

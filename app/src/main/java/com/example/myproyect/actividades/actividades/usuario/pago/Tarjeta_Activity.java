@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,18 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
-import com.example.myproyect.actividades.actividades.usuario.ConsultarReservaUser_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.clases.Reservar;
-import com.example.myproyect.actividades.entidades.Reserva;
-import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 
 public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickListener {
@@ -96,27 +89,29 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
         });
 
         txtVencimiento.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-
-
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (!hasFocus) {
+                    String venci = txtVencimiento.getText().toString().trim();
 
-                }else{//pierde el foco
-                    boolean venciPASS = false;
-                    String venci = txtVencimiento.getText().toString();
-                    if(!venci.isEmpty()){
-                        venciPASS = venci.matches("\\d{4}");
-                        if(!venciPASS){
-                            Toast.makeText(Tarjeta_Activity.this, "Fecha de vencimiento no valida", Toast.LENGTH_SHORT).show();
+                    if (!venci.isEmpty()) {
+                        // Validar formato MM/AA
+                        if (venci.matches("\\d{4}")) {
+                            // Dar formato MM/AA
+                            String venciFormat = venci.substring(0, 2) + "/" + venci.substring(2);
+
+                            // Validar fecha
+                            if (Fecha.validarVenci(venciFormat)) {
+                                txtVencimiento.setText(venciFormat);
+                                // txtCvv.requestFocus(); // Descomentar si necesitas mover el foco
+                            } else {
+                                MostrarMensaje.mensaje("Fecha de vencimiento no valida",getApplicationContext());
+                                txtVencimiento.setText("");
+                            }
+                        } else {
+                            MostrarMensaje.mensaje("Formato de fecha incorrecto. Use MM/AA",getApplicationContext());
                             txtVencimiento.setText("");
-                        }else {
-                            txtVencimiento.setText(venci.substring(0,2)+"/"+venci.substring(2));
-                            //txtCvv.requestFocus();
                         }
-                    }else {
-                        //txtCvv.requestFocus();
-
                     }
                 }
             }
