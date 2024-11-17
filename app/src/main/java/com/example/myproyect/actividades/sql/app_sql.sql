@@ -14,14 +14,12 @@ Cel_Cli varchar(15) unique not null,
 Fecha_registro datetime default current_timestamp
 );
 
-select * from cliente;
-
 
 insert into cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli) values
-('72673554', 'Milhos', 'Sihuay', 'mi@gmail.com', '$2a$10$iaG6KXDK2RuTt5KEciOON.WF/KYHkgOGmP7zO.YARdpgREp0TUlqG', '997653086' ),
-('70829460', 'Luiggi', 'Rebatta', 'lu@gmail.com', '$2a$10$Sxsf9v9K1njQI4bFtKdQUOACUJ3AmKc6eg1kUe0ABTi7X.3PsT1RW', '969599087' ),
-('12345677', 'Marcelo', 'Yabar', 'ma@gmail.com', '$2a$10$Ed9u0YSX4MDvqISy5ueHHOAkF79I5XGK1SBz5QB1haGDA8NQlvsZ6', '986389628' ),
-('72647015', 'Michell', 'Del Pino', 'mi_dp@gmail.com', '$2a$10$3NeDSeeUSdqwYR39pnCC9.TkMGbMWFbjWNVbXS/nSbCqa7EB9i/Xu', '913428693');
+('72673554', 'Milhos', 'Sihuay', 'milhos@gmail.com', '$2a$10$iaG6KXDK2RuTt5KEciOON.WF/KYHkgOGmP7zO.YARdpgREp0TUlqG', '997653086' ), #123
+('70829460', 'Luiggi', 'Rebatta', 'luiggi@gmail.com', '$2a$10$Sxsf9v9K1njQI4bFtKdQUOACUJ3AmKc6eg1kUe0ABTi7X.3PsT1RW', '969599087' ), #123
+('12345677', 'Marcelo', 'Yabar', 'marcelo@gmail.com', '$2a$10$Ed9u0YSX4MDvqISy5ueHHOAkF79I5XGK1SBz5QB1haGDA8NQlvsZ6', '986389628' ), #123
+('72647015', 'Michell', 'Del Pino', 'michell@gmail.com', '$2a$10$3NeDSeeUSdqwYR39pnCC9.TkMGbMWFbjWNVbXS/nSbCqa7EB9i/Xu', '913428693'); #123
 
 
 create procedure sp_ListarCLI()#--------
@@ -100,12 +98,12 @@ nombre_tabla varchar(20) not null unique
 );
 
 
+
 insert into tb_losa (precio_hora,nombre_losa, horario, direccion,nombre_tabla) values
 (10.5,'La Bombonerita','L-D', 'Av. Eduardo de Habich, San Martín de Porres 15102','reserva_losa1'),
 (20.5,'La Bombonera','L-D', 'Jr. Riobamba 601, San Martín de Porres 15101' ,'reserva_losa2'),
 (30.5,'Estadio La 70','L-D', 'San Martín de Porres 15107','reserva_losa3'),
 (40.5,'Campo deportivo 27 de noviembre','L-D', 'Av. 27 de Noviembre, San Martín de Porres 15106','reserva_losa4');
-
 
 
 create procedure sp_EditarLosas(#-----------------------
@@ -207,8 +205,8 @@ BEGIN
 END //
 DELIMITER ;
 
-select * from reserva_losa3;
-call sp_ListarRsv('reserva_losa3',316,321);
+
+#call sp_ListarRsv('reserva_losa1',321,330);
 
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
 DELIMITER //

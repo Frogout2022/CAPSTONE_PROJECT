@@ -1,6 +1,5 @@
 package com.example.myproyect.actividades.modelos;
 
-import android.util.Log;
 
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
@@ -9,6 +8,7 @@ import com.example.myproyect.actividades.entidades.Reserva;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +19,16 @@ public class DAO_Reserva {
         // PARA LA ACT. TABLA RESERVAS - CLI
         ArrayList<Reserva> lista = new ArrayList<>();
         Connection cnx = null;
+        CallableStatement csta = null;
+        ResultSet rs = null;
         try {
             cnx = ConexionMySQL.getConexion();
-            CallableStatement csta = cnx.prepareCall("{call sp_ListarRsv(?,?,?)}");
+            csta = cnx.prepareCall("{call sp_ListarRsv(?,?,?)}");
             csta.setString(1, tabla); // 'reserva_losa1'
             csta.setInt(2, dia_min); // actual
             csta.setInt(3, dia_max); // actual + 7
 
-            ResultSet rs = csta.executeQuery();
+            rs = csta.executeQuery();
             Reserva reserva;
 
             while (rs.next()) {
@@ -42,39 +44,58 @@ public class DAO_Reserva {
                 lista.add(reserva);
             }
 
-        } catch (Exception e) {
-            System.out.println("ERROR listarReserva_semanal(): " + e);
+        } catch (SQLException e) {
+            System.out.println("Error al LISTAR RSV SEMANAL: " + e.getMessage());
+        }finally {
+            //cerrar recursos
+            try{
+                if(rs!=null) rs.close();
+                if(csta!= null) csta.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
 
-        ConexionMySQL.cerrarConexion(cnx);
         return lista;
     }
 
-    public static boolean LlenarTablaFEcha(){
-        Connection cnx = ConexionMySQL.getConexion();
+    public static boolean LlenarTablaFecha()  {
+        Connection cnx = null;
+        CallableStatement csta = null;
         Boolean b=false;
         try {
-            CallableStatement csta = cnx.prepareCall("{call sp_insertar_Fechas}");
+            cnx = ConexionMySQL.getConexion();
+            csta = cnx.prepareCall("{call sp_insertar_Fechas}");
             b = csta.execute();
         }catch (Exception e){
-            System.out.println("ERROR AC listarReserva(): " + e);
+            System.out.println("Error al LLENAR TABLA RSV: " + e.getMessage());
+        }finally {
+            //cerrar recursos
+            try {
+                if (csta!= null) csta.close();
+                if(cnx!= null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
-        ConexionMySQL.cerrarConexion(cnx);
+
         return b;
     }
 
 
     public static List<Reserva> ConsultarRsv(String tabla){
         //CONSULTAR RESERVAS DEL CLIENTE
-
+        Connection cnx = null;
+        CallableStatement csta = null;
+        ResultSet rs = null;
         List<Reserva> lista = new ArrayList<>();
         String dni = Login_Activity.getUsuario().getDNI();
         try{
-            Connection cnx=ConexionMySQL.getConexion();
-            CallableStatement csta=cnx.prepareCall("{call sp_ConsultarRsvCLI(?,?)}");
+            cnx=ConexionMySQL.getConexion();csta=cnx.prepareCall("{call sp_ConsultarRsvCLI(?,?)}");
             csta.setString(1, tabla);
             csta.setString(2, dni);
-            ResultSet rs= csta.executeQuery();
+            rs= csta.executeQuery();
             Reserva reserva=null;
             while(rs.next()){
                 String dia;
@@ -94,12 +115,21 @@ public class DAO_Reserva {
                 lista.add(reserva);
             }
 
-            ConexionMySQL.cerrarConexion(cnx);
-        }catch(Exception e){System.out.println("Error sp_ConsultarRsvCLI(): "+e);}
+        }catch(SQLException e){
+            System.out.println("Error al CONSULTAR RSV INDIVIDUALES: " + e.getMessage());
+        }finally {
+            try {
+                //cerrar recursos
+                if(rs!= null) rs.close();
+                if(csta!=null) csta.close();
+                if(cnx != null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
+
         return lista;
     }
-
-
 
 
     public static List<Reserva> listarReservasCLI(String losa){
@@ -108,11 +138,13 @@ public class DAO_Reserva {
 
         ArrayList<Reserva> lista = new ArrayList<>();
         Connection cnx = null;
+        CallableStatement csta = null;
+        ResultSet rs = null;
         try {
             cnx = ConexionMySQL.getConexion();
-            CallableStatement csta = cnx.prepareCall("{call sp_ListarReservasCLI(?)}");
+             csta = cnx.prepareCall("{call sp_ListarReservasCLI(?)}");
             csta.setString(1, losa);
-            ResultSet rs = csta.executeQuery();
+             rs = csta.executeQuery();
             Reserva reserva;
 
             while (rs.next()) {
@@ -133,11 +165,20 @@ public class DAO_Reserva {
                 lista.add(reserva);
             }
 
-        } catch (Exception e) {
-            System.out.println("ERROR DAO sp_ListarReservasCLI(): " + e);
+        } catch (SQLException e) {
+            System.out.println("Error al LISTAR RESRVAS: " + e.getMessage());
+        }finally {
+            try {
+                //cerrar recursos
+                if(rs!= null) rs.close();
+                if(csta!=null ) csta.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            } catch (Exception e) {
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
 
-        ConexionMySQL.cerrarConexion(cnx);
+
         return lista;
     }
 
@@ -153,29 +194,41 @@ public class DAO_Reserva {
             case 19:
                 hora_str="7pm";break;
         }
+
         String msg=null;
+
+
         String dni = "";
         if(estado.equals("separar")) dni ="00000000";
         if(estado.equals("borrar" )) dni = null;
         if(estado.equals("aprobado")) dni = Login_Activity.getUsuario().getDNI();
+
+        Connection cnx = null;
+        CallableStatement csta = null;
+
         try{
-            Connection cnx=ConexionMySQL.getConexion();
-            CallableStatement csta=	cnx.prepareCall("{call sp_Reservar(?,?,?,?)}");
+            cnx=ConexionMySQL.getConexion();
+            csta=	cnx.prepareCall("{call sp_Reservar(?,?,?,?)}");
             csta.setString(1,tabla); // 'reserva_losa1'
             csta.setString(2,dia); // '2023-12-31'
             csta.setString(3,hora_str); // '3pm'
             csta.setString(4,dni); // '12345678'
 
-            csta.executeUpdate();
-            //Log.d("DAO_RSV", "tabla: "+tabla+" dia: "+dia+" ,hora: "+hora_str+" dni: "+dni);
-            msg="Reserva registrada correctamente";
-            ConexionMySQL.cerrarConexion(cnx);
-        }catch(Exception e){
-            System.out.println("ERROR AC insertarRSV(): " +e);
-            Log.d("DAO_RSV", "ERROR insert: "+e);
-            msg= "Error al reservar!";
-        }
+            int filasAfectadas = csta.executeUpdate();
+            if(filasAfectadas> 0) msg="Reserva registrada correctamente";
+            else msg= "Error al realizar tu reserva!";
 
+        }catch(SQLException e){
+            System.out.println("Error al INSERTAR RESERVAS: " + e.getMessage());
+        }finally {
+            try {
+                //cerrar recursos
+                if(csta!=null ) csta.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            } catch (Exception e) {
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
         return msg;
     }
 

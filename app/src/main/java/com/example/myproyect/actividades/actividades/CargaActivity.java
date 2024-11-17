@@ -4,20 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.widget.Toast;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.admin.ListarReservasADMIN_Activity;
 import com.example.myproyect.actividades.actividades.usuario.FallaLoad_Activity;
-import com.example.myproyect.actividades.clases.MostrarMensaje;
+import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.clases.Internet;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 
 import java.sql.Connection;
 
 public class CargaActivity extends AppCompatActivity {
 
-    boolean pass = false;
+    boolean pass1 = false, pass2 = false, pass3=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +32,10 @@ public class CargaActivity extends AppCompatActivity {
                 Connection cnx = ConexionMySQL.getConexion();
                 if(cnx !=null){
                     ConexionMySQL.cerrarConexion(cnx);
-                    pass = true;
+                    pass1 = true;
                     //Toast.makeText(CargaActivity.this, "Conexion exitosa", Toast.LENGTH_LONG).show();
                 }else{
-                    pass = false;
+                    pass1 = false;
                 }
 
                 try {
@@ -45,21 +43,25 @@ public class CargaActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }finally {
-                    //cargar la siguiente actividad
-                    //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    //StrictMode.setThreadPolicy(policy);
-                    if(pass){
-                        pass = false;
+
+                    pass2 = Fecha.getZonaHoraria();
+                    pass3 = Internet.tieneConexionInternet(getApplicationContext());
+                    if(pass1 && pass2 && pass3){
+                        pass1 = false;
+                        pass2 = false;
+                        pass3 = false;
                         Intent iInicioSesion = new Intent(getApplicationContext(), Login_Activity.class);
                         startActivity(iInicioSesion);
-                        //no deja historial
+
                         finish();
                     }else{
                         Intent iFail = new Intent(getApplicationContext(), FallaLoad_Activity.class);
-                        iFail.putExtra("BD", "No se pudo conectar al Servidor");
+                        iFail.putExtra("BD", pass1);
+                        iFail.putExtra("zoneH",pass2);
+                        iFail.putExtra("wifi", pass3);
                         startActivity(iFail);
                         finish();
-                        //Toast.makeText(CargaActivity.this, "No se pudo conectar a la BD", Toast.LENGTH_LONG).show();
+                        //No se puede usar Toast
                     }
                 }
             }

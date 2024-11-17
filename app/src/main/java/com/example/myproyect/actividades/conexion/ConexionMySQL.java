@@ -9,7 +9,6 @@ public class ConexionMySQL {
     public static Connection getConexion() {
         Connection conexion = null;
         try {
-
             String url = "jdbc:mysql://milhos.kguard.org:3308/app_canchafacil?useSSL=false";
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(url, "root", "admin");
@@ -25,14 +24,14 @@ public class ConexionMySQL {
         if (conexion != null) {
             try {
                 conexion.close();
-                System.out.println("Conexión cerrada.");
+                System.out.println("Conexion cerrada.");
             } catch (SQLException e) {
                 System.out.println("Error al cerrar la conexión: " + e.getMessage());
             }
+        }else{
+            System.out.println("Conexion == null");
         }
     }
-
-
 
     public static void main(String[] args) {
         Connection conexion = getConexion();

@@ -15,16 +15,18 @@ import java.util.ArrayList;
 
 public class DAO_Cliente {
     public static final String tabla = "CLIENTE";
-
+    public static String msg = "ERROR!";
 
     public static ArrayList<Usuario> listarClientes() {//PARA V. MANTENIMIENTO DE EMPLEADO
         ArrayList<Usuario> lista = new ArrayList<>();
         Connection cnx = null;
+        Statement statement = null;
+        ResultSet rs = null;
         try {
             cnx = ConexionMySQL.getConexion();
-            Statement statement = cnx.createStatement();
+            statement = cnx.createStatement();
             String consulta = "SELECT * FROM "+tabla;
-            ResultSet rs = statement.executeQuery(consulta);
+            rs = statement.executeQuery(consulta);
             Usuario user;
             while (rs.next()) {
                 String DNI = rs.getString(1);
@@ -37,30 +39,38 @@ public class DAO_Cliente {
                 user = new Usuario(DNI, nom, ape, correo, clave, cel, fecha);
                 lista.add(user);
             }
-        //cerrar recursos
-            rs.close();
-            statement.close();
-            ConexionMySQL.cerrarConexion(cnx);
-        } catch (Exception e) {
-            System.out.println("ERROR[DAO_CLI] listarClientes(): " + e);
-        }
 
+        } catch (SQLException e) {
+            System.out.println("Error al LISTAR CLIENTES: " + e.getMessage());
+        }finally {
+            try {
+                //cerrar recursos
+                if(rs!=null) rs.close();
+                if(statement!=null) statement.close();
+                if(cnx!=null)ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
         return lista;
     }
 
     public static Usuario ObtenerCLI(String correo, String pass){
         //PARA V. LOGIN
         Usuario user = null;
+        Connection cnx = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
         try{
-            Connection cnx=ConexionMySQL.getConexion();
+             cnx=ConexionMySQL.getConexion();
 
             //Statement statement = cnx.createStatement();
 
             String consulta = "SELECT * FROM " + tabla + " WHERE CORREO_CLI = ?";
-            PreparedStatement statement = cnx.prepareStatement(consulta);
+            statement = cnx.prepareStatement(consulta);
             statement.setString(1, correo);
 
-            ResultSet rs= statement.executeQuery();
+            rs= statement.executeQuery();
 
             if(rs.next()) {
                 String dni = rs.getString(1);
@@ -80,17 +90,29 @@ public class DAO_Cliente {
             //cerrar recursos
             rs.close();
             statement.close();
-            ConexionMySQL.cerrarConexion(cnx);
-        }catch(Exception e){System.out.println("ERROR[DAO_CLI] ObtenerCLI(): "+e);}
+
+        }catch(Exception e){
+            System.out.println("Error al obtetenerDAtosCLI: " + e.getMessage());
+        }finally {
+            try {
+                //CERRAR RECURSOS
+                if(rs!=null) rs.close();
+                if(statement!=null) statement.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
 
         return user;
     }
 
     public static String insertarCLI(Usuario user){
-        String msg=null;
+        Connection cnx = null;
+        CallableStatement csta = null;
         try{
-            Connection cnx=ConexionMySQL.getConexion();
-            CallableStatement csta=	cnx.prepareCall("{call sp_InsertarCLI(?,?,?,?,?,?)}");
+            cnx=ConexionMySQL.getConexion();
+            csta=	cnx.prepareCall("{call sp_InsertarCLI(?,?,?,?,?,?)}");
             csta.setString(1, user.getDNI());
             csta.setString(2, user.getNombre());
             csta.setString(3, user.getApellido());
@@ -99,15 +121,21 @@ public class DAO_Cliente {
             csta.setString(6, user.getCelular());
 
             int filasAfectadas = csta.executeUpdate();
+
             if(filasAfectadas>0) msg="Usuario registrado correctamente";
             else msg= "Error al intentar registrar!";
 
-            //cerrar recursos
-            csta.close();
-            ConexionMySQL.cerrarConexion(cnx);
         }catch(Exception e){
-            System.out.println("ERROR[DAO_CLI] insertarCLI(): " +e);
+            System.out.println("Error al INSERTAR CLIENTE: " + e.getMessage());
             msg= "ERROR al registrar!";
+        }finally {
+            try {
+                //CERRAR RECURSOS
+                if(csta!=null) csta.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
         return msg;
     }
@@ -115,27 +143,55 @@ public class DAO_Cliente {
     public static boolean ConsultarCorreo(String correo){
         //PARA V. REGISTRARSE & RESET_PASS
         boolean b = false;
+        Connection cnx = null;
+        CallableStatement csta = null;
+        ResultSet rs = null;
         try{
-            Connection cnx=ConexionMySQL.getConexion();
-            CallableStatement csta=cnx.prepareCall("{call sp_consultarCorreoCLI(?)}");
+            cnx=ConexionMySQL.getConexion();
+            csta=cnx.prepareCall("{call sp_consultarCorreoCLI(?)}");
             csta.setString(1, correo);
-            ResultSet rs= csta.executeQuery();
+            rs= csta.executeQuery();
             if(rs.next()) b= true;
-            ConexionMySQL.cerrarConexion(cnx);
-        }catch(Exception e){System.out.println("Error[DAO_CLI] ConsultarCorreo(): "+e);}
+
+        }catch(SQLException e){
+            System.out.println("Error al CONSULTAR CORREO: " + e.getMessage());
+        }finally {
+            try {
+                if(rs!=null) rs.close();
+                if(csta!=null) csta.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
         return b;
     }
+
     public static boolean ConsultarCelular(String celular){
 
         boolean b = false;
+        Connection cnx = null;
+        CallableStatement csta = null;
+        ResultSet rs = null;
         try{
-            Connection cnx=ConexionMySQL.getConexion();
-            CallableStatement csta=cnx.prepareCall("{call sp_ConsultarCelularCLI(?)}");
+            cnx=ConexionMySQL.getConexion();
+            csta=cnx.prepareCall("{call sp_ConsultarCelularCLI(?)}");
             csta.setString(1, celular);
-            ResultSet rs= csta.executeQuery();
+            rs= csta.executeQuery();
             if(rs.next()) b= true;
-            ConexionMySQL.cerrarConexion(cnx);
-        }catch(Exception e){System.out.println("ERROR[DAO_CLI] ConsultarCelular(): "+e);}
+
+        }catch(SQLException e){
+            System.out.println("Error al CONSULTAR CELULAR: " + e.getMessage());
+        }finally {
+            try {
+                //cerrar recursos
+                if(rs!=null) rs.close();
+                if(csta!=null) csta.close();
+                if(cnx != null) ConexionMySQL.cerrarConexion(cnx);
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
         return b;
     }
 
@@ -143,47 +199,63 @@ public class DAO_Cliente {
     public static boolean ConsultarDni(String dni){//PARA CONFIRMAR EL RESET PASS
         //PARA V. RESET PASS
         boolean b= false;
+        Connection cnx = null;
+        CallableStatement csta = null;
+        ResultSet rs = null;
         try{
-            Connection cnx=ConexionMySQL.getConexion();
-            CallableStatement csta = cnx.prepareCall("{call sp_consultarDniCLI(?)}");
+            cnx=ConexionMySQL.getConexion();
+            csta = cnx.prepareCall("{call sp_consultarDniCLI(?)}");
             csta.setString(1, dni);
-            ResultSet rs= csta.executeQuery();
+            rs= csta.executeQuery();
             if(rs.next()) b = true;
-            ConexionMySQL.cerrarConexion(cnx);
-        }catch(Exception e){System.out.println("ERROR[DAO_CLI] ConsultarDni(): "+e);}
+
+        }catch(Exception e){
+            System.out.println("Error al cerrar CONSULTAR DNI CLI: " + e.getMessage());
+        }finally {
+            try {
+                //cerrar recursos
+                if(rs!=null) rs.close();
+                if(csta!=null) csta.close();
+                if(cnx !=null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
+        }
         return b;
     }
 
     public static String editarPass(String dni, String pass){
-        String msg=null;
-
+        Connection cnx= null;
+        CallableStatement csta = null;
         try {
-            Connection cnx = ConexionMySQL.getConexion();
-            CallableStatement psta = cnx.prepareCall("{call sp_editarPassCLI(?,?)}");
-            psta.setString(1, dni);
+            cnx = ConexionMySQL.getConexion();
+            csta = cnx.prepareCall("{call sp_editarPassCLI(?,?)}");
+            csta.setString(1, dni);
             String claveHash = PasswordEncryptor.encryptPassword(pass);
-            psta.setString(2, claveHash);
-            int filasAfectadas = psta.executeUpdate();
+            csta.setString(2, claveHash);
+            int filasAfectadas = csta.executeUpdate();
 
-            if(filasAfectadas>0)msg="Se actualizó su contraseña";
+            if(filasAfectadas>0) msg="Se actualizó su contraseña";
             else msg="No se actualizó su contraseña";
 
-            // Cerrar recursos
-            psta.close();
-            ConexionMySQL.cerrarConexion(cnx);
-
         } catch (SQLException e) {
-            System.out.println("Error en la base de datos: " + e.getMessage());
-        } catch (Exception e){
-            System.out.println("ERROR[DAO_CLI] editarPass: "+e.getMessage());
+            System.out.println("Error al EDITAR PASS CLI: " + e.getMessage());
+        }finally {
+            try {
+                // Cerrar recursos
+                if(csta!=null) csta.close();
+                if(cnx !=null) ConexionMySQL.cerrarConexion(cnx);
+
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
 
         return msg;
     }
 
 
-    public static  String updateDatos(String correo, String celular){
-        String msg= "Error: ";
+    public static String updateDatos(String correo, String celular){
         String correo_login = Login_Activity.getUsuario().getCorreo();
         String cel_login = Login_Activity.getUsuario().getCelular();
         String dni = Login_Activity.getUsuario().getDNI();
@@ -204,26 +276,33 @@ public class DAO_Cliente {
         }
         if(retorno) return msg;
         else{
+            Connection cnx = null;
+            CallableStatement csta = null;
+
             try {
-                Connection cnx = ConexionMySQL.getConexion();
-                CallableStatement psta = cnx.prepareCall("{call sp_EditarDatosCLI(?,?,?)}");
-                psta.setString(1, dni);
-                psta.setString(2, correo);
-                psta.setString(3, celular);
-                int cambios = psta.executeUpdate();
+                cnx = ConexionMySQL.getConexion();
+                csta = cnx.prepareCall("{call sp_EditarDatosCLI(?,?,?)}");
+                csta.setString(1, dni);
+                csta.setString(2, correo);
+                csta.setString(3, celular);
+
+                int cambios = csta.executeUpdate();
 
                 if(cambios >0) msg = "Datos actualizados correctamente";
                 else msg = "Datos no actualizados!";
 
-                //cererar recursos
-                psta.close();
-                ConexionMySQL.cerrarConexion(cnx);
-
                 Login_Activity.usuario.setCorreo(correo);
                 Login_Activity.usuario.setCelular(celular);
-            } catch (Exception e) {
-                System.out.println("ERROR[DAO_CLI] updateDatos(): "+e);
-                msg = "Error al actualizar";
+            } catch (SQLException e) {
+                System.out.println("Error UPDATE DATOS CLI: " + e.getMessage());
+            }finally {
+                try {
+                    //cererar recursos
+                    if(csta!=null)csta.close();
+                    if(cnx!=null)ConexionMySQL.cerrarConexion(cnx);
+                }catch (SQLException e){
+                    System.out.println("Error al cerrar recursos: " + e.getMessage());
+                }
             }
 
             return msg;
@@ -231,19 +310,30 @@ public class DAO_Cliente {
     }
 
     public static String deleteCLI(){
-        String msg="";
+
         String dni = Login_Activity.getUsuario().getDNI();
+
+        Connection cnx = null;
+        CallableStatement csta = null;
+
         try {
-            Connection cnx = ConexionMySQL.getConexion();
-            CallableStatement psta = cnx.prepareCall("{call sp_EliminarCLI(?)}");
-            psta.setString(1, dni);
-            psta.executeUpdate();
-            ConexionMySQL.cerrarConexion(cnx);
+             cnx = ConexionMySQL.getConexion();
+             csta = cnx.prepareCall("{call sp_EliminarCLI(?)}");
+            csta.setString(1, dni);
+            csta.executeUpdate();
+
             msg = "Usuario eliminado correctamente";
 
         } catch (Exception e) {
-            System.out.println("ERROR[DAO_CLI] deleteCLI(): "+e);
-            msg = "Error al eliminar"+e;
+            System.out.println("Error al cerrar recursos: " + e.getMessage());
+        }finally {
+            try {
+                //ceerar recursos
+                if(csta!=null) csta.close();
+                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
+            }catch (SQLException e){
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
+            }
         }
         return msg;
     }

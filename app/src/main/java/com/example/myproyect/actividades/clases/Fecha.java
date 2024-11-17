@@ -74,6 +74,20 @@ public class Fecha {
         return numeroDiaActual;
     }
 
+    public static boolean getZonaHoraria(){
+        // Obtener la zona horaria del dispositivo
+        TimeZone zonaHoraria = TimeZone.getDefault();
+
+        // Obtener el nombre de la zona horaria
+        String zonaNombre = zonaHoraria.getID();
+
+        // Verificar si la zona horaria es Lima, Perú (GMT-5)
+        if (zonaNombre.equals("America/Lima")) {
+            return true; // Es la zona horaria de Lima, Perú
+        }
+        return false; // No es la zona horaria de Lima, Perú
+    }
+
 
 
 }
