@@ -1,5 +1,6 @@
 package com.example.myproyect.actividades.actividades.admin;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.example.myproyect.actividades.entidades.Usuario;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaU extends AppCompatActivity {
 
@@ -39,13 +41,26 @@ public class ListaU extends AppCompatActivity {
 
     }
     private void listar(){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        // Ejecutar las consultas en segundo plano
+        new AsyncTask<Void, Void, Void>() {
 
-        ArrayList<Usuario> user = DAO_Cliente.listarClientes();
-        listarUsersAdapter = new ListarUsers_Adapter(user);
+            @Override
+            protected Void doInBackground(Void... voids) {
+                // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
+                ArrayList<Usuario> user = DAO_Cliente.listarClientes();
 
-        rvListaUsers.setAdapter(listarUsersAdapter);
+                // Después de obtener todos los datos, actualizamos la UI en el hilo principal
+                runOnUiThread(() -> {
+                    // Configuramos el adaptador y los datos en la UI
+                    listarUsersAdapter = new ListarUsers_Adapter(user);
+                    rvListaUsers.setAdapter(listarUsersAdapter);
+                    txtvCantidad.setText("Cantidad de usuarios: "+String.valueOf(user.size()));
+                });
+
+                return null;
+            }
+
+        }.execute();  // Ejecutamos el AsyncTask
     }
 
 }
