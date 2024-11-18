@@ -20,6 +20,8 @@ import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ListaU extends AppCompatActivity {
 
@@ -44,10 +46,13 @@ public class ListaU extends AppCompatActivity {
 
     }
     private void listar(){
-        // Ejecutar las consultas en segundo plano
-        new AsyncTask<Void, Void, Void>() {
+        // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        // Ejecutar la tarea en segundo plano
+        executor.execute(new Runnable() {
             @Override
-            protected Void doInBackground(Void... voids) {
+            public void run() {
                 // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
                 ArrayList<Usuario> user = DAO_Cliente.listarClientes();
 
@@ -55,21 +60,23 @@ public class ListaU extends AppCompatActivity {
                 List<Reserva> listaRsvTabla2 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla2);
                 List<Reserva> listaRsvTabla3 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla3);
                 List<Reserva> listaRsvTabla4 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla4);
-                // Después de obtener todos los datos, actualizamos la UI en el hilo principal
-                runOnUiThread(() -> {
-                    // Configuramos el adaptador y los datos en la UI
-                    final int cantidad = listaRsvTabla1.size() + listaRsvTabla2.size() + listaRsvTabla3.size() + listaRsvTabla4.size();
-                    listarUsersAdapter = new ListarUsers_Adapter(user,cantidad);
-                    rvListaUsers.setAdapter(listarUsersAdapter);
-                    txtvCantidad.setText("Cantidad de usuarios: "+String.valueOf(user.size()));
+
+                // Actualizar la UI en el hilo principal
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Configurar el adaptador y los datos en la UI
+                        final int cantidad = listaRsvTabla1.size() + listaRsvTabla2.size() + listaRsvTabla3.size() + listaRsvTabla4.size();
+                        listarUsersAdapter = new ListarUsers_Adapter(user, cantidad);
+                        rvListaUsers.setAdapter(listarUsersAdapter);
+                        txtvCantidad.setText("Cantidad de usuarios: " + user.size());
+                    }
                 });
-
-                return null;
             }
+        });
 
-        }.execute();  // Ejecutamos el AsyncTask
-
-
+        // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
+        executor.shutdown();
     }
 
 }
