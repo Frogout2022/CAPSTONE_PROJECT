@@ -19,38 +19,38 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.ViewHold
     List<Integer> numerosList;
     public NumerosAdapter(List<Integer> numerosList){
         this.numerosList = numerosList;
+        System.out.println("NumerosAdapter");
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView txtNumero;
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             txtNumero = itemView.findViewById(R.id.txtvNum);
+            System.out.println("ViewHolder");
         }
+
     }
 
     @NonNull
     @Override
     public NumerosAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View vissta = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_users_adm, parent, false);
-        return new ViewHolder(vissta);
+        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_users_adm, parent, false);
+        System.out.println("onCreateViewHolder");
+        return new ViewHolder(vista);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NumerosAdapter.ViewHolder holder, int position) {
-
         holder.txtNumero.setText(numerosList.get(position).toString());
+        System.out.println("-->"+numerosList.get(position).toString());
 
     }
 
     @Override
     public int getItemCount() {
-
-
+        System.out.println("getItemCount");
         return numerosList.size();
     }
 }

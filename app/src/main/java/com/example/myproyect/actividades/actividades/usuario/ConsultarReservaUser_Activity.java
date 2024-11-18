@@ -1,6 +1,7 @@
 package com.example.myproyect.actividades.actividades.usuario;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
+import com.example.myproyect.actividades.clases.NumerosAdapter;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.modelos.DAO_Losa;
@@ -33,7 +35,14 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
     TextView txtvListado;
     Spinner spnLosas;
     String nombre_tabla;
-    TableLayout tabla;
+
+
+    ArrayList<Integer> numerosList = new ArrayList<>();
+    RecyclerView rvNumeros;
+    NumerosAdapter numerosAdapter;
+    Integer registroTotales = 35;
+    Integer limite = 10;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +50,24 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_consultar_reserva_user);
 
         asignarReferencias();
+        rvNumeros = findViewById(R.id.rv_consultar_rsv_user);
+        obternerPrimerosNumeros();
+        numerosAdapter = new NumerosAdapter(numerosList);
+        rvNumeros.setAdapter(numerosAdapter);
 
 
+    }
+    public void obternerPrimerosNumeros(){
+        if(registroTotales- numerosList.size()< limite){
+            for(int i=numerosList.size(); i<registroTotales; i++){
+                numerosList.add(i);
+            }
+        }else{
+            int siguienteLimite = numerosList.size() + limite;
+            for (int i= numerosList.size() ; i<siguienteLimite;i++){
+                numerosList.add(i);
+            }
+        }
     }
     private void funSpinner(){
         List<CanchaDeportiva> lista = new ArrayList<>();
@@ -91,7 +116,6 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
 
 
         }else {
-            llenarTabla(listaRsv);
 
             txtvListado.setText("");
             StringBuilder sb = new StringBuilder();
@@ -116,48 +140,8 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
             Toast.makeText(this, "Hay "+listaRsv.size()+" fechas con reservas actualmente en esta losa", Toast.LENGTH_LONG).show();
         }
     }
-    private void llenarTabla(List<Reserva> listaRsv){
-        tabla.removeAllViews();
 
-        int contador = 0;  // Contador para las reservas
-        for (Reserva reserva : listaRsv) {
-            for (int j = 0; j < 3; j++) {
-                String dni = reserva.getArrayDni()[j];
-                String dni_cli = Login_Activity.getUsuario().getDNI();
-
-                if (dni != null && dni.equals(dni_cli)) {
-                    // Crear una nueva fila para cada reserva
-                    TableRow tableRow = new TableRow(this);
-
-                    // Crear un contenedor para la información de la reserva
-                    LinearLayout reservaLayout = new LinearLayout(this);
-                    reservaLayout.setOrientation(LinearLayout.VERTICAL);  // Organizar de forma vertical
-
-                    // Información de la reserva
-                    TextView reservaTitle = new TextView(this);
-                    reservaTitle.setText("Reserva #" + (contador + 1));
-                    reservaLayout.addView(reservaTitle);
-
-                    TextView fechaText = new TextView(this);
-                    fechaText.setText("Fecha: " + reserva.getDia());
-                    reservaLayout.addView(fechaText);
-
-                    int hora = 3 + (2 * j);
-                    TextView horaText = new TextView(this);
-                    horaText.setText("Hora: " + hora + "pm");
-                    reservaLayout.addView(horaText);
-
-                    // Agregar la reserva al TableRow
-                    tableRow.addView(reservaLayout);
-                    tabla.addView(tableRow);  // Agregar la fila a la tabla
-
-                    contador++;  // Incrementar el contador
-                }
-            }
-        }
-    }
     private void asignarReferencias(){
-        tabla = findViewById(R.id.tablalListarRsvUser);
         spnLosas = findViewById(R.id.spnConsultarRsv_CLI);
         funSpinner();
         btnVolver = findViewById(R.id.btnVolver_ConsultRsvUser);

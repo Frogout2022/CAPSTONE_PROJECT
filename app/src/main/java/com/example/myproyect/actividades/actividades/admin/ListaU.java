@@ -13,11 +13,8 @@ import java.util.ArrayList;
 public class ListaU extends AppCompatActivity {
 
     ArrayList<Integer> numerosList = new ArrayList<>();
-
     RecyclerView rvNumeros;
-
     NumerosAdapter numerosAdapter;
-
     Integer registroTotales = 35;
     Integer limite = 10;
 
@@ -28,9 +25,9 @@ public class ListaU extends AppCompatActivity {
 
         rvNumeros = findViewById(R.id.rcvListarUsersForADM);
         obternerPrimerosNumeros();
-
         numerosAdapter = new NumerosAdapter(numerosList);
         rvNumeros.setAdapter(numerosAdapter);
+
 
     }
     public void obternerPrimerosNumeros(){
@@ -38,7 +35,6 @@ public class ListaU extends AppCompatActivity {
             for(int i=numerosList.size(); i<registroTotales; i++){
                 numerosList.add(i);
             }
-
         }else{
             int siguienteLimite = numerosList.size() + limite;
             for (int i= numerosList.size() ; i<siguienteLimite;i++){
