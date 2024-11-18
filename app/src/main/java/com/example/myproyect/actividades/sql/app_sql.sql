@@ -210,60 +210,30 @@ DELIMITER ;
 
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
 DELIMITER //
-
-CREATE PROCEDURE sp_RESERVAR(IN tabla VARCHAR(50), IN dia CHAR(10), IN hora CHAR(5), IN dni_user CHAR(8))
+CREATE PROCEDURE sp_RESERVAR(IN tabla varchar(50), IN dia CHAR(10),IN hora char(5), IN dni_user CHAR(8) )
 BEGIN
-    DECLARE mensaje VARCHAR(255);
-    DECLARE dni_actual CHAR(8);
-
-    -- Obtener el valor actual del campo para la hora y la fecha
-    SET @query = CONCAT('SELECT ', hora, ' FROM ', tabla, ' WHERE fecha_rsv = \'', dia, '\'');
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    -- Verificar si se obtuvo un valor, y si es el mismo que el nuevo valor
-    SET @query = CONCAT('SELECT ', hora, ' INTO @dni_actual FROM ', tabla, ' WHERE fecha_rsv = \'', dia, '\'');
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    -- Comprobar si el valor actual es el mismo que el que se va a actualizar
-    IF @dni_actual = dni_user THEN
-        SET mensaje = 'La reserva ya está hecha con los mismos datos.';
-        SELECT mensaje AS Estado;
-    ELSE
-        -- Crear la consulta dinámica para el UPDATE
-        SET @query = CONCAT(
-            'UPDATE ', tabla, ' SET ', hora, ' = ',
-            IF(dni_user IS NULL, 'NULL', CONCAT('\'', dni_user, '\'')),
-            ' WHERE fecha_rsv = \'', dia, '\''
-        );
-
-        -- Ejecutar la actualización
-        PREPARE stmt FROM @query;
-        EXECUTE stmt;
-        
-        -- Comprobar si se actualizó alguna fila
-        IF ROW_COUNT() = 0 THEN
-            -- Si no se actualizó ninguna fila, lanzar un error
-             SET mensaje = 'Error al registrar su reserva.';
-            SELECT mensaje AS Estado;
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se encontró una reserva para actualizar o la fecha es incorrecta.';
-        ELSE
-            -- Si se actualizó una fila, enviar mensaje de éxito
-            SET mensaje = 'Reserva actualizada correctamente.';
-            SELECT mensaje AS Estado;
-        END IF;
-        
-        DEALLOCATE PREPARE stmt;
-    END IF;
+	DECLARE mensaje varchar(255);
+    
+    -- Crear la consulta dinámica
+    SET @query =
+		CONCAT(
+        'UPDATE ', tabla, ' SET ', hora, ' = ',
+        IF(dni_user IS NULL, 'NULL', CONCAT('\'', dni_user, '\'')),
+        ' WHERE fecha_rsv = \'', dia, '\''
+    );
+	PREPARE stmt FROM @query;
+	EXECUTE stmt;
+    
+    SELECT ROW_COUNT() AS filas_afectadas;
+    
+	DEALLOCATE PREPARE stmt;
 END //
-
 DELIMITER ;
 
+
+
 #drop procedure sp_RESERVAR;
-#call sp_RESERVAR('reserva_losa1', '2024-11-20','7pm','72673522');
+call sp_RESERVAR('reserva_losa1', '2024-11-20','7pm','12673524');
 #update reserva_losa1 set 3pm ='1234578' where fecha_rsv= '2024-11-18';
 #select row_count();
 select * from reserva_losa1 where id=325;

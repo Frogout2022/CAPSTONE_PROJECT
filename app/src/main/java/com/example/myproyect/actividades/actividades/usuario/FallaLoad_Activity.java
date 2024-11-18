@@ -60,10 +60,10 @@ public class FallaLoad_Activity extends AppCompatActivity {
         }
 
         if(!zone) {
-            txtvZone.setText("- Cambiar la zona horaria a Lima.");
+            txtvZone.setText("- Cambiar la zona horaria a America/Lima.");
             txtvZone.setTextColor(Color.parseColor("#FF5733"));
         } else {
-
+            txtvZone.setText("- La zona horaria es America/Lima.");
         }
         if(!wifi) {
             txtvWifi.setText("- No tienes conexion a Internet.");

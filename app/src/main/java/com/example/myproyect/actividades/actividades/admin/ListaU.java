@@ -2,25 +2,48 @@ package com.example.myproyect.actividades.actividades.admin;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.clases.NumerosAdapter;
+
+import java.util.ArrayList;
 
 public class ListaU extends AppCompatActivity {
+
+    ArrayList<Integer> numerosList = new ArrayList<>();
+
+    RecyclerView rvNumeros;
+
+    NumerosAdapter numerosAdapter;
+
+    Integer registroTotales = 35;
+    Integer limite = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_lista_u);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        rvNumeros = findViewById(R.id.rcvListarUsersForADM);
+        obternerPrimerosNumeros();
+
+        numerosAdapter = new NumerosAdapter(numerosList);
+        rvNumeros.setAdapter(numerosAdapter);
+
+    }
+    public void obternerPrimerosNumeros(){
+        if(registroTotales- numerosList.size()< limite){
+            for(int i=numerosList.size(); i<registroTotales; i++){
+                numerosList.add(i);
+            }
+
+        }else{
+            int siguienteLimite = numerosList.size() + limite;
+            for (int i= numerosList.size() ; i<siguienteLimite;i++){
+                numerosList.add(i);
+            }
+        }
     }
 }

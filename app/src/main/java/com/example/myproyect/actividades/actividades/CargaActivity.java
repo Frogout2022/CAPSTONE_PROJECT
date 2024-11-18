@@ -35,44 +35,39 @@ public class CargaActivity extends AppCompatActivity {
                 //validar los parametros correctos del programa
                 //internet datos y etc
                 //domir aprox 3 seg
+            validaciones();
 
-                Connection cnx = ConexionMySQL.getConexion();
-                if(cnx !=null){
-                    ConexionMySQL.cerrarConexion(cnx);
-                    pass1 = true;
-                    //Toast.makeText(CargaActivity.this, "Conexion exitosa", Toast.LENGTH_LONG).show();
-                }else{
-                    pass1 = false;
-                }
-
-                try {
-                    sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }finally {
-
-                    pass2 = Fecha.getZonaHoraria();
-                    pass3 = Internet.tieneConexionInternet(getApplicationContext());
-                    if(pass1 && pass2 && pass3){
-                        pass1 = false;
-                        pass2 = false;
-                        pass3 = false;
-                        Intent iInicioSesion = new Intent(getApplicationContext(), Login_Activity.class);
-                        startActivity(iInicioSesion);
-
-                        finish();
-                    }else{
-                        Intent iFail = new Intent(getApplicationContext(), FallaLoad_Activity.class);
-                        iFail.putExtra("BD", pass1);
-                        iFail.putExtra("zoneH",pass2);
-                        iFail.putExtra("wifi", pass3);
-                        startActivity(iFail);
-                        finish();
-                        //No se puede usar Toast
-                    }
-                }
             }
         };
         tCarga.start();
     }
+    private void validaciones(){
+        Connection cnx = ConexionMySQL.getConexion();
+        if(cnx !=null){
+            ConexionMySQL.cerrarConexion(cnx);
+            pass1 = true;
+            //Toast.makeText(CargaActivity.this, "Conexion exitosa", Toast.LENGTH_LONG).show();
+        }else{
+            pass1 = false;
+        }
+            pass2 = Fecha.getZonaHoraria();
+            pass3 = Internet.tieneConexionInternet(getApplicationContext());
+            if(pass1 && pass2 && pass3){
+                pass1 = false;
+                pass2 = false;
+                pass3 = false;
+                Intent iInicioSesion = new Intent(getApplicationContext(), Login_Activity.class);
+                startActivity(iInicioSesion);
+
+                finish();
+            }else{
+                Intent iFail = new Intent(getApplicationContext(), FallaLoad_Activity.class);
+                iFail.putExtra("BD", pass1);
+                iFail.putExtra("zoneH",pass2);
+                iFail.putExtra("wifi", pass3);
+                startActivity(iFail);
+                finish();
+                //No se puede usar Toast
+            }
+        }
 }

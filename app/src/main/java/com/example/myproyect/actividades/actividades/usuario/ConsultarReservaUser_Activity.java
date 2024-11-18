@@ -11,7 +11,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,8 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
     TextView txtvListado;
     Spinner spnLosas;
     String nombre_tabla;
+    TableLayout tabla;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +91,8 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
 
 
         }else {
+            llenarTabla(listaRsv);
+
             txtvListado.setText("");
             StringBuilder sb = new StringBuilder();
 
@@ -109,7 +116,48 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
             Toast.makeText(this, "Hay "+listaRsv.size()+" fechas con reservas actualmente en esta losa", Toast.LENGTH_LONG).show();
         }
     }
+    private void llenarTabla(List<Reserva> listaRsv){
+        tabla.removeAllViews();
+
+        int contador = 0;  // Contador para las reservas
+        for (Reserva reserva : listaRsv) {
+            for (int j = 0; j < 3; j++) {
+                String dni = reserva.getArrayDni()[j];
+                String dni_cli = Login_Activity.getUsuario().getDNI();
+
+                if (dni != null && dni.equals(dni_cli)) {
+                    // Crear una nueva fila para cada reserva
+                    TableRow tableRow = new TableRow(this);
+
+                    // Crear un contenedor para la información de la reserva
+                    LinearLayout reservaLayout = new LinearLayout(this);
+                    reservaLayout.setOrientation(LinearLayout.VERTICAL);  // Organizar de forma vertical
+
+                    // Información de la reserva
+                    TextView reservaTitle = new TextView(this);
+                    reservaTitle.setText("Reserva #" + (contador + 1));
+                    reservaLayout.addView(reservaTitle);
+
+                    TextView fechaText = new TextView(this);
+                    fechaText.setText("Fecha: " + reserva.getDia());
+                    reservaLayout.addView(fechaText);
+
+                    int hora = 3 + (2 * j);
+                    TextView horaText = new TextView(this);
+                    horaText.setText("Hora: " + hora + "pm");
+                    reservaLayout.addView(horaText);
+
+                    // Agregar la reserva al TableRow
+                    tableRow.addView(reservaLayout);
+                    tabla.addView(tableRow);  // Agregar la fila a la tabla
+
+                    contador++;  // Incrementar el contador
+                }
+            }
+        }
+    }
     private void asignarReferencias(){
+        tabla = findViewById(R.id.tablalListarRsvUser);
         spnLosas = findViewById(R.id.spnConsultarRsv_CLI);
         funSpinner();
         btnVolver = findViewById(R.id.btnVolver_ConsultRsvUser);
