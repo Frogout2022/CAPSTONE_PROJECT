@@ -230,7 +230,7 @@ BEGIN
 END //
 DELIMITER ;
 
-
+select * from reserva_losa1;
 
 #drop procedure sp_RESERVAR;
 call sp_RESERVAR('reserva_losa1', '2024-11-20','7pm','12673524');

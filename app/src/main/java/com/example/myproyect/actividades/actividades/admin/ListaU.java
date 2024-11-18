@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,7 @@ public class ListaU extends AppCompatActivity {
     ListarUsers_Adapter listarUsersAdapter;
     Button btnRegresar, btnUpdate;
     TextView txtvCantidad;
+    ProgressBar progressBar;
 
     private Context context;
 
@@ -47,6 +50,9 @@ public class ListaU extends AppCompatActivity {
     private void asignarReferencias(){
 
         context = this;
+
+        progressBar = findViewById(R.id.pb_ListarUsers_ADM);
+
         rvListaUsers = findViewById(R.id.rcvListarUsersForADM);
         btnUpdate = findViewById(R.id.btnUpdate_ListarU);
         btnRegresar = findViewById(R.id.btnRegresar_ListarU);
@@ -58,6 +64,7 @@ public class ListaU extends AppCompatActivity {
     }
     private void botones(){
         btnUpdate.setOnClickListener(view -> {
+            rvListaUsers.setVisibility(View.INVISIBLE);
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
@@ -68,6 +75,9 @@ public class ListaU extends AppCompatActivity {
         });
     }
     private void listar(){
+        progressBar.setVisibility(View.VISIBLE);
+        rvListaUsers.setVisibility(View.VISIBLE);
+
         // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
         ExecutorService executor = Executors.newFixedThreadPool(1);
 
@@ -92,13 +102,20 @@ public class ListaU extends AppCompatActivity {
                         listarUsersAdapter = new ListarUsers_Adapter(user, cantidad, context);
                         rvListaUsers.setAdapter(listarUsersAdapter);
                         txtvCantidad.setText("Cantidad de usuarios: " + user.size());
+
+                        // Ocultar el ProgressBar después de que la tarea esté completada
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
+
                 });
             }
         });
 
+
         // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
         executor.shutdown();
+
+
     }
 
 }

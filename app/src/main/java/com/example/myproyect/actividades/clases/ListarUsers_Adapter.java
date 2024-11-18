@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.actividades.CargaActivity;
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.entidades.Usuario;
 
@@ -85,7 +86,7 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
         holder.btnVerRsv.setText("VER RESERVAS ("+cantidad+")");
 
         holder.btnVerRsv.setOnClickListener(view -> {
-            Intent intent = new Intent(context, Login_Activity.class);
+            Intent intent = new Intent(context, CargaActivity.class);
             intent.putExtra("KEY", "Valor");
             context.startActivity(intent);
             System.out.println("hola mundo");
