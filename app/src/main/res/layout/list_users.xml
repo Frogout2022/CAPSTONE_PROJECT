@@ -35,7 +35,7 @@
                     app:srcCompat="@drawable/icon_contact" />
 
                 <LinearLayout
-                    android:layout_width="235dp"
+                    android:layout_width="255dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
@@ -47,6 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Nombre:"
+                        android:textAllCaps="true"
                         android:textStyle="bold" />
 
                     <TextView
@@ -55,6 +56,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Apellido:"
+                        android:textAllCaps="true"
                         android:textStyle="bold" />
 
                     <TextView
@@ -63,6 +65,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Correo:"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="true"
                         android:textStyle="bold" />
 
                     <TextView
@@ -71,6 +75,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Celular:"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="true"
                         android:textStyle="bold" />
 
                     <TextView
@@ -79,6 +85,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Registro:"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="true"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -126,17 +134,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Ver Reservas" />
+                android:text="Ver Reservas (5)" />
 
             <TextView
                 android:id="@+id/txtv_cantRsv_rcv_ListUsers"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:gravity="center"
-                android:text="0"
+                android:text="#1"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
         </LinearLayout>
 
