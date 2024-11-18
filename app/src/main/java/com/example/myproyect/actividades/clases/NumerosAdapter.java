@@ -27,8 +27,8 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtNumero = itemView.findViewById(R.id.txtvNum);
-            System.out.println("ViewHolder");
+            txtNumero = itemView.findViewById(R.id.txtv_position_rcv_ListUsers);
+            //System.out.println("ViewHolder");
         }
 
     }
@@ -36,7 +36,7 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.ViewHold
     @NonNull
     @Override
     public NumerosAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_users_adm, parent, false);
+        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_users, parent, false);
         System.out.println("onCreateViewHolder");
         return new ViewHolder(vista);
     }
