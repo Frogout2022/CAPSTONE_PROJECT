@@ -42,6 +42,16 @@
                     android:paddingLeft="3dp">
 
                     <TextView
+                        android:id="@+id/textView41"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="DNI"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+                    <TextView
                         android:id="@+id/textView29"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -95,6 +105,15 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView42"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="72673554"
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtv_nombre_rcv_ListUsers"
