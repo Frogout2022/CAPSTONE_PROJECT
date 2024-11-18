@@ -12,31 +12,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.entidades.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapter.ViewHolder> {
 
     List<Integer> numerosList;
-    List<Usuario> usuariosList;
+    ArrayList<Usuario> usuariosList;
 
-    public ListarUsers_Adapter(List<Integer> numerosList){
-        this.numerosList = numerosList;
-        //System.out.println("ListarUsers_Adapter");
-    }
 
-    public void ListarUsers_Adapter2(List<Usuario> usuariosList){
+    public ListarUsers_Adapter(ArrayList<Usuario> usuariosList){
         this.usuariosList = usuariosList;
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNumero;
         TextView txtvDNI,txtvNombre,txtvApellido,txtvCel,txtvEmail,txtvFecha, txtvPos;
         Button btnVerRsv;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtNumero = itemView.findViewById(R.id.txtv_position_rcv_ListUsers); //borrar
 
             txtvDNI = itemView.findViewById(R.id.txtv_dni_rcv_ListUsers);
             txtvNombre = itemView.findViewById(R.id.txtv_nombre_rcv_ListUsers);
@@ -48,7 +41,6 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
             btnVerRsv = itemView.findViewById(R.id.btn_verRsv_rcv_ListUsers);
 
-            //System.out.println("ViewHolder");
         }
 
     }
@@ -64,10 +56,18 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
     @Override
     public void onBindViewHolder(@NonNull ListarUsers_Adapter.ViewHolder holder, int position) {
-        holder.txtNumero.setText(numerosList.get(position).toString());//borrar
+        //rellenar todos los datos
+        holder.txtvDNI.setText(usuariosList.get(position).getDNI().toString());
+        holder.txtvNombre.setText(usuariosList.get(position).getNombre().toString());
+        holder.txtvApellido.setText(usuariosList.get(position).getApellido().toString());
+        holder.txtvCel.setText(usuariosList.get(position).getCelular());
+        holder.txtvEmail.setText(usuariosList.get(position).getCorreo());
+        String hora_registro = usuariosList.get(position).getFecha_registro();
+        holder.txtvFecha.setText(hora_registro.substring(0,10)+" "+hora_registro.substring(11,16));
 
-        holder.txtvPos.setText(usuariosList.get(position).toString());
 
+        int pos = position+1;
+        holder.txtvPos.setText("#"+pos);
 
         //System.out.println("-->"+numerosList.get(position).toString());
 
@@ -75,8 +75,6 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
     @Override
     public int getItemCount() {
-        //System.out.println("getItemCount");
-        //return numerosList.size();
         return usuariosList.size();
     }
 }
