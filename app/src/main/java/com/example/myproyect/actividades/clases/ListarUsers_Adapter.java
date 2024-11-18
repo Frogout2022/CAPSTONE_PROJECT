@@ -1,5 +1,7 @@
 package com.example.myproyect.actividades.clases;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.entidades.Usuario;
 
 import java.util.ArrayList;
@@ -17,8 +20,10 @@ import java.util.List;
 
 public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapter.ViewHolder> {
 
-    ArrayList<Usuario> usuariosList;
-    int cantidad;
+    private ArrayList<Usuario> usuariosList;
+    private int cantidad;
+    private Context context;
+
 
     public ListarUsers_Adapter(ArrayList<Usuario> usuariosList){
         this.usuariosList = usuariosList;
@@ -26,6 +31,11 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
     public ListarUsers_Adapter(ArrayList<Usuario> usuariosList, int cantidad){
         this.usuariosList = usuariosList;
         this.cantidad = cantidad;
+    }
+    public ListarUsers_Adapter(ArrayList<Usuario> usuariosList, int cantidad, Context context){
+        this.usuariosList = usuariosList;
+        this.cantidad = cantidad;
+        this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,6 +83,13 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
         holder.txtvPos.setText("#"+pos);
 
         holder.btnVerRsv.setText("VER RESERVAS ("+cantidad+")");
+
+        holder.btnVerRsv.setOnClickListener(view -> {
+            Intent intent = new Intent(context, Login_Activity.class);
+            intent.putExtra("KEY", "Valor");
+            context.startActivity(intent);
+            System.out.println("hola mundo");
+        });
 
         //System.out.println("-->"+numerosList.get(position).toString());
 

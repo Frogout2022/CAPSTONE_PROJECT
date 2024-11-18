@@ -1,5 +1,8 @@
 package com.example.myproyect.actividades.actividades.admin;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -30,6 +33,8 @@ public class ListaU extends AppCompatActivity {
     Button btnRegresar, btnUpdate;
     TextView txtvCantidad;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +42,30 @@ public class ListaU extends AppCompatActivity {
 
         asignarReferencias();
         listar();
+        botones();
     }
     private void asignarReferencias(){
+
+        context = this;
         rvListaUsers = findViewById(R.id.rcvListarUsersForADM);
         btnUpdate = findViewById(R.id.btnUpdate_ListarU);
         btnRegresar = findViewById(R.id.btnRegresar_ListarU);
         txtvCantidad = findViewById(R.id.txtvCantUsers_ListU);
 
+        btnRegresar = findViewById(R.id.btnRegresar_ListarU);
+        btnUpdate = findViewById(R.id.btnUpdate_ListarU);
+
+    }
+    private void botones(){
+        btnUpdate.setOnClickListener(view -> {
+            listar();
+        });
+        btnRegresar.setOnClickListener(view -> {
+            Intent intent = new Intent(this,MenuAdmin_Activity.class );
+            startActivity(intent);
+            this.finish();
+            super.onBackPressed();
+        });
     }
     private void listar(){
         // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
@@ -67,7 +89,7 @@ public class ListaU extends AppCompatActivity {
                     public void run() {
                         // Configurar el adaptador y los datos en la UI
                         final int cantidad = listaRsvTabla1.size() + listaRsvTabla2.size() + listaRsvTabla3.size() + listaRsvTabla4.size();
-                        listarUsersAdapter = new ListarUsers_Adapter(user, cantidad);
+                        listarUsersAdapter = new ListarUsers_Adapter(user, cantidad, context);
                         rvListaUsers.setAdapter(listarUsersAdapter);
                         txtvCantidad.setText("Cantidad de usuarios: " + user.size());
                     }
