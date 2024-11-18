@@ -17,12 +17,15 @@ import java.util.List;
 
 public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapter.ViewHolder> {
 
-    List<Integer> numerosList;
     ArrayList<Usuario> usuariosList;
-
+    int cantidad;
 
     public ListarUsers_Adapter(ArrayList<Usuario> usuariosList){
         this.usuariosList = usuariosList;
+    }
+    public ListarUsers_Adapter(ArrayList<Usuario> usuariosList, int cantidad){
+        this.usuariosList = usuariosList;
+        this.cantidad = cantidad;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,6 +71,8 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
         int pos = position+1;
         holder.txtvPos.setText("#"+pos);
+
+        holder.btnVerRsv.setText("VER RESERVAS ("+cantidad+")");
 
         //System.out.println("-->"+numerosList.get(position).toString());
 
