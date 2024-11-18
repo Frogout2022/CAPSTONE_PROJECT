@@ -38,7 +38,7 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
-            android:id="@+id/textView30"
+            android:id="@+id/txtvCantUsers_ListU"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
@@ -55,6 +55,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btnRegresar_ListarU"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -62,7 +63,7 @@
                 android:text="Regresar" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/btnUpdate_ListarU"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
