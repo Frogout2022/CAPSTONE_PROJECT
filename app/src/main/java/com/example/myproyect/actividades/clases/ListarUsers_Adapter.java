@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,9 +43,11 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtvDNI,txtvNombre,txtvApellido,txtvCel,txtvEmail,txtvFecha, txtvPos;
         Button btnVerRsv;
+        ImageView img;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            //Actualizar y comprobar los ID
             txtvDNI = itemView.findViewById(R.id.txtv_dni_rcv_ListUsers);
             txtvNombre = itemView.findViewById(R.id.txtv_nombre_rcv_ListUsers);
             txtvApellido = itemView.findViewById(R.id.txtv_apellido_rcv_ListUsers);
@@ -52,6 +55,7 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
             txtvEmail = itemView.findViewById(R.id.txtv_email_rcv_ListUsers);
             txtvFecha = itemView.findViewById(R.id.txtv_fechaR_rcv_ListUsers);
             txtvPos = itemView.findViewById(R.id.txtv_position_rcv_ListUsers);
+            img = itemView.findViewById(R.id.img_rcv_ListRsv);
 
             btnVerRsv = itemView.findViewById(R.id.btn_verRsv_rcv_ListUsers);
 

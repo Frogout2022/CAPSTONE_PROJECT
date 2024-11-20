@@ -91,7 +91,7 @@ public class DAO_Reserva {
         ResultSet rs = null;
         List<Reserva> lista = new ArrayList<>();
         String dni = Login_Activity.getUsuario().getDNI();
-        //dni = "72673554"; //TEST LISTAR USERS
+        //dni = "72673551"; //TEST LISTAR USERS
         try{
             cnx=ConexionMySQL.getConexion();csta=cnx.prepareCall("{call sp_ConsultarRsvCLI(?,?)}");
             csta.setString(1, tabla);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.admin.MenuAdmin_Activity;
-import com.example.myproyect.actividades.clases.ListarUsers_Adapter;
 import com.example.myproyect.actividades.clases.adapters.ListarRsv_Adapter;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
@@ -33,7 +32,7 @@ import java.util.concurrent.Executors;
 
 public class ListaReservas_Activity extends AppCompatActivity {
 
-    RecyclerView rvListaRsv;
+    RecyclerView rvListarRsv;
     ListarRsv_Adapter listarRsvAdapter;
     Button btnRegresar, btnUpdate;
     TextView txtvCantidad;
@@ -41,7 +40,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
     Spinner spnLosas;
     private Context context;
     private List<Reserva> listaRsv;
-    private String nombre_tabla;
+    private String nombre_tabla="reserva_losa1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_rsv);
 
         asignarReferencias();
-        funSpinner();
+        //funSpinner();
         listar();
         botones();
     }
@@ -59,7 +58,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.pb_ListarRsv_CLI);
 
-        rvListaRsv = findViewById(R.id.rcvListarRsvForUSR);
+        rvListarRsv = findViewById(R.id.rcvListarRsvForUSR);
         btnUpdate = findViewById(R.id.btnUpdate_ListarRsv);
         btnRegresar = findViewById(R.id.btnRegresar_ListarRsv);
         txtvCantidad = findViewById(R.id.txtvCantRsv_ListRsv);
@@ -70,19 +69,20 @@ public class ListaReservas_Activity extends AppCompatActivity {
     }
     private void botones(){
         btnUpdate.setOnClickListener(view -> {
-            rvListaRsv.setVisibility(View.INVISIBLE);
+            rvListarRsv.setVisibility(View.INVISIBLE);
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(this, MenuAdmin_Activity.class );
+            Intent intent = new Intent(this, BienvenidoActivity.class );
             startActivity(intent);
             this.finish();
             super.onBackPressed();
         });
     }
     private void listar(){
+        System.out.println("listar");
         progressBar.setVisibility(View.VISIBLE);
-        rvListaRsv.setVisibility(View.VISIBLE);
+        rvListarRsv.setVisibility(View.VISIBLE);
 
         // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
         ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -91,43 +91,60 @@ public class ListaReservas_Activity extends AppCompatActivity {
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                System.out.println("run");
                 // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
                 listaRsv = DAO_Reserva.ConsultarRsv(nombre_tabla);
+                if(!listaRsv.isEmpty()){
+                    // Actualizar la UI en el hilo principal
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("run!");
+                            List<Pair<String, Integer>> listaR = new ArrayList<>();
+                            String dni_cli = Login_Activity.getUsuario().getDNI();
+                            int cont=0;
+                            for (Reserva reserva : listaRsv) {
+                                for (int j = 0; j < 3; j++) {
+                                    String dni = reserva.getArrayDni()[j];
+                                    if (dni != null && dni.equals(dni_cli)) {
+                                        int hora = 3 + (2 * j);
+                                        listaR.add(new Pair<>(reserva.getDia(),hora));
+                                    }
+                                }
+                                cont++;
+                            }
+                            System.out.println("contador! "+cont);
 
-                // Actualizar la UI en el hilo principal
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int contador=0; //contador reservas
-                        if(listaRsv.size() == 0 ){
-                            Toast.makeText(context, "No hay reservas en esta losa.", Toast.LENGTH_SHORT).show();
-                            // Ocultar el ProgressBar después de que la tarea esté completada
-                            txtvCantidad.setText("Cantidad de reservas: 0");
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }else {
                             // Configurar el adaptador y los datos en la UI
-                            listarRsvAdapter = new ListarRsv_Adapter(listaRsv,context);
-                            rvListaRsv.setAdapter(listarRsvAdapter);
-                            txtvCantidad.setText("Cantidad de reservas: " + listarRsvAdapter.getItemCount());
-
+                            listarRsvAdapter = new ListarRsv_Adapter(listaR,nombre_tabla,context);
+                            rvListarRsv.setAdapter(listarRsvAdapter);
+                            txtvCantidad.setText("Cantidad de reservas: " + cont);
                             // Ocultar el ProgressBar después de que la tarea esté completada
                             progressBar.setVisibility(View.INVISIBLE);
                         }
-                    }
 
-                });
+                    });
+                }else{//No hay reservas en toda la tabla con ese DNI (login)
+                    //Toast.makeText(context, "No hay reservas en esta losa.", Toast.LENGTH_SHORT).show();
+                    // Ocultar el ProgressBar después de que la tarea esté completada
+                    txtvCantidad.setText("Cantidad de reservas: 0!");
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+
             }
         });
 
 
         // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
-        executor.shutdown();
+      executor.shutdown();
 
         }
 
     private void funSpinner(){
-        List<CanchaDeportiva> lista;
 
+        System.out.println("funSpinner");
+
+        List<CanchaDeportiva> lista;
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
