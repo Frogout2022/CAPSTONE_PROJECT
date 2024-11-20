@@ -50,24 +50,9 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_consultar_reserva_user);
 
         asignarReferencias();
-        rvNumeros = findViewById(R.id.rv_consultar_rsv_user);
-        obternerPrimerosNumeros();
-        numerosAdapter = new NumerosAdapter(numerosList);
-        rvNumeros.setAdapter(numerosAdapter);
 
 
-    }
-    public void obternerPrimerosNumeros(){
-        if(registroTotales- numerosList.size()< limite){
-            for(int i=numerosList.size(); i<registroTotales; i++){
-                numerosList.add(i);
-            }
-        }else{
-            int siguienteLimite = numerosList.size() + limite;
-            for (int i= numerosList.size() ; i<siguienteLimite;i++){
-                numerosList.add(i);
-            }
-        }
+
     }
     private void funSpinner(){
         List<CanchaDeportiva> lista = new ArrayList<>();
@@ -113,8 +98,6 @@ public class ConsultarReservaUser_Activity extends AppCompatActivity {
         if(listaRsv.size() == 0 ){
             txtvListado.setText("NO HAY RESERVAS EN ESTA LOSA");
             Toast.makeText(this, "NO HAY RESERVAS EN ESTA LOSA", Toast.LENGTH_SHORT).show();
-
-
         }else {
 
             txtvListado.setText("");

@@ -34,7 +34,7 @@ public class BienvenidoActivity extends AppCompatActivity implements InterfaceMe
     private void referencias(){
         btnConsultar = findViewById(R.id.btnReservasRealizadas_User);
         btnConsultar.setOnClickListener(view -> {
-            Intent intent  = new Intent(this, ConsultarReservaUser_Activity.class);
+            Intent intent  = new Intent(this, ListaReservas_Activity.class);
             startActivity(intent);
             finish();
         });

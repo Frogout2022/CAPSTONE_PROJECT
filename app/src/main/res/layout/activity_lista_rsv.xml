@@ -23,11 +23,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Listar Usuarios"
+            android:text="Listar Reservas"
             android:textAlignment="center"
             android:textColor="@color/hyperlink"
             android:textSize="34sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="16dp"
+            android:text="Selecciona una cancha:"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spnListar_Rsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -36,7 +52,7 @@
             android:backgroundTint="#8BC34A">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcvListarUsersForADM"
+                android:id="@+id/rcvListarRsvForUSR"
                 android:layout_width="match_parent"
                 android:layout_height="285dp"
                 android:layout_marginTop="25dp"
@@ -47,7 +63,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <ProgressBar
-                android:id="@+id/pb_ListarUsers_ADM"
+                android:id="@+id/pb_ListarRsv_CLI"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,12 +73,12 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/txtvCantUsers_ListU"
+            android:id="@+id/txtvCantRsv_ListRsv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:paddingStart="16dp"
-            android:text="Cantidad de usuarios:"
+            android:text="Cantidad de reservas:"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -74,7 +90,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnRegresar_ListarU"
+                android:id="@+id/btnRegresar_ListarRsv"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -82,7 +98,7 @@
                 android:text="Regresar" />
 
             <Button
-                android:id="@+id/btnUpdate_ListarU"
+                android:id="@+id/btnUpdate_ListarRsv"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
