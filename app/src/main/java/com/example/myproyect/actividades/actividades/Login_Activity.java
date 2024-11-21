@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +26,9 @@ import com.example.myproyect.actividades.entidades.App;
 import com.example.myproyect.actividades.entidades.Usuario;
 import com.example.myproyect.actividades.modelos.DAO_Administrador;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Login_Activity extends AppCompatActivity {
@@ -72,7 +77,7 @@ public class Login_Activity extends AppCompatActivity {
         txtClave = findViewById(R.id.logTxtClave);
         checkRecordar = findViewById(R.id.logChkRecordar);
         lblRegistrate = findViewById(R.id.logLblRegistrar);
-        btnIngresar = findViewById(R.id.logBtnIngresar);
+        btnIngresar = findViewById(R.id.btn_ingresar_Login);
         btnSalir = findViewById(R.id.logBtnSalir);
 
         lblRegistrate.setOnClickListener(view -> {
@@ -87,15 +92,167 @@ public class Login_Activity extends AppCompatActivity {
         });
 
         btnIngresar.setOnClickListener(view -> {
-            validarFormulari();
+            validarFormulario();
         });
         btnSalir.setOnClickListener(view -> {
             finishAffinity();
             finish();
         });
     }
+    void recuperarPass() {
+        String correo = txtCorreo.getText().toString(); //guardar el correo ingresado
 
-    void recuperarPass(){
+        if (correo.isEmpty()) {
+            MostrarMensaje.mensaje("Ingrese su correo", this);
+        } else {
+            // Crear un ExecutorService para ejecutar la tarea en segundo plano
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+
+            // Mostrar un ProgressBar mientras validas los datos
+            //progressBar.setVisibility(View.VISIBLE);
+
+            // Ejecutar la tarea en segundo plano
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Validar si el correo existe (consulta a la base de datos)
+                    boolean correoValido = DAO_Cliente.ConsultarCorreo(correo);
+
+                    // Cuando termine la validación, actualizamos la UI
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Ocultar el ProgressBar
+                            //progressBar.setVisibility(View.GONE);
+
+                            if (correoValido) {
+                                // Usuario encontrado, solicitar DNI
+                                final EditText input = new EditText(context);
+                                new AlertDialog.Builder(context)
+                                        .setMessage("Ingrese su DNI: ")
+                                        .setView(input)
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                String dni = input.getText().toString();
+
+                                                // Ahora validamos el DNI (en segundo plano)
+                                                ExecutorService executorDni = Executors.newSingleThreadExecutor();
+                                                executorDni.execute(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        boolean dniValido = DAO_Cliente.ConsultarDni(dni);
+
+                                                        // Cuando termine la validación, actualizamos la UI
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                if (dniValido) {
+                                                                    // DNI válido, iniciar la actividad para recuperar la contraseña
+                                                                    Intent intent = new Intent(context, RecuperarPassword_Activity.class);
+                                                                    intent.putExtra("dni", dni);
+                                                                    intent.putExtra("login", true);
+                                                                    startActivity(intent);
+                                                                } else {
+                                                                    Toast.makeText(context, "DNI incorrecto", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                });
+
+                                                // Cerrar el ExecutorService para DNI cuando ya no sea necesario
+                                                executorDni.shutdown();
+                                            }
+                                        })
+                                        .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                            txtCorreo.setText(null);
+                                            txtClave.setText(null);
+                                        })
+                                        .show();
+                            } else {
+                                // Correo no registrado
+                                MostrarMensaje.mensaje("Correo no registrado", context);
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Cerrar el ExecutorService cuando ya no sea necesario
+            executor.shutdown();
+        }
+    }
+
+    void recuperarPass3() {
+        String correo = txtCorreo.getText().toString(); //guardar el correo ingresado
+
+        if (correo.isEmpty()) {
+            MostrarMensaje.mensaje("Ingrese su correo", this);
+        } else {
+            // Crear un ExecutorService para ejecutar la tarea en segundo plano
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+
+            // Mostrar un ProgressBar mientras validas los datos
+            //progressBar.setVisibility(View.VISIBLE);
+
+            // Ejecutar la tarea en segundo plano
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Validar si el correo existe
+                    boolean correoValido = DAO_Cliente.ConsultarCorreo(correo);
+
+                    // Cuando termine la validación, actualizamos la UI
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Ocultar el ProgressBar
+                            //progressBar.setVisibility(View.GONE);
+
+                            if (correoValido) {
+                                // Usuario encontrado, solicitar DNI
+                                final EditText input = new EditText(context);
+                                new AlertDialog.Builder(context)
+                                        .setMessage("Ingrese su DNI: ")
+                                        .setView(input)
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                String dni = input.getText().toString();
+                                                // Validar el DNI
+                                                if (DAO_Cliente.ConsultarDni(dni)) {
+                                                    // DNI válido, iniciar la actividad para recuperar la contraseña
+                                                    Intent intent = new Intent(context, RecuperarPassword_Activity.class);
+                                                    intent.putExtra("dni", dni);
+                                                    intent.putExtra("login", true);
+                                                    startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(context, "DNI incorrecto", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        })
+                                        .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                            txtCorreo.setText(null);
+                                            txtClave.setText(null);
+                                        })
+                                        .show();
+                            } else {
+                                // Correo no registrado
+                                MostrarMensaje.mensaje("Correo no registrado", context);
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Cerrar el ExecutorService cuando ya no sea necesario
+            executor.shutdown();
+        }
+    }
+
+
+    void recuperarPass2(){
         String correo = txtCorreo.getText().toString(); //guardar el correo ingresado
         if(correo.isEmpty()){
             MostrarMensaje.mensaje("Ingrese su correo",this);
@@ -162,7 +319,7 @@ public class Login_Activity extends AppCompatActivity {
         finish();
     }
 
-    private void validarFormulari() {
+    private void validarFormulario() {
         String correo = txtCorreo.getText().toString().trim();
         String clave = txtClave.getText().toString().trim();
 
@@ -170,15 +327,89 @@ public class Login_Activity extends AppCompatActivity {
             Toast.makeText(this, "Ingrese correctamente sus datos", Toast.LENGTH_SHORT).show();
             return;
         }
-        iniciarSesion(correo, clave);
+        iniciarSesion2(correo, clave);
 
     }
     private void guardarUsuario(String correo, String clave){
         usuario = DAO_Cliente.ObtenerCLI(correo,clave);
     }
-    private void iniciarSesion(String correo, String clave){
+    private void iniciarSesion(String correo, String clave) {
+        // Crear un ExecutorService con un solo hilo
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        // Ejecutar la tarea en segundo plano
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Realizar la consulta de usuario en el hilo en segundo plano
+                boolean usuarioEncontrado = DAO_Cliente.ObtenerCLI(correo, clave) != null;
+
+                if (usuarioEncontrado) {
+                    // Usuario encontrado
+                    runOnUiThread(() -> {
+                        guardarUsuario(correo, clave);
+
+                        // Validar recordar sesión
+                        if (checkRecordar.isChecked()) {
+                            App.uploadDatos(getApplicationContext(), true, correo, clave);
+                            Toast.makeText(getApplicationContext(), "Sesión guardada", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (App.recordarS) {
+                                Toast.makeText(getApplicationContext(), "Sesión dejada de recordar", Toast.LENGTH_SHORT).show();
+                            }
+                            App.uploadDatos(getApplicationContext(), false, null, null);
+                        }
+
+                        Intent intent = new Intent(getApplicationContext(), BienvenidoActivity.class);
+                        startActivity(intent);
+                    });
+
+                } else {
+                    // Buscar admin si el usuario no fue encontrado
+                    boolean esAdmin = DAO_Administrador.ConsultarAdm(correo, clave);
+
+                    if (esAdmin) {
+                        runOnUiThread(() -> {
+                            final EditText input = new EditText(getApplicationContext());
+                            new AlertDialog.Builder(getApplicationContext())
+                                    .setMessage("Ingrese su DNI: ")
+                                    .setView(input)
+                                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                        String dni = input.getText().toString();
+                                        if (DAO_Administrador.ConsultarDni(dni)) {
+                                            // DNI encontrado
+                                            Intent intent = new Intent(getApplicationContext(), MenuAdmin_Activity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "DNI incorrecto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                        txtCorreo.setText(null);
+                                        txtClave.setText(null);
+                                    })
+                                    .show();
+                        });
+
+                    } else {
+                        runOnUiThread(() -> {
+                            Toast.makeText(getApplicationContext(), "USUARIO O CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
+
+                // Finalizar el ExecutorService
+                executor.shutdown();
+            }
+        });
+    }
+
+    private void iniciarSesion2(String correo, String clave){
+        btnIngresar.setEnabled(false);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
         if(DAO_Cliente.ObtenerCLI(correo, clave) != null){
             //usuario encontrado
             guardarUsuario(correo,clave);
@@ -194,6 +425,7 @@ public class Login_Activity extends AppCompatActivity {
             }
             Intent intent = new Intent(this, BienvenidoActivity.class);
             startActivity(intent);
+            this.finish();
         }else{
             //buscar admin
             if(DAO_Administrador.ConsultarAdm(correo, clave)){
@@ -211,18 +443,32 @@ public class Login_Activity extends AppCompatActivity {
                                     Intent intent = new Intent(context, MenuAdmin_Activity.class);
                                     //intent.putExtra("dni", dni);
                                     startActivity(intent);
+
                                 }else{
                                     Toast.makeText(context, "DNI incorrecto", Toast.LENGTH_SHORT).show();
+                                    // Calcular el tiempo del Toast (por defecto, corto: 2000ms, largo: 3500ms)
+                                    int duracionToast = Toast.LENGTH_SHORT == Toast.LENGTH_SHORT ? 2000 : 3500;
+                                    // Usar un Handler para habilitar el botón después del Toast
+                                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                        btnIngresar.setEnabled(true); // Rehabilitar el botón
+                                    }, duracionToast);
                                 }
                             }
                         })
                         .setNegativeButton("Cancel",(dialogInterface, i) -> {
                             txtCorreo.setText(null);
                             txtClave.setText(null);
+                            btnIngresar.setEnabled(true);
                         })
                         .show();
             }else{
                 Toast.makeText(this, "USUARIO O CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
+                // Calcular el tiempo del Toast (por defecto, corto: 2000ms, largo: 3500ms)
+                int duracionToast = Toast.LENGTH_SHORT == Toast.LENGTH_SHORT ? 2000 : 3500;
+                // Usar un Handler para habilitar el botón después del Toast
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    btnIngresar.setEnabled(true); // Rehabilitar el botón
+                }, duracionToast);
             }
 
         }

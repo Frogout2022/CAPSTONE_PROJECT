@@ -73,7 +73,20 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/logBtnIngresar"
+                android:id="@+id/logBtnSalir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:backgroundTint="#88FF5722"
+                android:text="@string/logBtnSalir"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="20dp" />
+
+            <Button
+                android:id="@+id/btn_ingresar_Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -84,17 +97,6 @@
                 android:textAllCaps="false"
                 app:cornerRadius="20dp" />
 
-            <Button
-                android:id="@+id/logBtnSalir"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
-                android:backgroundTint="@color/btnRegOrange"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
-                android:layout_weight="1"
-                android:text="@string/logBtnSalir"/>
         </LinearLayout>
 
         <TextView

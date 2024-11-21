@@ -78,7 +78,7 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
 
         holder.txtvLosa.setText(nombre_tabla);
         int pos = position+1;
-        holder.txtvPos.setText(pos+"");
+        holder.txtvPos.setText("#"+pos);
         //funcion estado
         holder.txtvEstado.setText("Pendiente");
 

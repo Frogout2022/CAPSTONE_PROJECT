@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,12 +13,18 @@ import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.clases.InterfaceMenu;
 import com.example.myproyect.actividades.entidades.Usuario;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 public class BienvenidoActivity extends AppCompatActivity implements InterfaceMenu {
 
-    TextView lblSaludo;
+    TextView lblSaludo,txtvHora;
     Button btnSalida,btnReservar, btnActualizarDatos, btnConsultar;
     TextView lblCancha1, lblCancha2, lblCancha3, lblCancha4;
     Usuario usuario = Login_Activity.getUsuario();
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +32,41 @@ public class BienvenidoActivity extends AppCompatActivity implements InterfaceMe
         setContentView(R.layout.activity_bienvenido);
 
         referencias();
+        mostrarHora();
 
         lblSaludo = findViewById(R.id.bieLblSaludo);
         String nomUsuario = usuario.getNombre();
         lblSaludo.setText("Bienvenido "+nomUsuario);
 
     }
+    private void mostrarHora(){
+        // Configurar zona horaria de América/Lima
+        TimeZone timeZoneLima = TimeZone.getTimeZone("America/Lima");
+
+        // Actualizar la hora cada segundo
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Formato de hora y fecha
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss - dd/MM/yyyy", Locale.getDefault());
+                sdf.setTimeZone(timeZoneLima); // Establecer zona horaria
+
+                String currentTime = sdf.format(new Date());
+                txtvHora.setText(currentTime);
+
+                handler.postDelayed(this, 1000); // Actualizar cada segundo
+            }
+        }, 0);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Detener las actualizaciones cuando la actividad se destruya
+        handler.removeCallbacksAndMessages(null);
+    }
     private void referencias(){
+        txtvHora = findViewById(R.id.txtv_time_User);
+
         btnConsultar = findViewById(R.id.btnReservasRealizadas_User);
         btnConsultar.setOnClickListener(view -> {
             Intent intent  = new Intent(this, ListaReservas_Activity.class);
