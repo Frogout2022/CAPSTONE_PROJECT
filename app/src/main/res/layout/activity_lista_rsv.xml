@@ -46,6 +46,13 @@
             android:layout_marginTop="10dp"
             android:minHeight="48dp" />
 
+        <Switch
+            android:id="@+id/sw_Listar_rsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="Pendientes" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="285dp"

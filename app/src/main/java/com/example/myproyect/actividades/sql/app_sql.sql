@@ -130,15 +130,19 @@ CREATE TABLE tb_pago (
 #drop table tb_pago;
 
 DELIMITER $$
-CREATE PROCEDURE ConsultarPagoPorDNI(
-    IN p_dniCliPago VARCHAR(8)
+CREATE PROCEDURE sp_ConsultarPago(
+    IN FECHA VARCHAR(20),
+    IN HORA VARCHAR(10)
 )
 BEGIN
     SELECT * 
-    FROM Pago
-    WHERE dniCliPago = p_dniCliPago;
+    FROM tb_pago
+    WHERE fecha_reserva = FECHA and hora_reserva = HORA;
 END $$
 DELIMITER ;
+#drop procedure sp_ConsultarPago;
+call sp_ConsultarPago('2024-11-29','7pm');
+select * from tb_pago;
 
 #------------TABLA RESERVAS------------
 

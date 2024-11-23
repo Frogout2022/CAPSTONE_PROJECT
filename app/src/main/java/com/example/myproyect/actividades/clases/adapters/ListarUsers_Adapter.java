@@ -1,8 +1,6 @@
-package com.example.myproyect.actividades.clases;
+package com.example.myproyect.actividades.clases.adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +8,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.CargaActivity;
-import com.example.myproyect.actividades.actividades.Login_Activity;
-import com.example.myproyect.actividades.entidades.Pago;
+import com.example.myproyect.actividades.actividades.usuario.ListaReservas_Activity;
 import com.example.myproyect.actividades.entidades.Usuario;
-import com.example.myproyect.actividades.modelos.DAO_Pago;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapter.ViewHolder> {
 
@@ -95,28 +88,16 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
         holder.btnVerRsv.setText("VER RESERVAS ("+cantidad+")");
 
         holder.btnVerRsv.setOnClickListener(view -> {
-            mosrtrarPago();
+            mostrarReservas(context);
 
         });
 
         //System.out.println("-->"+numerosList.get(position).toString());
 
     }
-    private void mosrtrarPago(){
-        Pago pago = DAO_Pago.consultarPago(Login_Activity.getUsuario().getDNI());
-        new AlertDialog.Builder(context)
-                .setTitle("Informacion de pago:") // Opcional: Título del diálogo
-                .setMessage("Este es el mensaje del diálogo.") // Mensaje principal
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Acción al presionar "Aceptar"
-                        //Toast.makeText(context, "Botón Aceptar presionado", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setCancelable(false) // Impide cerrar tocando fuera del diálogo
-                .show(); // Muestra el diálogo
-
+    private void mostrarReservas(Context context){
+        Intent intent = new Intent(context, ListaReservas_Activity.class);
+        context.startActivity(intent);
 
     }
 

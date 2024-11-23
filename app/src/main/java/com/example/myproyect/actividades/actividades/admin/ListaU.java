@@ -1,15 +1,11 @@
 package com.example.myproyect.actividades.actividades.admin;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.clases.ListaTablasBD;
-import com.example.myproyect.actividades.clases.ListarUsers_Adapter;
-import com.example.myproyect.actividades.clases.NumerosAdapter;
+import com.example.myproyect.actividades.clases.adapters.ListarUsers_Adapter;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.entidades.Usuario;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;

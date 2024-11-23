@@ -1,7 +1,10 @@
 package com.example.myproyect.actividades.clases.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.StrictMode;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.CargaActivity;
 import com.example.myproyect.actividades.actividades.Login_Activity;
+import com.example.myproyect.actividades.entidades.Pago;
 import com.example.myproyect.actividades.entidades.Reserva;
+import com.example.myproyect.actividades.modelos.DAO_Pago;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +52,6 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
             txtvHora = itemView.findViewById(R.id.txtv_hora_rcv_ListRsv);
             txtvLosa = itemView.findViewById(R.id.txtv_losa_rcv_ListRsv);
             txtvEstado = itemView.findViewById(R.id.txtv_estado_rcv_ListRsv);
-            txtvFechaR = itemView.findViewById(R.id.txtv_fechaR_rcv_ListRsv);
             txtvPos = itemView.findViewById(R.id.txtv_position_rcv_ListRsv);
 
             btnVerPago = itemView.findViewById(R.id.btn_verRsv_rcv_ListRsv);
@@ -84,8 +88,37 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
 
 
         holder.btnVerPago.setOnClickListener(view -> {
-            //mostrar una vista de detalles
-            //(implementar CLASE)
+            System.out.println("btn verPago");
+            String fecha = reservasList.get(position).first.toString() ;
+            String hora = reservasList.get(position).second.toString()+"pm";
+
+            //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            //StrictMode.setThreadPolicy(policy);
+            Pago pago = DAO_Pago.consultarPago(fecha, hora);
+
+            StringBuilder sb = new StringBuilder();
+            if(pago==null){
+                sb.append("Error al recuperar informacion del pago.");
+            }else{
+                sb.append("Fecha de pago: "+pago.getFechaPago()+"\n");
+                sb.append("Codigo de pago: "+pago.getCodPago()+"\n");
+                sb.append("Monto Total: "+pago.getMontoTotal()+"\n");
+                sb.append("igv:  "+pago.getIgvPago()+"\n");
+                sb.append("Medio de pago: "+pago.getMedioPago()+"\n");
+            }
+
+            new AlertDialog.Builder(context)
+                    .setTitle("Informacion de pago:") // Opcional: Título del diálogo
+                    .setMessage(sb) // Mensaje principal
+                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Acción al presionar "Aceptar"
+                            //Toast.makeText(context, "Botón Aceptar presionado", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setCancelable(false) // Impide cerrar tocando fuera del diálogo
+                    .show(); // Muestra el diálogo
         });
 
         System.out.println("onBindViewHolder: "+getItemCount());

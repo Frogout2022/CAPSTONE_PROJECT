@@ -1,6 +1,8 @@
 package com.example.myproyect.actividades.modelos;
 
 
+import android.os.StrictMode;
+
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 import com.example.myproyect.actividades.entidades.Pago;
 
@@ -12,68 +14,28 @@ import java.sql.SQLException;
 
 public class DAO_Pago {
 
-
-    public static String insertarPago(Pago pago){
-        String msg = null;
-        Connection cnx = null;
-        CallableStatement csta = null;
-        try{
-            cnx= ConexionMySQL.getConexion();
-            //(dni,nomLosa,horas,montoTotal, estado, tipo);
-            //call insertPago('72673554',"La bomobonera" ,5,258.4,'aprobado', 'tarjeta');
-            csta=	cnx.prepareCall("{call insertPago(?,?,?,?,?,?)}");
-            csta.setString(1, pago.getDniCliPago()); //DNI
-            csta.setString(2, pago.getNombre_losa()); //NOMBRE_LOSA
-            csta.setInt(3, pago.getCantidad_horas()); //HORAS
-            csta.setDouble(4, pago.getMontoTotal());//MONTO TOTAL
-            csta.setString(5, pago.getEstadoPago());//ESTADO
-            csta.setString(6, pago.getMedioPago());//TIPO
-
-            int filasAfectadas = csta.executeUpdate();
-
-            if(filasAfectadas>0) msg="Pago validado y registrado";
-            else msg= "Error al intentar registrar Pago!";
-
-        }catch(Exception e){
-            System.out.println("Error al INSERTAR PAGO: " + e.getMessage());
-            msg= "ERROR al insertar Pago!";
-        }finally {
-            try {
-                //CERRAR RECURSOS
-                if(csta!=null) csta.close();
-                if(cnx!=null) ConexionMySQL.cerrarConexion(cnx);
-            }catch (SQLException e){
-                System.out.println("Error al cerrar recursos: " + e.getMessage());
-            }
-        }
-        return msg;
-    }
-    public static Pago consultarPago(String dni){
+    public static Pago consultarPago(String fecha,String hora){
+        System.out.println("consultarPago");
         Pago pago = null;
-        //PARA V. LOGIN
         Connection cnx = null;
         CallableStatement callableStatement=null;
         ResultSet rs = null;
         try{
             cnx=ConexionMySQL.getConexion();
-
-            callableStatement = cnx.prepareCall("{call ConsultarPagoPorDNI(?)}");
-            callableStatement.setString(1, dni);
-
+            callableStatement = cnx.prepareCall("{call sp_ConsultarPago(?,?)}");
+            callableStatement.setString(1, fecha);
+            callableStatement.setString(2,hora);
+            System.out.println("fecha: "+fecha+" hora: "+hora);
             rs = callableStatement.executeQuery();
 
             if(rs.next()) {
-                String fechaPago = rs.getString(1);
-                String codPago = rs.getString(2);
-                String dniCli = rs.getString(3);
-                String nom_losa = rs.getString(4);
-                int cantHoras  = rs.getInt(5);
-                String estadoPago = rs.getString(6);
-                Double montoTotal = rs.getDouble(7);
-                Double igvPago = rs.getDouble(8);
-                String mediopago = rs.getString(9);
+                String fechaPago = rs.getString(2);
+                String codPago = rs.getString(3);
+                Double montoTotal = rs.getDouble(6);
+                Double igvPago = rs.getDouble(7);
+                String mediopago = rs.getString(8);
 
-                pago = new Pago(fechaPago,codPago,dniCli,nom_losa,cantHoras,estadoPago,montoTotal,igvPago,mediopago);
+                pago = new Pago(fechaPago,codPago,montoTotal,igvPago,mediopago);
 
             }
 

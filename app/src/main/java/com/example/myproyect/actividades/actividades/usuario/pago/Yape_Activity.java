@@ -145,7 +145,6 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else{
             if(validarCodigo() && validarTelefono()){
-                //registrarPago();
                 insertarReserva();
                 Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
                 startActivity(iBienvenido);
@@ -159,17 +158,5 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
         String msg = Reservar.realizar("aprobado", "Yape"); //<--
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         TablaReservaUser_Activity.listaChkS.clear();
-    }
-    private void registrarPago(){
-        String dniCliPago= Login_Activity.getUsuario().getDNI();
-        String nombre_losa = TablaReservaUser_Activity.nombre_losa;
-        int cantidad_horas = TablaReservaUser_Activity.listaChkS.size();
-        String estadoPago = "Aprobado";
-        String medioPago= "Yape";
-
-        Pago pago = new Pago(dniCliPago,nombre_losa,cantidad_horas,estadoPago,total,medioPago);
-        String msg = DAO_Pago.insertarPago(pago);
-        System.out.print("msg: "+msg);
-
     }
 }

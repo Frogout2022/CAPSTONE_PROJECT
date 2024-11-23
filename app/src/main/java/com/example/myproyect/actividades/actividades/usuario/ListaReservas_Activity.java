@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class ListaReservas_Activity extends AppCompatActivity {
     TextView txtvCantidad;
     ProgressBar progressBar;
     Spinner spnLosas;
+    Switch swLista;
+
     private Context context;
     private List<Reserva> listaRsv;
     private String nombre_tabla="reserva_losa1";
@@ -57,6 +60,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
         context = this;
 
         progressBar = findViewById(R.id.pb_ListarRsv_CLI);
+        swLista = findViewById(R.id.sw_Listar_rsv);
 
         rvListarRsv = findViewById(R.id.rcvListarRsvForUSR);
         btnUpdate = findViewById(R.id.btnUpdate_ListarRsv);
@@ -81,6 +85,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
     }
     private void listar(){
         System.out.println("listar");
+
         progressBar.setVisibility(View.VISIBLE);
         rvListarRsv.setVisibility(View.VISIBLE);
 
@@ -136,9 +141,9 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
 
         // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
-      executor.shutdown();
 
-        }
+      executor.shutdown();
+    }
 
     private void funSpinner(){
 
