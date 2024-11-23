@@ -88,10 +88,10 @@ public class ListaU extends AppCompatActivity {
                 // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
                 ArrayList<Usuario> user = DAO_Cliente.listarClientes();
 
-                List<Reserva> listaRsvTabla1 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla1);
-                List<Reserva> listaRsvTabla2 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla2);
-                List<Reserva> listaRsvTabla3 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla3);
-                List<Reserva> listaRsvTabla4 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla4);
+                List<Reserva> listaRsvTabla1 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla1.first);
+                List<Reserva> listaRsvTabla2 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla2.first);
+                List<Reserva> listaRsvTabla3 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla3.first);
+                List<Reserva> listaRsvTabla4 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla4.first);
 
                 // Actualizar la UI en el hilo principal
                 runOnUiThread(new Runnable() {

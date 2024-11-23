@@ -112,6 +112,7 @@ public class BienvenidoActivity extends AppCompatActivity implements InterfaceMe
         //mandar al login
         Intent iLogin = new Intent(this, Login_Activity.class);
         startActivity(iLogin);
+        this.finish();
     }
 
     @Override

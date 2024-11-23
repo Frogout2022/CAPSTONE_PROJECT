@@ -13,11 +13,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
+import com.example.myproyect.actividades.clases.ListaTablasBD;
+import com.example.myproyect.actividades.clases.ListarUsers_Adapter;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.clases.Reservar;
+import com.example.myproyect.actividades.entidades.Pago;
+import com.example.myproyect.actividades.entidades.Reserva;
+import com.example.myproyect.actividades.entidades.Usuario;
+import com.example.myproyect.actividades.modelos.DAO_Cliente;
+import com.example.myproyect.actividades.modelos.DAO_Pago;
+import com.example.myproyect.actividades.modelos.DAO_Reserva;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickListener {
@@ -25,7 +39,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     EditText txtNombre, txtApellido, txtCorreo, txtNumeroTarjeta, txtCvv, txtVencimiento;
     TextView txtvMontoPago, txtvSalir;
     Button btnTest;
-
+    double total = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +48,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
         asignarReferencias();
         Intent retorno = getIntent();
-        double total = retorno.getDoubleExtra("MontoPagar", 0.0);
+        total = retorno.getDoubleExtra("MontoPagar", 0.0);
         txtvMontoPago.setText("Pagar S/ "+total);
 
         focosDeCampos();
@@ -274,7 +288,41 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void reservarBD(){
+
+        // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        // Ejecutar la tarea en segundo plano
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
+                String dni = Login_Activity.getUsuario().getDNI();
+                String id_losa = TablaReservaUser_Activity.tabla;
+                int cantHoras = TablaReservaUser_Activity.listaChkS.size();
+                String estadoPago = "Aprobado";
+                String medioPago="Tarjeta";
+                Pago pago = new Pago(dni, id_losa,cantHoras,estadoPago,total,medioPago);
+                DAO_Pago.insertarPago(pago);
+                // Actualizar la UI en el hilo principal
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Configurar el adaptador y los datos en la UI
+
+                    }
+
+                });
+            }
+        });
+
+
+        // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
+        executor.shutdown();
+
+
         //COMPRA REALIZADA
+
         String msg = Reservar.realizar("aprobado");
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         Intent iBienvenido = new Intent(this, BienvenidoActivity.class);

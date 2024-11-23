@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
+import com.example.myproyect.actividades.clases.ListaTablasBD;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.modelos.DAO_Losa;
@@ -121,12 +122,13 @@ public class Losa4Fragment extends Fragment {
         StrictMode.setThreadPolicy(policy);
         List<CanchaDeportiva> lista = new ArrayList<>();
         lista = DAO_Losa.listarLosas();
-        final String nombre_losa = getString(R.string.bieLblCan4);
+        final String nombre_losa = ListaTablasBD.cancha4.first;
         if(!lista.get(3).getMantenimiento()){
             Intent intent = new Intent(getContext(), TablaReservaUser_Activity.class);
             intent.putExtra("tabla", nombre_tabla);
             //final String nombre_losa = getString(R.string.bieLblCan4);
             intent.putExtra("nombre", nombre_losa);
+            intent.putExtra("idLosa",ListaTablasBD.cancha4.second.toString());
             startActivity(intent);
         }else{
             MostrarMensaje.mensaje(nombre_losa+" en mantenimiento."+"\n"+"Disculpa las molestias", getContext()); //alert

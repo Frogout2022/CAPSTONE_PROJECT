@@ -271,13 +271,12 @@ CREATE TABLE Pago (
 	fechaPago datetime DEFAULT current_timestamp,           -- Fecha y hora del pago
     codPago VARCHAR(50) NOT NULL UNIQUE,       -- Código único del pago
     dniCliPago VARCHAR(8) NOT NULL UNIQUE,        -- DNI del cliente (20 caracteres como máximo)
-    id_Losa INT,
+    nom_losa VARCHAR(50),
     cantHoras INT NOT NULL,
     estadoPago VARCHAR(20) NOT NULL,       -- Estado del pago, por ejemplo, 'Pagado', 'Pendiente', etc.
     montoTotal DECIMAL(10, 2) NOT NULL,    -- Monto total del pago, con 2 decimales
     igvPago DECIMAL(10, 2) NOT NULL,       -- Monto del IGV asociado al pago
-    medioPago VARCHAR(30) NOT NULL ,        -- Medio de pago, por ejemplo, 'Tarjeta', 'Efectivo', etc.
-    foreign key(id_losa) references tb_losa(id)
+    medioPago VARCHAR(30) NOT NULL         -- Medio de pago, por ejemplo, 'Tarjeta', 'Efectivo', etc.
 );
 #select * from tb_losa;
 #drop table pago;
@@ -287,7 +286,7 @@ CREATE TABLE Pago (
 DELIMITER $$
 CREATE PROCEDURE insertPago(
     IN dniCliente VARCHAR(8),
-    IN idLosa INT,
+    IN nombreLosa VARCHAR(50),
     IN horas INT,
     IN monto DECIMAL(10, 2),
     IN estado VARCHAR(20),
@@ -320,8 +319,8 @@ BEGIN
     END IF;
 
     -- Insertar el nuevo pago con el código generado automáticamente
-    INSERT INTO Pago (codPago,dniCliPago,id_losa,cantHoras,estadoPago, montoTotal, igvPago, medioPago)
-    VALUES (nuevoCodigo,dniCliente,idLosa,horas, estado, monto, igv, medio);
+    INSERT INTO Pago (codPago,dniCliPago,nombreLosa,cantHoras,estadoPago, montoTotal, igvPago, medioPago)
+    VALUES (nuevoCodigo,dniCliente,nombreLosa,horas, estado, monto, igv, medio);
     
     SELECT ROW_COUNT() AS filas_afectadas;
 END$$

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
+import com.example.myproyect.actividades.clases.ListaTablasBD;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.modelos.DAO_Losa;
@@ -93,7 +94,7 @@ public class Losa1Fragment extends Fragment{
                 switch (view.getId()) {
 
                     case R.id.car1BtnRegresar:
-                        Log.d("tag", "test");
+                        //Log.d("tag", "test");
                         regresar();
                         break;
                     case R.id.car1BtnAceptar:
@@ -109,7 +110,7 @@ public class Losa1Fragment extends Fragment{
                 switch (view.getId()) {
 
                     case R.id.car1BtnRegresar:
-                        Log.d("tag", "test");
+                        //Log.d("tag", "test");
                         regresar();
                         break;
                     case R.id.car1BtnAceptar:
@@ -126,12 +127,13 @@ public class Losa1Fragment extends Fragment{
         StrictMode.setThreadPolicy(policy);
         List<CanchaDeportiva> lista = new ArrayList<>();
         lista = DAO_Losa.listarLosas();
-        final String nombre_losa = getString(R.string.bieLblCan1);
+        final String nombre_losa = ListaTablasBD.cancha1.first;
         if(!lista.get(0).getMantenimiento()){
             Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getContext(), TablaReservaUser_Activity.class);
             intent.putExtra("tabla", nombre_tabla);
             intent.putExtra("nombre", nombre_losa);
+            intent.putExtra("idLosa", ListaTablasBD.cancha1.second.toString());
             startActivity(intent);
             getActivity().finish();
         }else{

@@ -74,7 +74,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
         lblSemana.setSingleLine(false);
         lblSemana.setText(Fecha.lblTablaReserva);
-        lblSemana.append("\n"+getIntent().getStringExtra("nombre"));
+        lblSemana.append("\n"+"#"+getIntent().getStringExtra("idLosa")+": "+getIntent().getStringExtra("nombre"));
         //lblNombreL.setSingleLine(false);
 
 

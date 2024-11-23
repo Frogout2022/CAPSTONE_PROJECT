@@ -5,22 +5,31 @@ public class Pago {
     private String fechaPago;
     private String codPago;
     private String dniCliPago;
-    private int idLosa;
+    private String nombre_losa;
     private int cantidad_horas;
     private String estadoPago;
     private double montoTotal;
     private double igvPago;
     private String medioPago;
 
-    public Pago(String fechaPago, String codPago, String dniCliPago, int idLosa, int cantidad_horas, String estadoPago, double montoTotal, double igvPago, String medioPago) {
+    public Pago(String fechaPago, String codPago, String dniCliPago, String nombre_losa, int cantidad_horas, String estadoPago, double montoTotal, double igvPago, String medioPago) {
         this.fechaPago = fechaPago;
         this.codPago = codPago;
         this.dniCliPago = dniCliPago;
-        this.idLosa = idLosa;
+        this.nombre_losa = nombre_losa;
         this.cantidad_horas = cantidad_horas;
         this.estadoPago = estadoPago;
         this.montoTotal = montoTotal;
         this.igvPago = igvPago;
+        this.medioPago = medioPago;
+    }
+
+    public Pago(String dniCliPago, String nombre_losa, int cantidad_horas, String estadoPago, double montoTotal, String medioPago) {
+        this.dniCliPago = dniCliPago;
+        this.nombre_losa = nombre_losa;
+        this.cantidad_horas = cantidad_horas;
+        this.estadoPago = estadoPago;
+        this.montoTotal = montoTotal;
         this.medioPago = medioPago;
     }
 
@@ -96,11 +105,11 @@ public class Pago {
         this.cantidad_horas = cantidad_horas;
     }
 
-    public int getIdLosa() {
-        return idLosa;
+    public String getNombre_losa() {
+        return nombre_losa;
     }
 
-    public void setIdLosa(int idLosa) {
-        this.idLosa = idLosa;
+    public void setNombre_losa(String nombre_losa) {
+        this.nombre_losa = nombre_losa;
     }
 }

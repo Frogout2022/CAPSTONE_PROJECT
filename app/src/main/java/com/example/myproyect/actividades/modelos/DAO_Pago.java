@@ -23,7 +23,7 @@ public class DAO_Pago {
             //call insertPago('72673554',1,5,258.4,'aprobado', 'tarjeta');
             csta=	cnx.prepareCall("{call InsertarPago(?,?,?,?,?,?)}");
             csta.setString(1, pago.getDniCliPago()); //DNI
-            csta.setInt(2, pago.getIdLosa()); //ID_LOSA
+            csta.setString(2, pago.getNombre_losa()); //NOMBRE_LOSA
             csta.setInt(3, pago.getCantidad_horas()); //HORAS
             csta.setDouble(4, pago.getMontoTotal());//MONTO TOTAL
             csta.setString(5, pago.getEstadoPago());//ESTADO
@@ -66,14 +66,14 @@ public class DAO_Pago {
                 String fechaPago = rs.getString(1);
                 String codPago = rs.getString(2);
                 String dniCli = rs.getString(3);
-                int id_losa = rs.getInt(4);
-                int cantHoras  = rs.getInt(5);// Password encriptado
+                String nom_losa = rs.getString(4);
+                int cantHoras  = rs.getInt(5);
                 String estadoPago = rs.getString(6);
                 Double montoTotal = rs.getDouble(7);
                 Double igvPago = rs.getDouble(8);
                 String mediopago = rs.getString(9);
 
-                pago = new Pago(fechaPago,codPago,dniCli,id_losa,cantHoras,estadoPago,montoTotal,igvPago,mediopago);
+                pago = new Pago(fechaPago,codPago,dniCli,nom_losa,cantHoras,estadoPago,montoTotal,igvPago,mediopago);
 
             }
 

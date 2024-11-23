@@ -20,6 +20,7 @@ public class Menu_Losas_Activity extends AppCompatActivity implements InterfaceM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
         fragments = new Fragment[4];
         fragments[0] = new Losa1Fragment();
         fragments[1] = new Losa2Fragment();
