@@ -270,7 +270,7 @@ CREATE TABLE Pago (
     idPago INT AUTO_INCREMENT PRIMARY KEY, -- Clave primaria auto-incrementable
 	fechaPago datetime DEFAULT current_timestamp,           -- Fecha y hora del pago
     codPago VARCHAR(50) NOT NULL UNIQUE,       -- Código único del pago
-    dniCliPago VARCHAR(8) NOT NULL UNIQUE,        -- DNI del cliente (20 caracteres como máximo)
+    dniCliPago VARCHAR(8) NOT NULL,        -- DNI del cliente (20 caracteres como máximo)
     nom_losa VARCHAR(50),
     cantHoras INT NOT NULL,
     estadoPago VARCHAR(20) NOT NULL,       -- Estado del pago, por ejemplo, 'Pagado', 'Pendiente', etc.
@@ -319,14 +319,14 @@ BEGIN
     END IF;
 
     -- Insertar el nuevo pago con el código generado automáticamente
-    INSERT INTO Pago (codPago,dniCliPago,nombreLosa,cantHoras,estadoPago, montoTotal, igvPago, medioPago)
+    INSERT INTO Pago (codPago,dniCliPago,nom_Losa,cantHoras,estadoPago, montoTotal, igvPago, medioPago)
     VALUES (nuevoCodigo,dniCliente,nombreLosa,horas, estado, monto, igv, medio);
     
     SELECT ROW_COUNT() AS filas_afectadas;
 END$$
 DELIMITER ;
 #drop procedure insertPago;
-call insertPago('72673555',1,5,258.4,'aprobado', 'tarjeta');
+call insertPago('72673555',"la bombo",5,258.4,'aprobado', 'tarjeta');
 select * from pago;
 
 DELIMITER $$
@@ -342,6 +342,7 @@ DELIMITER ;
 
 
 select * from pago;
+
 
 SELECT 'FINISH' AS mensaje;
 ##############<----------------->###############

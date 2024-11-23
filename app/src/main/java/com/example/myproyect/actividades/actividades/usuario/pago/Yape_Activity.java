@@ -14,11 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.Reservar;
+import com.example.myproyect.actividades.entidades.Pago;
 import com.example.myproyect.actividades.entidades.Reserva;
+import com.example.myproyect.actividades.modelos.DAO_Pago;
 import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ import java.util.List;
 public class Yape_Activity extends AppCompatActivity implements View.OnClickListener {
     TextView txtvSalir, txtvPagar;
     EditText txtTelefono, txtCodigo;
-
+    double total;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +40,7 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
         asignarReferencias();
 
         Intent retorno = getIntent();
-        double total = retorno.getDoubleExtra("MontoPagar", 0.0);
+        total = retorno.getDoubleExtra("MontoPagar", 0.0);
         txtvPagar.setText("Pagar S/ "+total);
 
     }
@@ -142,17 +145,31 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
         }else{
             if(validarCodigo() && validarTelefono()){
-                //PAGO ACEPTADO
-                String msg = Reservar.realizar("aprobado"); //<--
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-                // regresa al menu principal
+                registrarPago();
+                insertarReserva();
                 Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
                 startActivity(iBienvenido);
-                //limpiar listado
-                TablaReservaUser_Activity.listaChkS.clear();
                 finish();
             }//else Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
 
         }
+    }
+    private void insertarReserva(){
+        //PAGO ACEPTADO
+        String msg = Reservar.realizar("aprobado"); //<--
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        TablaReservaUser_Activity.listaChkS.clear();
+    }
+    private void registrarPago(){
+        String dniCliPago= Login_Activity.getUsuario().getDNI();
+        String nombre_losa = TablaReservaUser_Activity.nombre_losa;
+        int cantidad_horas = TablaReservaUser_Activity.listaChkS.size();
+        String estadoPago = "Aprobado";
+        String medioPago= "Yape";
+
+        Pago pago = new Pago(dniCliPago,nombre_losa,cantidad_horas,estadoPago,total,medioPago);
+        String msg = DAO_Pago.insertarPago(pago);
+        System.out.print("msg: "+msg);
+
     }
 }

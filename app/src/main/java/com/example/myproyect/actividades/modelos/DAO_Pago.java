@@ -19,9 +19,9 @@ public class DAO_Pago {
         CallableStatement csta = null;
         try{
             cnx= ConexionMySQL.getConexion();
-            //(dni,idLosa,horas,montoTotal, estado, tipo);
-            //call insertPago('72673554',1,5,258.4,'aprobado', 'tarjeta');
-            csta=	cnx.prepareCall("{call InsertarPago(?,?,?,?,?,?)}");
+            //(dni,nomLosa,horas,montoTotal, estado, tipo);
+            //call insertPago('72673554',"La bomobonera" ,5,258.4,'aprobado', 'tarjeta');
+            csta=	cnx.prepareCall("{call insertPago(?,?,?,?,?,?)}");
             csta.setString(1, pago.getDniCliPago()); //DNI
             csta.setString(2, pago.getNombre_losa()); //NOMBRE_LOSA
             csta.setInt(3, pago.getCantidad_horas()); //HORAS
@@ -32,7 +32,7 @@ public class DAO_Pago {
             int filasAfectadas = csta.executeUpdate();
 
             if(filasAfectadas>0) msg="Pago validado y registrado";
-            else msg= "Error al intentar registrar!";
+            else msg= "Error al intentar registrar Pago!";
 
         }catch(Exception e){
             System.out.println("Error al INSERTAR PAGO: " + e.getMessage());

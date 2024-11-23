@@ -54,7 +54,7 @@
             android:ems="10"
             android:hint="Número de Tarjeta"
             android:inputType="number"
-            android:maxLength="16"
+            android:maxLength="19"
             android:nextFocusForward="@id/txtVencimientoPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +69,7 @@
             android:ems="10"
             android:hint="MM/AA"
             android:inputType="number"
-            android:maxLength="4"
+            android:maxLength="5"
             android:nextFocusForward="@+id/txtCvvPAY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNumTarjetaPAY" />

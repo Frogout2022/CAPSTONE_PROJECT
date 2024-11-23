@@ -3,6 +3,7 @@ package com.example.myproyect.actividades.actividades.usuario.pago;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -40,7 +41,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     TextView txtvMontoPago, txtvSalir;
     Button btnTest;
     double total = 0.0;
-
+    Context context= null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -288,47 +289,23 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void reservarBD(){
-
-        // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-
-        // Ejecutar la tarea en segundo plano
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
                 // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
                 String dni = Login_Activity.getUsuario().getDNI();
-                String id_losa = TablaReservaUser_Activity.tabla;
+                String nombre_losa = TablaReservaUser_Activity.tabla;
                 int cantHoras = TablaReservaUser_Activity.listaChkS.size();
                 String estadoPago = "Aprobado";
                 String medioPago="Tarjeta";
-                Pago pago = new Pago(dni, id_losa,cantHoras,estadoPago,total,medioPago);
-                DAO_Pago.insertarPago(pago);
-                // Actualizar la UI en el hilo principal
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Configurar el adaptador y los datos en la UI
+                Pago pago = new Pago(dni, nombre_losa,cantHoras,estadoPago,total,medioPago);
+                String msg2 = DAO_Pago.insertarPago(pago);
+                System.out.println("msg2: " +msg2);
 
-                    }
-
-                });
-            }
-        });
-
-
-        // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
-        executor.shutdown();
-
-
-        //COMPRA REALIZADA
-
-        String msg = Reservar.realizar("aprobado");
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
-        startActivity(iBienvenido);
-        //limpiar listado
-        TablaReservaUser_Activity.listaChkS.clear();
+                //Toast.makeText(context, msg2, Toast.LENGTH_SHORT).show();
+                        String msg = Reservar.realizar("aprobado");
+                        System.out.println("msg: " +msg);
+                        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                        Intent iBienvenido = new Intent(context, BienvenidoActivity.class);
+                        startActivity(iBienvenido);
+                        TablaReservaUser_Activity.listaChkS.clear(); //limpiar listado
         finish();
     }
 

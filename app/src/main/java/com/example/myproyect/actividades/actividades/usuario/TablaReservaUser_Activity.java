@@ -53,6 +53,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     public static List<Integer> listaChkS = new ArrayList<>();
     List<TextView> listaTxtv = new ArrayList<>();
     public static String tabla;
+    public static String nombre_losa;
     public static boolean preReserva = false;
 
     @Override
@@ -75,6 +76,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         lblSemana.setSingleLine(false);
         lblSemana.setText(Fecha.lblTablaReserva);
         lblSemana.append("\n"+"#"+getIntent().getStringExtra("idLosa")+": "+getIntent().getStringExtra("nombre"));
+        nombre_losa = getIntent().getStringExtra("nombre");
         //lblNombreL.setSingleLine(false);
 
 
