@@ -42,7 +42,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     TextView txtv_cl1,txtv_cl2,txtv_cl3,txtv_cl4,txtv_cl5,txtv_cl6;
     TextView lblNombreL;
     int numDia1, numDia6;
-    Double cantidadPagar=0.0, precio_hora=0.0;
+    public static Double cantidadPagar=0.0, precio_hora=0.0;
     int cantidadReservas=0;
     Usuario usuario = Login_Activity.getUsuario();
 

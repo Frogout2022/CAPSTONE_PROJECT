@@ -289,18 +289,9 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     }
     private void reservarBD(){
-                // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
-                String dni = Login_Activity.getUsuario().getDNI();
-                String nombre_losa = TablaReservaUser_Activity.tabla;
-                int cantHoras = TablaReservaUser_Activity.listaChkS.size();
-                String estadoPago = "Aprobado";
-                String medioPago="Tarjeta";
-                Pago pago = new Pago(dni, nombre_losa,cantHoras,estadoPago,total,medioPago);
-                String msg2 = DAO_Pago.insertarPago(pago);
-                System.out.println("msg2: " +msg2);
 
                 //Toast.makeText(context, msg2, Toast.LENGTH_SHORT).show();
-                        String msg = Reservar.realizar("aprobado");
+                        String msg = Reservar.realizar("aprobado", "tarjeta");
                         System.out.println("msg: " +msg);
                         //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                         Intent iBienvenido = new Intent(context, BienvenidoActivity.class);

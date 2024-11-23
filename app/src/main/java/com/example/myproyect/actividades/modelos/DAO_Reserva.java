@@ -2,6 +2,7 @@ package com.example.myproyect.actividades.modelos;
 
 
 import com.example.myproyect.actividades.actividades.Login_Activity;
+import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 import com.example.myproyect.actividades.entidades.Reserva;
 
@@ -183,8 +184,8 @@ public class DAO_Reserva {
         return lista;
     }
 
-
-    public static String insertarRSV(String tabla, String dia, int hora, String estado){ //PARA ACTV. CLIENTE
+    //PARA ACTV. CLIENTE
+    public static String insertarRSV(String tabla, String dia, int hora, String estado, String medioPago){
         //editar-UPDATE
         String hora_str= "";
         switch (hora){
@@ -209,15 +210,20 @@ public class DAO_Reserva {
 
         try{
             cnx = ConexionMySQL.getConexion();
-            csta = cnx.prepareCall("{call sp_Reservar(?,?,?,?)}");
+            csta = cnx.prepareCall("{call sp_Reservar(?,?,?,?,?,?,?)}");
             csta.setString(1,tabla); // 'reserva_losa1'
             csta.setString(2,dia); // '2023-12-31'
             csta.setString(3,hora_str); // '3pm'
             csta.setString(4,dni); // '12345678'
+            csta.setDouble(5, TablaReservaUser_Activity.cantidadPagar); //monto Total
+            csta.setString(6,estado);// estado para evitar registrar pago
+            csta.setString(7, medioPago); //tarjeta-yape
             rs = csta.executeQuery();
-            int fa = 0;
+            int fa = 0,fa2 = 0;
+            System.out.println("filas afectadas: "+fa);
             if(rs.next()){
-                 fa = rs.getInt(1);
+                 fa = rs.getInt(1); // 1 = validar insert reserva
+                 fa2 = rs.getInt(2); //1= validar insert de pago
             }
             if(fa>0){
                 //hubo alguna fila afecta por UPDATE

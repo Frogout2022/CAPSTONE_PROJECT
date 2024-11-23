@@ -14,6 +14,10 @@ import java.util.List;
 
 public class Reservar {
 
+
+    static void proceso_reserva(){
+
+    }
     public static String realizar(String estado){
         //PROCESO DE RESERVA EN BD
             //int dia_siguiente = Fecha.obtenerNumeroDiaActual()+1;
@@ -50,18 +54,63 @@ public class Reservar {
                    // Log.d("RESERVA","TABLA: "+tabla+" ,DIA: "+dia+" ,HORA: "+hora);
                     if(!TablaReservaUser_Activity.preReserva){//false
                         if(validar(grupo,hora)) msg = "Hora selecciona ya Ocupada";
-                        else msg = insertarReserva(tabla, dia, hora, estado);
+                        else msg = insertarReserva(tabla, dia, hora, estado, null);
                     }else{//true
-                        msg = insertarReserva(tabla, dia, hora, estado);
+                        msg = insertarReserva(tabla, dia, hora, estado, null);
                     }
                 }
             }
         return msg;
     }
-    static String insertarReserva(String tabla, String dia,int hora, String estado){
+
+    public static String realizar(String estado, String medioPago){
+        //PROCESO DE RESERVA EN BD
+        //int dia_siguiente = Fecha.obtenerNumeroDiaActual()+1;
+        String tabla = TablaReservaUser_Activity.tabla;
+        List<Integer> listaChkS = TablaReservaUser_Activity.listaChkS;
+        String msg = null;
+        List<String> lista = Fecha.getFechas();
+        int[][] casos = {
+                {0, 1, 2},     // Casos 0, 1, 2
+                {3, 4, 5},     // Casos 3, 4, 5
+                {6, 7, 8},     // Casos 6, 7, 8
+                {9, 10, 11},   // Casos 9, 10, 11
+                {12, 13, 14},  // Casos 12, 13, 14
+                {15, 16, 17}   // Casos 15, 16, 17
+        };
+        //Log.d("RESERVA", "lenghListaSemanal: "+listaSemanal.size());
+        Log.d("RESERVA", "lenghListaCheks: "+listaChkS.size());
+
+        for (int i = 0; i < listaChkS.size(); i++) {
+            int numOrden = listaChkS.get(i); //capturar la posicion en la tabla
+            int grupo = -1; //0=dia1(mañana);1=dia2;2=dia3
+            String dia;
+
+            // Determinar el grupo al que pertenece numOrden
+            for (int j = 0; j < casos.length; j++) {
+                if (Arrays.stream(casos[j]).anyMatch(x -> x == numOrden)) {
+                    grupo = j;
+                    break;
+                }
+            }
+            if (grupo != -1) {
+                dia = lista.get(grupo);
+                int hora = 15 + ((numOrden - grupo * 3) * 2);
+                // Log.d("RESERVA","TABLA: "+tabla+" ,DIA: "+dia+" ,HORA: "+hora);
+                if(!TablaReservaUser_Activity.preReserva){//false
+                    if(validar(grupo,hora)) msg = "Hora selecciona ya Ocupada";
+                    else msg = insertarReserva(tabla, dia, hora, estado, medioPago);
+                }else{//true
+                    msg = insertarReserva(tabla, dia, hora, estado, medioPago);
+                }
+            }
+        }
+        return msg;
+    }
+    static String insertarReserva(String tabla, String dia,int hora, String estado, String medioPago){
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        return DAO_Reserva.insertarRSV(tabla, dia, hora,estado);
+        return DAO_Reserva.insertarRSV(tabla, dia, hora,estado, medioPago);
     }
 
     static Boolean validar(int dia,int hora){
