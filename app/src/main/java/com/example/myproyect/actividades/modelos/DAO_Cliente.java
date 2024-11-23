@@ -1,6 +1,7 @@
 package com.example.myproyect.actividades.modelos;
 
 import com.example.myproyect.actividades.actividades.Login_Activity;
+import com.example.myproyect.actividades.clases.ListaTablasBD;
 import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
 import com.example.myproyect.actividades.entidades.Usuario;
@@ -85,12 +86,7 @@ public class DAO_Cliente {
                 if (PasswordEncryptor.checkPassword(pass, claveHash)){
                     user = new Usuario(dni, nom, ape, email, claveHash, cel, fecha);
                 }
-
             }
-            //cerrar recursos
-            rs.close();
-            statement.close();
-
         }catch(Exception e){
             System.out.println("Error al obtetenerDAtosCLI: " + e.getMessage());
         }finally {
@@ -103,7 +99,6 @@ public class DAO_Cliente {
                 System.out.println("Error al cerrar recursos: " + e.getMessage());
             }
         }
-
         return user;
     }
 

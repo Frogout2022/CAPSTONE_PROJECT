@@ -1,26 +1,24 @@
 package com.example.myproyect.actividades.entidades;
 
 public class Pago {
-    private String dniCliPago;
-    private String codPago;
-    private String estadoPago;
+    private int idPago;
     private String fechaPago;
+    private String codPago;
+    private String dniCliPago;
+    private int idLosa;
+    private int cantidad_horas;
+    private String estadoPago;
     private double montoTotal;
     private double igvPago;
     private String medioPago;
 
-    public Pago(String fechaPago, double montoTotal, String medioPago, String codPago) {
+    public Pago(String fechaPago, String codPago, String dniCliPago, int idLosa, int cantidad_horas, String estadoPago, double montoTotal, double igvPago, String medioPago) {
         this.fechaPago = fechaPago;
-        this.montoTotal = montoTotal;
-        this.medioPago = medioPago;
         this.codPago = codPago;
-    }
-
-    public Pago(String dniCliPago, String codPago, String estadoPago, String fechaPago, double montoTotal, double igvPago, String medioPago) {
         this.dniCliPago = dniCliPago;
-        this.codPago = codPago;
+        this.idLosa = idLosa;
+        this.cantidad_horas = cantidad_horas;
         this.estadoPago = estadoPago;
-        this.fechaPago = fechaPago;
         this.montoTotal = montoTotal;
         this.igvPago = igvPago;
         this.medioPago = medioPago;
@@ -80,5 +78,29 @@ public class Pago {
 
     public void setIgvPago(double igvPago) {
         this.igvPago = igvPago;
+    }
+
+    public int getIdPago() {
+        return idPago;
+    }
+
+    public void setIdPago(int idPago) {
+        this.idPago = idPago;
+    }
+
+    public int getCantidad_horas() {
+        return cantidad_horas;
+    }
+
+    public void setCantidad_horas(int cantidad_horas) {
+        this.cantidad_horas = cantidad_horas;
+    }
+
+    public int getIdLosa() {
+        return idLosa;
+    }
+
+    public void setIdLosa(int idLosa) {
+        this.idLosa = idLosa;
     }
 }

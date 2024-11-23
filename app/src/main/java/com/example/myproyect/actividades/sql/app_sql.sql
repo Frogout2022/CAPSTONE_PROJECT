@@ -2,6 +2,9 @@
 create database if not exists app_canchafacil;
 use app_canchafacil;
 SELECT NOW() AS fecha_hora_actual;
+SELECT CURRENT_TIMESTAMP AS fecha_hora_actual;
+SELECT sysdate() AS fecha_hora_actual;
+SELECT @@session.time_zone;
 SET lc_time_names = 'es_ES'; #CAMBIAR A ESPAÑOL EL IDIOMA
 
 create table Cliente(
@@ -25,6 +28,9 @@ insert into cliente (dni_cli, nomb_cli, ape_cli, correo_cli, contra_cli, cel_cli
 
 create procedure sp_ListarCLI()#--------
 select * from Cliente;
+
+-- Configurar la zona horaria para la conexión
+SET time_zone = 'America/Lima';
 
 create procedure sp_InsertarCLI(#--------
 Dni char(8) ,
@@ -193,7 +199,6 @@ call LLenarTablaReservas(2);
 call LLenarTablaReservas(3);
 call LLenarTablaReservas(4);
 
-
 ###		LISTAR RESERVAS SEMANALES O EN UN RANGO DETERMINADO ###
 DELIMITER //
 CREATE PROCEDURE sp_ListarRsv(IN tabla varchar(50), in dia_min int, in dia_max int)
@@ -204,8 +209,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
-
-
 #call sp_ListarRsv('reserva_losa3',322,328);
 
 ### REALIZAR UNA RESERVA ### -> CLIENTE COMPRA
@@ -213,7 +216,6 @@ DELIMITER //
 CREATE PROCEDURE sp_RESERVAR(IN tabla varchar(50), IN dia CHAR(10),IN hora char(5), IN dni_user CHAR(8) )
 BEGIN
 	DECLARE mensaje varchar(255);
-    
     -- Crear la consulta dinámica
     SET @query =
 		CONCAT(
@@ -223,20 +225,18 @@ BEGIN
     );
 	PREPARE stmt FROM @query;
 	EXECUTE stmt;
-    
     SELECT ROW_COUNT() AS filas_afectadas;
-    
 	DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
 
-select * from reserva_losa1;
+#select * from reserva_losa1;
 
 #drop procedure sp_RESERVAR;
-call sp_RESERVAR('reserva_losa1', '2024-11-20','7pm','12673524');
+#call sp_RESERVAR('reserva_losa1', '2024-11-20','7pm','12673524');
 #update reserva_losa1 set 3pm ='1234578' where fecha_rsv= '2024-11-18';
 #select row_count();
-select * from reserva_losa1 where id=325;
+#select * from reserva_losa1 where id=325;
 
 
 ### LISTAR RESERVAS INDIVIDUAL POR CLIENTE ###
@@ -266,6 +266,83 @@ BEGIN
 END //
 DELIMITER ;
 
+CREATE TABLE Pago (
+    idPago INT AUTO_INCREMENT PRIMARY KEY, -- Clave primaria auto-incrementable
+	fechaPago datetime DEFAULT current_timestamp,           -- Fecha y hora del pago
+    codPago VARCHAR(50) NOT NULL UNIQUE,       -- Código único del pago
+    dniCliPago VARCHAR(8) NOT NULL UNIQUE,        -- DNI del cliente (20 caracteres como máximo)
+    id_Losa INT,
+    cantHoras INT NOT NULL,
+    estadoPago VARCHAR(20) NOT NULL,       -- Estado del pago, por ejemplo, 'Pagado', 'Pendiente', etc.
+    montoTotal DECIMAL(10, 2) NOT NULL,    -- Monto total del pago, con 2 decimales
+    igvPago DECIMAL(10, 2) NOT NULL,       -- Monto del IGV asociado al pago
+    medioPago VARCHAR(30) NOT NULL ,        -- Medio de pago, por ejemplo, 'Tarjeta', 'Efectivo', etc.
+    foreign key(id_losa) references tb_losa(id)
+);
+#select * from tb_losa;
+#drop table pago;
+#select * from pago;
+#truncate table pago;
+
+DELIMITER $$
+CREATE PROCEDURE insertPago(
+    IN dniCliente VARCHAR(8),
+    IN idLosa INT,
+    IN horas INT,
+    IN monto DECIMAL(10, 2),
+    IN estado VARCHAR(20),
+    IN medio VARCHAR(20)
+)
+BEGIN
+    DECLARE nuevoCodigo VARCHAR(20);
+    DECLARE ultimoCodigo VARCHAR(20);
+    DECLARE numero INT;
+    DECLARE igv DECIMAL(10, 2);
+
+	-- Calcular el IGV (18% del monto)
+    SET igv = monto * 0.18;
+
+    -- Obtener el último código de pago insertado
+    SELECT codPago INTO ultimoCodigo
+    FROM Pago
+    ORDER BY idPago DESC
+    LIMIT 1;
+
+    -- Si no hay códigos previos, iniciar con 'COD001'
+    IF ultimoCodigo IS NULL THEN
+        SET nuevoCodigo = 'COD001';
+    ELSE
+        -- Extraer la parte numérica del último código de pago (eliminando el 'COD')
+        SET numero = CAST(SUBSTRING(ultimoCodigo, 4) AS UNSIGNED);
+        SET numero = numero + 1;  -- Incrementar el número
+        -- Generar el nuevo código de pago con formato 'COD' seguido del número con 3 dígitos
+        SET nuevoCodigo = CONCAT('COD', LPAD(numero, 3, '0'));
+    END IF;
+
+    -- Insertar el nuevo pago con el código generado automáticamente
+    INSERT INTO Pago (codPago,dniCliPago,id_losa,cantHoras,estadoPago, montoTotal, igvPago, medioPago)
+    VALUES (nuevoCodigo,dniCliente,idLosa,horas, estado, monto, igv, medio);
+    
+    SELECT ROW_COUNT() AS filas_afectadas;
+END$$
+DELIMITER ;
+#drop procedure insertPago;
+call insertPago('72673555',1,5,258.4,'aprobado', 'tarjeta');
+select * from pago;
+
+DELIMITER $$
+CREATE PROCEDURE ConsultarPagoPorDNI(
+    IN p_dniCliPago VARCHAR(8)
+)
+BEGIN
+    SELECT * 
+    FROM Pago
+    WHERE dniCliPago = p_dniCliPago;
+END $$
+DELIMITER ;
+
+
+select * from pago;
 
 SELECT 'FINISH' AS mensaje;
 ##############<----------------->###############
