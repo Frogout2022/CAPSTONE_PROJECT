@@ -83,18 +83,12 @@ public class ListaU extends AppCompatActivity {
                 // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
                 ArrayList<Usuario> user = DAO_Cliente.listarClientes();
 
-                List<Reserva> listaRsvTabla1 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla1.first);
-                List<Reserva> listaRsvTabla2 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla2.first);
-                List<Reserva> listaRsvTabla3 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla3.first);
-                List<Reserva> listaRsvTabla4 = DAO_Reserva.listarReservasCLI(ListaTablasBD.tabla4.first);
-
                 // Actualizar la UI en el hilo principal
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         // Configurar el adaptador y los datos en la UI
-                        final int cantidad = listaRsvTabla1.size() + listaRsvTabla2.size() + listaRsvTabla3.size() + listaRsvTabla4.size();
-                        listarUsersAdapter = new ListarUsers_Adapter(user, cantidad, context);
+                        listarUsersAdapter = new ListarUsers_Adapter(user, context);
                         rvListaUsers.setAdapter(listarUsersAdapter);
                         txtvCantidad.setText("Cantidad de usuarios: " + user.size());
 

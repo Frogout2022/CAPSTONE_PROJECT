@@ -99,7 +99,8 @@ public class ListaReservas_Activity extends AppCompatActivity {
             public void run() {
                 System.out.println("run");
                 // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
-                listaRsv = DAO_Reserva.ConsultarRsv(nombre_tabla);
+                String dni = Login_Activity.getUsuario().getDNI();
+                listaRsv = DAO_Reserva.ConsultarRsv(nombre_tabla, dni);
                 if(!listaRsv.isEmpty()){
                     // Actualizar la UI en el hilo principal
                     runOnUiThread(new Runnable() {

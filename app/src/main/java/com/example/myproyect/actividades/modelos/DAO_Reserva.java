@@ -85,13 +85,12 @@ public class DAO_Reserva {
     }
 
 
-    public static List<Reserva> ConsultarRsv(String tabla){
+    public static List<Reserva> ConsultarRsv(String tabla, String dni){
         //CONSULTAR RESERVAS DEL CLIENTE
         Connection cnx = null;
         CallableStatement csta = null;
         ResultSet rs = null;
         List<Reserva> lista = new ArrayList<>();
-        String dni = Login_Activity.getUsuario().getDNI();
         //dni = "72673551"; //TEST LISTAR USERS
         try{
             cnx=ConexionMySQL.getConexion();csta=cnx.prepareCall("{call sp_ConsultarRsvCLI(?,?)}");

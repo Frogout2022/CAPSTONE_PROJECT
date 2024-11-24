@@ -20,9 +20,6 @@
             android:name=".actividades.actividades.TestRv"
             android:exported="false" />
         <activity
-            android:name=".actividades.actividades.admin.ListaU2"
-            android:exported="false" />
-        <activity
             android:name=".actividades.actividades.usuario.FallaLoad_Activity"
             android:exported="false" />
         <activity

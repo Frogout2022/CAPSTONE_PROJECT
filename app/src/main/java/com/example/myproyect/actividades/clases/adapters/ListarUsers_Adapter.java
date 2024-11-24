@@ -14,9 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.ListaReservas_Activity;
+import com.example.myproyect.actividades.clases.ListaTablasBD;
+import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.entidades.Usuario;
+import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapter.ViewHolder> {
 
@@ -32,9 +36,8 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
         this.usuariosList = usuariosList;
         this.cantidad = cantidad;
     }
-    public ListarUsers_Adapter(ArrayList<Usuario> usuariosList, int cantidad, Context context){
+    public ListarUsers_Adapter(ArrayList<Usuario> usuariosList, Context context){
         this.usuariosList = usuariosList;
-        this.cantidad = cantidad;
         this.context = context;
     }
 
@@ -85,6 +88,7 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
         int pos = position+1;
         holder.txtvPos.setText("#"+pos);
 
+        contarCantidadRsv(position);
         holder.btnVerRsv.setText("VER RESERVAS ("+cantidad+")");
 
         holder.btnVerRsv.setOnClickListener(view -> {
@@ -94,6 +98,14 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
         //System.out.println("-->"+numerosList.get(position).toString());
 
+    }
+    private void contarCantidadRsv(int position){
+        List<Reserva> listaRsvTabla1 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla1.first,usuariosList.get(position).getDNI());
+        List<Reserva> listaRsvTabla2 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla2.first,usuariosList.get(position).getDNI());
+        List<Reserva> listaRsvTabla3 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla3.first,usuariosList.get(position).getDNI());
+        List<Reserva> listaRsvTabla4 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla4.first,usuariosList.get(position).getDNI());
+
+        cantidad = listaRsvTabla1.size() + listaRsvTabla2.size() + listaRsvTabla3.size()+ listaRsvTabla4.size();
     }
     private void mostrarReservas(Context context){
         Intent intent = new Intent(context, ListaReservas_Activity.class);
