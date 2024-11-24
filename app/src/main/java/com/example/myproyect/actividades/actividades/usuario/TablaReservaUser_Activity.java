@@ -5,7 +5,6 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +16,6 @@ import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.usuario.pago.PagoActivity;
 import com.example.myproyect.actividades.clases.Fecha;
-import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.clases.Reservar;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
@@ -26,12 +24,13 @@ import com.example.myproyect.actividades.modelos.DAO_Losa;
 import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class TablaReservaUser_Activity extends AppCompatActivity {
-    TableLayout tb1,tb2;
+
     CheckBox chkL1,chkL2,chkL3;
     CheckBox chkM1,chkM2,chkM3;
     CheckBox chkMi1,chkMi2,chkMi3;
@@ -40,11 +39,8 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     CheckBox chkS1, chkS2,chkS3;
     TextView lblSemana, lblCantidadPagar, lblTarifa;
     TextView txtv_cl1,txtv_cl2,txtv_cl3,txtv_cl4,txtv_cl5,txtv_cl6;
-    TextView lblNombreL;
-    int numDia1, numDia6;
+
     public static Double cantidadPagar=0.0, precio_hora=0.0;
-    int cantidadReservas=0;
-    Usuario usuario = Login_Activity.getUsuario();
 
     public static ArrayList<Reserva> listaSemanal = new ArrayList<>();
 
@@ -82,18 +78,23 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
     }
     private void consultarPrecioH(){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        List<CanchaDeportiva> lista = new ArrayList<>();
-        lista = DAO_Losa.listarLosas();
-        tabla = getIntent().getStringExtra("tabla");
-        int i=0;
-        for(CanchaDeportiva canchaDeportiva : lista){
-            if(canchaDeportiva.getNombre_tabla().equals(tabla)) break;
-            i++;
-        }
-        precio_hora = lista.get(i).getPrecio();
-        lblTarifa.setText("Precio/HORA: "+precio_hora+" soles");
+
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+
+            final List<CanchaDeportiva> lista = DAO_Losa.listarLosas();
+            tabla = getIntent().getStringExtra("tabla");
+
+            runOnUiThread(() -> {
+                int i=0;
+                for(CanchaDeportiva canchaDeportiva : lista){
+                    if(canchaDeportiva.getNombre_tabla().equals(tabla)) break;
+                    i++;
+                }
+                precio_hora = lista.get(i).getPrecio();
+                lblTarifa.setText("Precio/HORA: "+precio_hora+" soles");
+            });
+        });
 
 
     }
@@ -102,38 +103,43 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     private void updateChk(){
         //consultar BD
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            //hilo secundario
+            int dia_siguiente = Fecha.obtenerNumeroDiaActual()+1;
+            String tabla = getIntent().getStringExtra("tabla");
+            listaSemanal = DAO_Reserva.listarReservaSemanal(tabla, dia_siguiente, dia_siguiente+5);//+7
 
-        int dia_siguiente = Fecha.obtenerNumeroDiaActual()+1;
-        String tabla = getIntent().getStringExtra("tabla");
-        listaSemanal = DAO_Reserva.listarReservaSemanal(tabla, dia_siguiente, dia_siguiente+5);//+7
+            runOnUiThread(() -> {
+                //hilo principal UI
+                if(listaSemanal.size()==0){
+                    //lista vacía
+                    Toast.makeText(this, "No se pudieron cargar datos de la losa.", Toast.LENGTH_SHORT).show();
 
-        if(listaSemanal.size()==0){
-            Toast.makeText(this, "LISTA VACIA", Toast.LENGTH_SHORT).show();
+                }else{
+                    //Toast.makeText(this, "LISTA NO VACIA", Toast.LENGTH_SHORT).show();
 
-        }else{
-            //Toast.makeText(this, "LISTA NO VACIA", Toast.LENGTH_SHORT).show();
+                    int index = 0, cantidadDias= 6, cantidadHoras=3;
 
-            int index = 0, cantidadDias= 6, cantidadHoras=3;
-
-            for (int i = 0; i < cantidadDias; i++) {
-                for (int j = 0; j < cantidadHoras; j++) {
-                    if(listaSemanal.get(i).getArrayDni()[j]!=null){
-                        //true
-                        listaChk.get(index).setChecked(true);
-                        listaChk.get(index).setText("Ocupado");
-                        listaChk.get(index).setEnabled(false);
-                    }else{
-                        listaChk.get(index).setChecked(false);
-                        listaChk.get(index).setText("Libre");
-                        listaChk.get(index).setEnabled(true);
+                    for (int i = 0; i < cantidadDias; i++) {
+                        for (int j = 0; j < cantidadHoras; j++) {
+                            if(listaSemanal.get(i).getArrayDni()[j]!=null){
+                                //true
+                                listaChk.get(index).setChecked(true);
+                                listaChk.get(index).setText("Ocupado");
+                                listaChk.get(index).setEnabled(false);
+                            }else{
+                                listaChk.get(index).setChecked(false);
+                                listaChk.get(index).setText("Libre");
+                                listaChk.get(index).setEnabled(true);
+                            }
+                            index++;
+                        }
                     }
-                    index++;
+                    listaChkS.clear();
                 }
-            }
-            listaChkS.clear();
-        }
+            });
+        });
 
     }
 
@@ -233,13 +239,6 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
         referenciasChk();
 
-
-    }
-    private void testReservar(){
-        String msg = Reservar.realizar("aprobado");
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
-        updateChk(); //actualizar vista
 
     }
     private void referenciasChk(){

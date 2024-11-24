@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,9 +18,14 @@ import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Reservar;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Yape_Activity extends AppCompatActivity implements View.OnClickListener {
     TextView txtvSalir, txtvPagar;
     EditText txtTelefono, txtCodigo;
+    ProgressBar progressBar;
     double total;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +41,15 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void asignarReferencias(){
+        progressBar = findViewById(R.id.pb_load_yape);
+        progressBar.setVisibility(View.GONE);
         txtvSalir = findViewById(R.id.txtvSalirYape);
         txtvPagar = findViewById(R.id.txtvPayYape);
         txtvSalir.setOnClickListener(view -> {
             salir();
         });
         txtvPagar.setOnClickListener(view -> {
+            txtvPagar.setEnabled(false);
             confirmaryapeo();
         });
         txtTelefono = findViewById(R.id.txtTelyape);
@@ -130,20 +141,36 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
     private void confirmaryapeo() {
         if(txtCodigo.getText().toString().isEmpty() || txtTelefono.getText().toString().isEmpty()){
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
+            txtvPagar.setEnabled(true);
         }else{
             if(validarCodigo() && validarTelefono()){
+                txtvPagar.setEnabled(true);
                 insertarReserva();
+
                 Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
                 startActivity(iBienvenido);
                 finish();
-            }//else Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
 
+            }else{
+                Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
+                txtvPagar.setEnabled(true);
+            }
         }
     }
     private void insertarReserva(){
-        //PAGO ACEPTADO
-        String msg = Reservar.realizar("aprobado", "Yape"); //<--
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        TablaReservaUser_Activity.listaChkS.clear();
+        progressBar.setVisibility(View.VISIBLE);
+        Executor executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(() -> {
+            //PAGO ACEPTADO
+            final String msg = Reservar.realizar("aprobado", "Yape"); //<--
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                TablaReservaUser_Activity.listaChkS.clear();
+            });
+
+        });
+
     }
 }

@@ -103,9 +103,9 @@ nombre_tabla varchar(20) not null unique
 
 insert into tb_losa (precio_hora,nombre_losa, horario, direccion,nombre_tabla) values
 (10.5,'La Bombonerita','L-D', 'Av. Eduardo de Habich, San Martín de Porres 15102','reserva_losa1'),
-(20.5,'La Bombonera','L-D', 'Jr. Riobamba 601, San Martín de Porres 15101' ,'reserva_losa2'),
-(30.5,'Estadio La 70','L-D', 'San Martín de Porres 15107','reserva_losa3'),
-(40.5,'Campo deportivo 27 de noviembre','L-D', 'Av. 27 de Noviembre, San Martín de Porres 15106','reserva_losa4');
+(11.5,'La Bombonera','L-D', 'Jr. Riobamba 601, San Martín de Porres 15101' ,'reserva_losa2'),
+(12.5,'Estadio La 70','L-D', 'San Martín de Porres 15107','reserva_losa3'),
+(13.5,'Campo deportivo 27 de noviembre','L-D', 'Av. 27 de Noviembre, San Martín de Porres 15106','reserva_losa4');
 
 
 create procedure sp_EditarLosas(#-----------------------
