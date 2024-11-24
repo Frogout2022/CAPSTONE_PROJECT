@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -131,6 +132,33 @@ public class Fecha {
         return fechaIngresada.isBefore(fechaActual.toLocalDate());
     }
 
+    public static boolean validarRangoFecha(String fechaStr,int dias) {
+        try {
+            // Definir el formato de la fecha que recibimos como String
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+            // Establecer la zona horaria GMT-5
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT-5"));
+
+            // Convertir la cadena de fecha en un objeto Date
+            Date fecha = sdf.parse(fechaStr);
+
+            // Obtener la fecha actual en la misma zona horaria
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeZone(TimeZone.getTimeZone("GMT-5"));
+            Date fechaActual = calendar.getTime();
+
+            // Calcular la fecha límite (32 días antes de la fecha actual)
+            calendar.add(Calendar.DAY_OF_YEAR, dias);
+            Date fechaLimite = calendar.getTime();
+
+            // Comprobar si la fecha está dentro de los últimos n días
+            return !fecha.before(fechaLimite) ;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

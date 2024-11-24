@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -38,16 +40,19 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
     ProgressBar progressBar;
     Spinner spnLosas;
     Switch swLista;
+    RadioGroup rg;
+    RadioButton rb_anio,rb_mes,rb_semana;
 
     private Context context;
     private List<Reserva> listaRsv;
     private String nombre_tabla="reserva_losa1";
-
+    private String filtro= null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_rsv_adm);
 
+        filtro="Año";
         asignarReferencias();
         funSpinner();
         listar();
@@ -66,6 +71,13 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
         btnRegresar = findViewById(R.id.btnRegresar_ListarRsv_ADM);
         txtvCantidad = findViewById(R.id.txtvCantRsv_ListRsv_ADM);
 
+        rg = findViewById(R.id.rg_rsv_usuarios_adm);
+        rb_anio = findViewById(R.id.rb_anio_rsv_adm);
+        rb_mes = findViewById(R.id.rb_mes_rsv_adm);
+        rb_semana = findViewById(R.id.rb_semana_rsv_adm);
+
+        rb_anio.setChecked(true);
+
 
     }
     private void botones(){
@@ -82,6 +94,18 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
         swLista.setOnClickListener(view -> {
             listar();
         });
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = findViewById(i);
+                filtro = radioButton.getText().toString();
+                listar();
+                System.out.println("selected: "+radioButton.getText().toString());
+            }
+        });
+
+
     }
     private void listar(){
         progressBar.setVisibility(View.VISIBLE); // Mostrar progreso al iniciar
@@ -104,16 +128,26 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
                     swLista.setEnabled(true);
                     List<Reserva> listaR = new ArrayList<>();
                     List<Reserva> lista_rsv_vigentes = new ArrayList<>();
+
+                    List<Reserva> lista_rsv_anual = new ArrayList<>();
+                    List<Reserva> lista_rsv_mensual = new ArrayList<>();
+                    List<Reserva> lista_rsv_semanal = new ArrayList<>();
+
                     for (Reserva reserva : listaRsv) {
                         for (int j = 0; j < 3; j++) {
                             String dniReserva = reserva.getArrayDni()[j];
                             if(dniReserva!=null){
                                 int hora = 3 + (2 * j);
-                                boolean b = Fecha.esFechaPasada(reserva.getDia());
-                                if(!b){
+                                lista_rsv_anual.add(new Reserva(reserva.getDia(),hora+"pm",dniReserva));
+
+                                if(Fecha.validarRangoFecha(reserva.getDia(),-31)){
+                                    lista_rsv_mensual.add(new Reserva(reserva.getDia(),hora+"pm",dniReserva));
+                                }
+                                if(Fecha.validarRangoFecha(reserva.getDia(),-7)){
+                                    lista_rsv_semanal.add(new Reserva(reserva.getDia(),hora+"pm",dniReserva));
+                                }
+                                if(!Fecha.esFechaPasada(reserva.getDia())){
                                     lista_rsv_vigentes.add(new Reserva(reserva.getDia(),hora+"pm",dniReserva));
-                                }else{
-                                    listaR.add(new Reserva(reserva.getDia(), hora + "pm", dniReserva));
                                 }
 
                             }
@@ -123,8 +157,23 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
                         listarRsvAdapter = new ListarRsv_Adapter(lista_rsv_vigentes, nombre_tabla, context);
                         txtvCantidad.setText("Cantidad de reservas: " + lista_rsv_vigentes.size());
                     }else{
-                        listarRsvAdapter = new ListarRsv_Adapter(listaR, nombre_tabla, context);
-                        txtvCantidad.setText("Cantidad de reservas: " + listaR.size());
+
+                        switch (filtro){
+                            case "Año":
+                                listarRsvAdapter = new ListarRsv_Adapter(lista_rsv_anual, nombre_tabla, context);
+                                txtvCantidad.setText("Cantidad de reservas: " + lista_rsv_anual.size());
+                                break;
+                            case "Mes":
+                                listarRsvAdapter = new ListarRsv_Adapter(lista_rsv_mensual, nombre_tabla, context);
+                                txtvCantidad.setText("Cantidad de reservas: " + lista_rsv_mensual.size());
+                                break;
+                            case "Semana":
+                                listarRsvAdapter = new ListarRsv_Adapter(lista_rsv_semanal, nombre_tabla, context);
+                                txtvCantidad.setText("Cantidad de reservas: " + lista_rsv_semanal.size());
+                                break;
+
+                        }
+
                     }
                     rvListarRsv.setAdapter(listarRsvAdapter);
                 } else {

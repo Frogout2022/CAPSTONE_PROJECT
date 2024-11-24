@@ -30,24 +30,25 @@
             android:textStyle="bold" />
 
         <RadioGroup
+            android:id="@+id/rg_rsv_usuarios_adm"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioButton9"
+                android:id="@+id/rb_anio_rsv_adm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="Año" />
 
             <RadioButton
-                android:id="@+id/radioButton8"
+                android:id="@+id/rb_mes_rsv_adm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mes" />
 
             <RadioButton
-                android:id="@+id/radioButton7"
+                android:id="@+id/rb_semana_rsv_adm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Semana" />
