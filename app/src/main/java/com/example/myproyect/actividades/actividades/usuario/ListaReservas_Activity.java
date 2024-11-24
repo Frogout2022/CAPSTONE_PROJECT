@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
+import com.example.myproyect.actividades.actividades.admin.MenuAdmin_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.adapters.ListarRsv_Adapter;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
@@ -75,10 +76,17 @@ public class ListaReservas_Activity extends AppCompatActivity {
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(this, Bienvenido_Activity.class );
-            startActivity(intent);
-            this.finish();
-            super.onBackPressed();
+            boolean b = Login_Activity.isAdmin;
+            if(b){
+                Intent intent = new Intent(this, MenuAdmin_Activity.class );
+                startActivity(intent);
+                this.finish();
+            }else{
+                Intent intent = new Intent(this, Bienvenido_Activity.class );
+                startActivity(intent);
+                this.finish();
+            }
+
         });
         swLista.setOnClickListener(view -> {
             listar();
@@ -91,7 +99,10 @@ public class ListaReservas_Activity extends AppCompatActivity {
         swLista.setEnabled(false);
         txtvCantidad.setText(""); // Limpiar texto de cantidad
 
-        String dni_cli = Login_Activity.getUsuario().getDNI();
+        Intent intent = getIntent();
+        String dni_cli = intent.getStringExtra("dni");
+        System.out.println("dni: "+dni_cli);
+        //String dni_cli = Login_Activity.getUsuario().getDNI();
         // Crear ExecutorService con un solo hilo
         ExecutorService executor = Executors.newSingleThreadExecutor();
 

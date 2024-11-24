@@ -70,6 +70,8 @@ public class Bienvenido_Activity extends AppCompatActivity implements InterfaceM
         btnConsultar = findViewById(R.id.btnReservasRealizadas_User);
         btnConsultar.setOnClickListener(view -> {
             Intent intent  = new Intent(this, ListaReservas_Activity.class);
+            intent.putExtra("dni", Login_Activity.getUsuario().getDNI());
+            System.out.println("putExtra:"+Login_Activity.getUsuario().getDNI());
             startActivity(intent);
             finish();
         });

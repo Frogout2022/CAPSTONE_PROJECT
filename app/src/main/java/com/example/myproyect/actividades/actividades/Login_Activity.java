@@ -43,6 +43,7 @@ public class Login_Activity extends AppCompatActivity {
     Context context = this;
 
     public static Usuario usuario = new Usuario();
+    public static boolean isAdmin = false;
     //public static Usuario usuario = new Usuario("70829460","Milhos", "Sihuay", "m@g.com", "123", "997653086");
     private String correo=null, clave=null;
 
@@ -424,6 +425,7 @@ public class Login_Activity extends AppCompatActivity {
                 App.uploadDatos(this, false, null, null);
             }
             Intent intent = new Intent(this, Bienvenido_Activity.class);
+            isAdmin = false;
             startActivity(intent);
             this.finish();
         }else{
@@ -442,7 +444,9 @@ public class Login_Activity extends AppCompatActivity {
                                     //DNI ENCONTRADO
                                     Intent intent = new Intent(context, MenuAdmin_Activity.class);
                                     //intent.putExtra("dni", dni);
+                                    isAdmin = true;
                                     startActivity(intent);
+                                    finish();
 
                                 }else{
                                     Toast.makeText(context, "DNI incorrecto", Toast.LENGTH_SHORT).show();

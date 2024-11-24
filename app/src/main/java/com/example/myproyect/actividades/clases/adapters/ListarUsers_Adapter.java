@@ -92,7 +92,7 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
         holder.btnVerRsv.setText("VER RESERVAS ("+cantidad+")");
 
         holder.btnVerRsv.setOnClickListener(view -> {
-            mostrarReservas(context);
+            mostrarReservas(context, position);
 
         });
 
@@ -100,6 +100,7 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
     }
     private void contarCantidadRsv(int position){
+
         List<Reserva> listaRsvTabla1 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla1.first,usuariosList.get(position).getDNI());
         List<Reserva> listaRsvTabla2 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla2.first,usuariosList.get(position).getDNI());
         List<Reserva> listaRsvTabla3 = DAO_Reserva.ConsultarRsv(ListaTablasBD.tabla3.first,usuariosList.get(position).getDNI());
@@ -107,8 +108,9 @@ public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapte
 
         cantidad = listaRsvTabla1.size() + listaRsvTabla2.size() + listaRsvTabla3.size()+ listaRsvTabla4.size();
     }
-    private void mostrarReservas(Context context){
+    private void mostrarReservas(Context context, int position){
         Intent intent = new Intent(context, ListaReservas_Activity.class);
+        intent.putExtra("dni",usuariosList.get(position).getDNI());
         context.startActivity(intent);
 
     }

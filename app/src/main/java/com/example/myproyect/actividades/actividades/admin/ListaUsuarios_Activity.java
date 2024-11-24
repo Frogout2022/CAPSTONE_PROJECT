@@ -62,7 +62,6 @@ public class ListaUsuarios_Activity extends AppCompatActivity {
             Intent intent = new Intent(this,MenuAdmin_Activity.class );
             startActivity(intent);
             this.finish();
-            super.onBackPressed();
         });
     }
     private void listar(){
