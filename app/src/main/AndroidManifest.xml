@@ -20,13 +20,10 @@
             android:name=".actividades.actividades.admin.ListaReservas_ADM_Activity"
             android:exported="false" />
         <activity
-            android:name=".actividades.actividades.usuario.FallaLoad_Activity"
+            android:name=".actividades.actividades.FallaLoad_Activity"
             android:exported="false" />
         <activity
             android:name=".actividades.actividades.admin.MantenimientoLosas_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".actividades.actividades.admin.ListarReservasADMIN_Activity"
             android:exported="false" />
         <activity
             android:name=".actividades.actividades.usuario.ListaReservas_Activity"

@@ -1,11 +1,10 @@
-package com.example.myproyect.actividades.actividades.usuario;
+package com.example.myproyect.actividades.actividades;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myproyect.BuildConfig;
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.CargaActivity;
 
 public class FallaLoad_Activity extends AppCompatActivity {
 

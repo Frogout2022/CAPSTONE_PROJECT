@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.example.myproyect.BuildConfig;
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.usuario.FallaLoad_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.Internet;
 import com.example.myproyect.actividades.conexion.ConexionMySQL;
