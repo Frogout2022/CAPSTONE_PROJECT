@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
-import com.example.myproyect.actividades.actividades.admin.MenuAdmin_Activity;
 import com.example.myproyect.actividades.clases.adapters.ListarRsv_Adapter;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
@@ -80,68 +78,62 @@ public class ListaReservas_Activity extends AppCompatActivity {
             super.onBackPressed();
         });
     }
-    private void listar(){
-        System.out.println("listar");
 
-        progressBar.setVisibility(View.VISIBLE);
-        rvListarRsv.setVisibility(View.VISIBLE);
+    private void listar() {
+        progressBar.setVisibility(View.VISIBLE); // Mostrar progreso al iniciar
+        rvListarRsv.setVisibility(View.GONE); // Ocultar el RecyclerView hasta tener datos
+        swLista.setEnabled(false);
+        txtvCantidad.setText(""); // Limpiar texto de cantidad
 
-        // Crear un ExecutorService con un solo hilo o un pool de hilos según tu preferencia
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        String dni_cli = Login_Activity.getUsuario().getDNI();
+        // Crear ExecutorService con un solo hilo
+        ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        // Ejecutar la tarea en segundo plano
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("run");
-                // Realizar consultas en paralelo usando Thread para mejorar el rendimiento
-                String dni = Login_Activity.getUsuario().getDNI();
-                listaRsv = DAO_Reserva.ConsultarRsv(nombre_tabla, dni);
-                if(!listaRsv.isEmpty()){
-                    // Actualizar la UI en el hilo principal
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("run!");
-                            List<Reserva> listaR = new ArrayList<>();
-                            String dni_cli = Login_Activity.getUsuario().getDNI();
-                            int cont=0;
-                            for (Reserva reserva : listaRsv) {
-                                for (int j = 0; j < 3; j++) {
-                                    String dni = reserva.getArrayDni()[j];
-                                    if (dni != null && dni.equals(dni_cli)) {
-                                        int hora = 3 + (2 * j);
+        executor.execute(() -> {
+            // Hilo secundario para consultas
 
-                                        listaR.add(new Reserva(reserva.getDia(),hora+"pm",dni));
-                                    }
-                                }
-                                cont++;
+            listaRsv = DAO_Reserva.ConsultarRsv(nombre_tabla, dni_cli);
+
+            runOnUiThread(() -> {
+                // Hilo principal para actualizar UI
+                progressBar.setVisibility(View.GONE); // Ocultar el ProgressBar
+
+                if (!listaRsv.isEmpty()) {
+                    // Si hay datos, mostrar el RecyclerView y configurarlo
+                    rvListarRsv.setVisibility(View.VISIBLE);
+                    swLista.setEnabled(true);
+
+                    List<Reserva> listaR = new ArrayList<>();
+                    int cont = 0;
+
+                    for (Reserva reserva : listaRsv) {
+                        for (int j = 0; j < 3; j++) {
+                            String dniReserva = reserva.getArrayDni()[j];
+                            if (dniReserva != null && dniReserva.equals(dni_cli)) {
+                                int hora = 3 + (2 * j);
+                                listaR.add(new Reserva(reserva.getDia(), hora + "pm", dniReserva));
                             }
-                            System.out.println("contador! "+cont);
-
-                            // Configurar el adaptador y los datos en la UI
-                            listarRsvAdapter = new ListarRsv_Adapter(listaR,nombre_tabla,context);
-                            rvListarRsv.setAdapter(listarRsvAdapter);
-                            txtvCantidad.setText("Cantidad de reservas: " + cont);
-                            // Ocultar el ProgressBar después de que la tarea esté completada
-                            progressBar.setVisibility(View.INVISIBLE);
                         }
+                        cont++;
+                    }
 
-                    });
-                }else{//No hay reservas en toda la tabla con ese DNI (login)
-                    //Toast.makeText(context, "No hay reservas en esta losa.", Toast.LENGTH_SHORT).show();
-                    // Ocultar el ProgressBar después de que la tarea esté completada
-                    txtvCantidad.setText("Cantidad de reservas: 0!");
-                    progressBar.setVisibility(View.INVISIBLE);
+                    System.out.println("contador! " + cont);
+
+                    listarRsvAdapter = new ListarRsv_Adapter(listaR, nombre_tabla, context);
+                    rvListarRsv.setAdapter(listarRsvAdapter);
+                    txtvCantidad.setText("Cantidad de reservas: " + cont);
+
+                } else {
+                    // Si no hay datos, ocultar el RecyclerView y mostrar mensaje
+                    rvListarRsv.setVisibility(View.GONE);
+                    txtvCantidad.setText("No hay reservas disponibles.");
+                    System.out.println("No hay reservas en esta losa.");
                 }
-
-            }
+            });
         });
 
-
-        // Cerrar el ExecutorService cuando ya no sea necesario (por ejemplo, en onDestroy o cuando termines)
-
-      executor.shutdown();
+        // Cerrar el ExecutorService
+        executor.shutdown();
     }
 
     private void funSpinner(){
