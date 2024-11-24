@@ -48,7 +48,7 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
     public static ArrayList<Reserva> listaSemanal = new ArrayList<>();
 
-    Button btnReservar,btnVolver, btnTest;
+    Button btnReservar,btnVolver;
     List<CheckBox> listaChk = new ArrayList<>();
     public static List<Integer> listaChkS = new ArrayList<>();
     List<TextView> listaTxtv = new ArrayList<>();
@@ -231,10 +231,6 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
             reservar();
         });
 
-        btnTest = findViewById(R.id.btnTestReservar);
-        btnTest.setOnClickListener(view -> {
-            testReservar();
-        });
         referenciasChk();
 
 

@@ -73,9 +73,9 @@ Cel_Admin varchar(15) unique not null
 );
 
 insert into admin values
-('72673554', 'Milhos', 'Sihuay', 'mi_adm@g.com', '$2a$10$9qCHnNkbUuWqVU8C.gkX3uo4xzb4eZfHL7zyZHxTJ0Y2igkjrdAGG', '997653086' ), #321
-('70829460', 'Luiggi', 'Rebatta', 'lu_adm@g.com', '$2a$10$zeTmdX5EE7wCFGAmIaGdY.2t/Pm9YB8802bnDSNu1DS9PCd6rbKF2', '969599087' ), #321
-('12345677', 'Marcelo', 'Yabar', 'ma_adm@g.com', '$2a$10$oI58ZbDgq7BvmX6GOgJoRulSNGYVcnPeaMTth.jGH8oNB9iRtFdf.', '986389628' ); #321
+('72673554', 'Milhos', 'Sihuay', 'mi_adm@g.com', '$2a$10$5MqF4e5ag7JMFW0FjufjTuPv4smMPjL63y57lmazNVTYDC38DvN2K', '997653086' ), #tiff
+('60766704', 'Keyra', 'Sihuay', 'ke_adm@gmail.com', '$2a$10$uexQP1A5y7tyxDFXa1Z8JuZiP2NNSwSvD.r92Lqujjp/2Nn9jPb2y', '976185877' ), #5284Ke67391
+('70829460', 'Luiggi', 'Rebatta', 'lu_adm@g.com', '$2a$10$eEl8TUFEMfRhNnr8L58ZwelazBOyn1ugI6O5yKM.9gaBNMmiL2rVm', '969599087' ); #321
 
 create procedure sp_ConsultarADM(
 Correo varchar(30),
@@ -232,8 +232,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
-#call sp_ListarRsv('reserva_losa3',322,328);
-
 
 
 ### ------------ REALIZAR UNA RESERVA e INSERCCION DE PAGO ### -> CLIENTE COMPRA
@@ -254,8 +252,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
-#drop procedure sp_RESERVAR;
-
 
 DELIMITER //
 CREATE PROCEDURE sp_RESERVAR(
