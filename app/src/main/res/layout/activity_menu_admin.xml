@@ -6,58 +6,84 @@
     android:layout_height="match_parent"
     tools:context=".actividades.actividades.admin.MenuAdmin_Activity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="315dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="52dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="Bienvenido administrador"
-        android:textColor="#DF1919"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
-        android:layout_width="329dp"
-        android:layout_height="251dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="143dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btnListarRsvUsers_MenuAdm"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LISTAR RESERVAS" />
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Bienvenido administrador"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="34sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnListarUsers_MenuAdm"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="LISTAR USUARIOS" />
-
-        <Button
-            android:id="@+id/btn_MngLosas_AdminMenu"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/txtv_hora_adm"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MANTENIMIENTO LOSAS" />
+            android:layout_gravity="center"
+            android:layout_marginVertical="15dp"
+            android:text="2024-12-12 12:12"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnSalirAdmin"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="SALIR" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LISTAR LOSAS"
-            android:visibility="invisible" />
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/imgbtn_listusers_adm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="#8BC34A"
+                app:srcCompat="@drawable/icon_users_adm" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/imgbtn_mante_adm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="#8BC34A"
+                app:srcCompat="@drawable/icon_config_adm" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/imgbtn_listRsv_adm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="#8BC34A"
+                app:srcCompat="@drawable/icon_calendar_adm" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/imgbtn_exit_adm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="#8BC34A"
+                app:srcCompat="@drawable/icon_salir_adm" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

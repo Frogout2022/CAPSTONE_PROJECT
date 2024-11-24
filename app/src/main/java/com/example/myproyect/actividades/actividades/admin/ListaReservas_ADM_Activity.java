@@ -86,7 +86,7 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(this, Bienvenido_Activity.class );
+            Intent intent = new Intent(this, MenuAdmin_Activity.class );
             startActivity(intent);
             this.finish();
             super.onBackPressed();
