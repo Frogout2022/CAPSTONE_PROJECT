@@ -256,8 +256,8 @@ END //
 DELIMITER ;
 #drop procedure sp_RESERVAR;
 
-DELIMITER //
 
+DELIMITER //
 CREATE PROCEDURE sp_RESERVAR(
     IN tabla VARCHAR(50), 
     IN dia CHAR(10), 

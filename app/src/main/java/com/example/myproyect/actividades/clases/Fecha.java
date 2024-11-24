@@ -2,6 +2,10 @@ package com.example.myproyect.actividades.clases;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -110,6 +114,21 @@ public class Fecha {
         }
 
         return false; // Fecha vencida
+    }
+
+    public static boolean esFechaPasada(String fecha) {
+        // Definir la zona horaria GMT-5
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+
+        // Formatear el string a LocalDate
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaIngresada = LocalDate.parse(fecha, formatter);
+
+        // Obtener la fecha actual en la zona horaria especificada
+        ZonedDateTime fechaActual = ZonedDateTime.now(zonaHoraria);
+
+        // Comparar las fechas
+        return fechaIngresada.isBefore(fechaActual.toLocalDate());
     }
 
 
