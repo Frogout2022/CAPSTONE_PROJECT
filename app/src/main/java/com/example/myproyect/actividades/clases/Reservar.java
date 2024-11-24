@@ -126,8 +126,4 @@ public class Reservar {
         else return false;
     }
 
-    static Boolean separar(){
-
-        return false;
-    }
 }

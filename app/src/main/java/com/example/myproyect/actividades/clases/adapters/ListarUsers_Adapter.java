@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class ListarUsers_Adapter extends RecyclerView.Adapter<ListarUsers_Adapter.ViewHolder> {
 
     private ArrayList<Usuario> usuariosList;
-    private int cantidad;
+    private int cantidad = 0;
     private Context context;
 
 

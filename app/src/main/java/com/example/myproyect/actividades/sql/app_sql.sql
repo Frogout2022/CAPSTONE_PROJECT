@@ -140,9 +140,7 @@ BEGIN
     WHERE fecha_reserva = FECHA and hora_reserva = HORA;
 END $$
 DELIMITER ;
-#drop procedure sp_ConsultarPago;
-call sp_ConsultarPago('2024-11-29','7pm');
-select * from tb_pago;
+
 
 #------------TABLA RESERVAS------------
 
@@ -256,7 +254,6 @@ BEGIN
 	DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
-
 #drop procedure sp_RESERVAR;
 
 DELIMITER //
@@ -334,16 +331,6 @@ END //
 
 DELIMITER ;
 
-#drop procedure sp_reservar;
-#select * from reserva_losa1 WHERE ID = 333;
-#select * from tb_pago;
-#TRUNCATE TABLE TB_PAGO;
-#drop procedure sp_RESERVAR;
-#call sp_RESERVAR('reserva_losa1', '2024-11-28','7pm','72673552' ,100.5,'aprobado','yapee');
-#update reserva_losa1 set 3pm ='1234578' where fecha_rsv= '2024-11-18';
-#select row_count();
-#select * from reserva_losa1 where id=325;
-
 
 #--------------------## LISTAR RESERVAS INDIVIDUAL POR CLIENTE ###
 DELIMITER //
@@ -371,8 +358,6 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END //
 DELIMITER ;
-
-
 
 
 SELECT 'FINISH' AS mensaje;

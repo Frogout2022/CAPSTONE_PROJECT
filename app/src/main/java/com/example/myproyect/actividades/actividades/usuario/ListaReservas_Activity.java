@@ -51,7 +51,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_rsv);
 
         asignarReferencias();
-        //funSpinner();
+        funSpinner();
         listar();
         botones();
     }
@@ -61,6 +61,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.pb_ListarRsv_CLI);
         swLista = findViewById(R.id.sw_Listar_rsv);
+        spnLosas = findViewById(R.id.spnListar_Rsv);
 
         rvListarRsv = findViewById(R.id.rcvListarRsvForUSR);
         btnUpdate = findViewById(R.id.btnUpdate_ListarRsv);
@@ -155,15 +156,18 @@ public class ListaReservas_Activity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         lista = DAO_Losa.listarNombres();
 
+
         List<String> opciones = new ArrayList<>();
         int i=1;
         for(CanchaDeportiva canchaDeportiva : lista){
             opciones.add(i+". "+canchaDeportiva.getNombre());
             i++;
+            System.out.println("cancha: "+canchaDeportiva.getNombre());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opciones);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
 
         spnLosas.setAdapter(adapter);
 
@@ -181,6 +185,8 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
 }

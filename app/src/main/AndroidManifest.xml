@@ -38,9 +38,6 @@
             android:name=".actividades.actividades.usuario.ListaReservas_Activity"
             android:exported="false" />
         <activity
-            android:name=".actividades.actividades.usuario.ConsultarReservaUser_Activity"
-            android:exported="false" />
-        <activity
             android:name=".actividades.actividades.usuario.TablaReservaUser_Activity"
             android:exported="false" />
         <activity
