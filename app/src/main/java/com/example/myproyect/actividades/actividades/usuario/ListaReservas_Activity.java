@@ -43,6 +43,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
     private List<Reserva> listaRsv;
     private String nombre_tabla="reserva_losa1";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
         listar();
         botones();
     }
+
     private void asignarReferencias(){
         context = this;
 
@@ -66,6 +68,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
         txtvCantidad = findViewById(R.id.txtvCantRsv_ListRsv);
 
     }
+
     private void botones(){
         btnUpdate.setOnClickListener(view -> {
             rvListarRsv.setVisibility(View.INVISIBLE);
