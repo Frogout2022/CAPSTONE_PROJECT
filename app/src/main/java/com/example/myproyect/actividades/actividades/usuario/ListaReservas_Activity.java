@@ -81,7 +81,6 @@ public class ListaReservas_Activity extends AppCompatActivity {
             super.onBackPressed();
         });
         swLista.setOnClickListener(view -> {
-            System.out.println("is check");
             listar();
         });
     }
@@ -98,22 +97,16 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
         executor.execute(() -> {
             // Hilo secundario para consultas
-
             listaRsv = DAO_Reserva.ConsultarRsv(nombre_tabla, dni_cli);
-
             runOnUiThread(() -> {
                 // Hilo principal para actualizar UI
                 progressBar.setVisibility(View.GONE); // Ocultar el ProgressBar
-
                 if (!listaRsv.isEmpty()) {
                     // Si hay datos, mostrar el RecyclerView y configurarlo
                     rvListarRsv.setVisibility(View.VISIBLE);
                     swLista.setEnabled(true);
-
                     List<Reserva> listaR = new ArrayList<>();
                     List<Reserva> lista_rsv_vigentes = new ArrayList<>();
-                    int cont = 0;
-
                     for (Reserva reserva : listaRsv) {
                         for (int j = 0; j < 3; j++) {
                             String dniReserva = reserva.getArrayDni()[j];
@@ -126,7 +119,6 @@ public class ListaReservas_Activity extends AppCompatActivity {
                                 listaR.add(new Reserva(reserva.getDia(), hora + "pm", dniReserva));
                             }
                         }
-                        cont++;
                     }
 
                     if(swLista.isChecked()){

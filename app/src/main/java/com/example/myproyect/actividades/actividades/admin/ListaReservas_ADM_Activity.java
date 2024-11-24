@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
+import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.adapters.ListarRsv_Adapter;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
@@ -78,6 +79,9 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
             this.finish();
             super.onBackPressed();
         });
+        swLista.setOnClickListener(view -> {
+            listar();
+        });
     }
     private void listar(){
         progressBar.setVisibility(View.VISIBLE); // Mostrar progreso al iniciar
@@ -90,39 +94,43 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
 
         executor.execute(() -> {
             // Hilo secundario para consultas
-            System.out.println("run");
             listaRsv = DAO_Reserva.listarReservasCLI(nombre_tabla);
-
             runOnUiThread(() -> {
                 // Hilo principal para actualizar UI
                 progressBar.setVisibility(View.GONE); // Ocultar el ProgressBar
-
                 if (!listaRsv.isEmpty()) {
                     // Si hay datos, mostrar el RecyclerView y configurarlo
                     rvListarRsv.setVisibility(View.VISIBLE);
                     swLista.setEnabled(true);
-
                     List<Reserva> listaR = new ArrayList<>();
-
+                    List<Reserva> lista_rsv_vigentes = new ArrayList<>();
                     for (Reserva reserva : listaRsv) {
                         for (int j = 0; j < 3; j++) {
                             String dniReserva = reserva.getArrayDni()[j];
                             if(dniReserva!=null){
                                 int hora = 3 + (2 * j);
-                                listaR.add(new Reserva(reserva.getDia(), hora + "pm", dniReserva));
+                                boolean b = Fecha.esFechaPasada(reserva.getDia());
+                                if(!b){
+                                    lista_rsv_vigentes.add(new Reserva(reserva.getDia(),hora+"pm",dniReserva));
+                                }else{
+                                    listaR.add(new Reserva(reserva.getDia(), hora + "pm", dniReserva));
+                                }
+
                             }
                         }
                     }
-
-                    listarRsvAdapter = new ListarRsv_Adapter(listaR, nombre_tabla, context);
+                    if(swLista.isChecked()) {
+                        listarRsvAdapter = new ListarRsv_Adapter(lista_rsv_vigentes, nombre_tabla, context);
+                        txtvCantidad.setText("Cantidad de reservas: " + lista_rsv_vigentes.size());
+                    }else{
+                        listarRsvAdapter = new ListarRsv_Adapter(listaR, nombre_tabla, context);
+                        txtvCantidad.setText("Cantidad de reservas: " + listaR.size());
+                    }
                     rvListarRsv.setAdapter(listarRsvAdapter);
-                    txtvCantidad.setText("Cantidad de reservas: " + listaR.size());
-
                 } else {
                     // Si no hay datos, ocultar el RecyclerView y mostrar mensaje
                     rvListarRsv.setVisibility(View.GONE);
                     txtvCantidad.setText("No hay reservas disponibles.");
-                    System.out.println("No hay reservas en esta losa.");
                 }
             });
         });

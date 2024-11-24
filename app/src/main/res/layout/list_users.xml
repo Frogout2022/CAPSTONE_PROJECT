@@ -163,7 +163,6 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/btnBieOrange"
                     android:drawableLeft="@drawable/list_ul_solid"
-                    android:drawablePadding="15dp"
                     android:gravity="center"
                     android:text="Ver Reservas (5)" />
 

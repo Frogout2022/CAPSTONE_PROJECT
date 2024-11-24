@@ -14,17 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.entidades.Pago;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.modelos.DAO_Pago;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.ViewHolder> {
     private List<Reserva> reserval;
     private Context context;
     private String nombre_tabla;
-
+    private Pago pago = null;
     public ListarRsv_Adapter(List<Reserva> reserval, String nombreTabla, Context context) {
         this.reserval = reserval;
         this.nombre_tabla = nombreTabla;
@@ -32,7 +36,7 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtvDNI,txtvFecha,txtvHora,txtvLosa,txtvEstado,txtvFechaR,txtvPos;
+        TextView txtvDNI,txtvFecha,txtvHora,txtvEstado,txtvFechaR,txtvPos;
         Button btnVerPago;
         ImageView img;
         public ViewHolder(@NonNull View itemView) {
@@ -41,10 +45,11 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
             txtvDNI = itemView.findViewById(R.id.txtv_dni_rcv_ListRsv);
             txtvFecha = itemView.findViewById(R.id.txtv_fecha_rcv_ListRsv);
             txtvHora = itemView.findViewById(R.id.txtv_hora_rcv_ListRsv);
-            txtvLosa = itemView.findViewById(R.id.txtv_losa_rcv_ListRsv);
             txtvEstado = itemView.findViewById(R.id.txtv_estado_rcv_ListRsv);
             txtvPos = itemView.findViewById(R.id.txtv_position_rcv_ListRsv);
 
+
+            img = itemView.findViewById(R.id.img_rcv_ListRsv);
             btnVerPago = itemView.findViewById(R.id.btn_verRsv_rcv_ListRsv);
             System.out.println("ViewHolder");
         }
@@ -71,30 +76,38 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
         holder.txtvFecha.setText(reserval.get(position).getDia());
         holder.txtvHora.setText(reserval.get(position).getHora());
 
-        holder.txtvLosa.setText(nombre_tabla);
         int pos = position+1;
         holder.txtvPos.setText("#"+pos);
         //funcion estado
-        holder.txtvEstado.setText("Pendiente");
+        String estado;
+        if( Fecha.esFechaPasada(reserval.get(position).getDia().toString())){
+            estado = "Concluido";
+            holder.img.setImageResource(R.drawable.calendar_days_solid);
+        }else{
+            estado = "Vigente";
+            holder.img.setImageResource(R.drawable.icon_reloj_arena);
+        }
+
+
+        holder.txtvEstado.setText(estado);
 
         holder.btnVerPago.setOnClickListener(view -> {
-            System.out.println("btn verPago");
+
             String fecha = reserval.get(position).getDia() ;
             String hora = reserval.get(position).getHora();
+            pago = DAO_Pago.consultarPago(fecha, hora);
 
-            //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            //StrictMode.setThreadPolicy(policy);
-            Pago pago = DAO_Pago.consultarPago(fecha, hora);
 
             StringBuilder sb = new StringBuilder();
             if(pago==null){
                 sb.append("Error al recuperar informacion del pago.");
             }else{
-                sb.append("Fecha de pago: "+pago.getFechaPago()+"\n");
-                sb.append("Codigo de pago: "+pago.getCodPago()+"\n");
-                sb.append("Monto Total: "+pago.getMontoTotal()+"\n");
-                sb.append("igv:  "+pago.getIgvPago()+"\n");
-                sb.append("Medio de pago: "+pago.getMedioPago()+"\n");
+                String f = pago.getFechaPago();
+                sb.append("Fecha de pago:  "+f.substring(0,16)+"\n");
+                sb.append("Codigo de pago:  "+pago.getCodPago()+"\n");
+                sb.append("Monto Total:  S/"+pago.getMontoTotal()+"\n");
+                sb.append("igv:   S/"+pago.getIgvPago()+"\n");
+                sb.append("Medio de pago:  "+pago.getMedioPago()+"\n");
             }
 
             new AlertDialog.Builder(context)
@@ -111,7 +124,6 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
                     .show(); // Muestra el diálogo
         });
 
-        System.out.println("onBindViewHolder: "+getItemCount());
     }
 
     @Override
