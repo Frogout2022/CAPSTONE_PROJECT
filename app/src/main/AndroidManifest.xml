@@ -20,6 +20,9 @@
             android:name=".actividades.actividades.TestRv"
             android:exported="false" />
         <activity
+            android:name=".actividades.actividades.admin.ListaReservas_ADM_Activity"
+            android:exported="false" />
+        <activity
             android:name=".actividades.actividades.usuario.FallaLoad_Activity"
             android:exported="false" />
         <activity

@@ -27,17 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.ViewHolder> {
-    private List<Pair<String, Integer>> reservasList;
+    private List<Reserva> reserval;
     private Context context;
     private String nombre_tabla;
 
-    public ListarRsv_Adapter(List<Pair<String, Integer>> reservasList){
-        this.reservasList = reservasList;
-    }
-    public ListarRsv_Adapter(List<Pair<String, Integer>> reservasList,String nombre_tabla, Context context){
-        this.reservasList = reservasList;
+    public ListarRsv_Adapter(List<Reserva> reserval, String nombreTabla, Context context) {
+        this.reserval = reserval;
+        this.nombre_tabla = nombreTabla;
         this.context = context;
-        this.nombre_tabla= nombre_tabla;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,12 +70,12 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
     public void onBindViewHolder(@NonNull ListarRsv_Adapter.ViewHolder holder, int position) {
         //rellenar todos los datos
 
-        String dni_cli = Login_Activity.getUsuario().getDNI();
-        holder.txtvDNI.setText(dni_cli);
+        //String dni_cli = Login_Activity.getUsuario().getDNI();
+        holder.txtvDNI.setText(reserval.get(position).getDni());
         //para vista del ADMIN recibir el DNI del cardview
 
-        holder.txtvFecha.setText(reservasList.get(position).first.toString());
-        holder.txtvHora.setText(reservasList.get(position).second.toString()+"pm");
+        holder.txtvFecha.setText(reserval.get(position).getDia());
+        holder.txtvHora.setText(reserval.get(position).getHora());
 
         holder.txtvLosa.setText(nombre_tabla);
         int pos = position+1;
@@ -86,11 +83,10 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
         //funcion estado
         holder.txtvEstado.setText("Pendiente");
 
-
         holder.btnVerPago.setOnClickListener(view -> {
             System.out.println("btn verPago");
-            String fecha = reservasList.get(position).first.toString() ;
-            String hora = reservasList.get(position).second.toString()+"pm";
+            String fecha = reserval.get(position).getDia() ;
+            String hora = reserval.get(position).getHora();
 
             //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             //StrictMode.setThreadPolicy(policy);
@@ -126,6 +122,6 @@ public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.Vi
 
     @Override
     public int getItemCount() {
-        return reservasList.size();
+        return reserval.size();
     }
 }

@@ -40,7 +40,7 @@ public class MenuAdmin_Activity extends AppCompatActivity {
 
         btnListarRsv = findViewById(R.id.btnListarRsvUsers_MenuAdm);
         btnListarRsv.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ListarReservasADMIN_Activity.class);
+            Intent intent = new Intent(this, ListaReservas_ADM_Activity.class);
             startActivity(intent);
             finish();
 
