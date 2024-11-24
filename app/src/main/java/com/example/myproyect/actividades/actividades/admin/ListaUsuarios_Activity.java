@@ -12,19 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.clases.ListaTablasBD;
 import com.example.myproyect.actividades.clases.adapters.ListarUsers_Adapter;
-import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.entidades.Usuario;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;
-import com.example.myproyect.actividades.modelos.DAO_Reserva;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ListaU extends AppCompatActivity {
+public class ListaUsuarios_Activity extends AppCompatActivity {
 
     RecyclerView rvListaUsers;
     ListarUsers_Adapter listarUsersAdapter;

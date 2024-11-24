@@ -26,7 +26,7 @@ public class MenuAdmin_Activity extends AppCompatActivity {
         });
         btnListarUsers = findViewById(R.id.btnListarUsers_MenuAdm);
         btnListarUsers.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ListaU.class);
+            Intent intent = new Intent(this, ListaUsuarios_Activity.class);
             startActivity(intent);
             finish();
         });

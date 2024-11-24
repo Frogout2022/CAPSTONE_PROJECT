@@ -138,44 +138,49 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
     private void funSpinner(){
 
-        System.out.println("funSpinner");
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            // Hilo secundario para consultas
+            List<CanchaDeportiva> lista;
+            lista = DAO_Losa.listarNombres();
+            runOnUiThread(() -> {
+                //hilo principal
 
-        List<CanchaDeportiva> lista;
+                List<String> opciones = new ArrayList<>();
+                int i=1;
+                for(CanchaDeportiva canchaDeportiva : lista){
+                    opciones.add(i+". "+canchaDeportiva.getNombre());
+                    i++;
+                    System.out.println("cancha: "+canchaDeportiva.getNombre());
+                }
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        lista = DAO_Losa.listarNombres();
-
-
-        List<String> opciones = new ArrayList<>();
-        int i=1;
-        for(CanchaDeportiva canchaDeportiva : lista){
-            opciones.add(i+". "+canchaDeportiva.getNombre());
-            i++;
-            System.out.println("cancha: "+canchaDeportiva.getNombre());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opciones);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opciones);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
-        spnLosas.setAdapter(adapter);
+                spnLosas.setAdapter(adapter);
 
-        List<CanchaDeportiva> finalLista = lista;
-        spnLosas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //String opcion = (String) adapterView.getItemAtPosition(i);
-                nombre_tabla = finalLista.get(i).getNombre_tabla();
-                listar(); //llamar a la fucnion principal
-            }
+                List<CanchaDeportiva> finalLista = lista;
+                spnLosas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        //String opcion = (String) adapterView.getItemAtPosition(i);
+                        nombre_tabla = finalLista.get(i).getNombre_tabla();
+                        listar(); //llamar a la funcion principal
+                    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
+                    }
+                });
+
+            });
+
         });
 
+        // Cerrar el ExecutorService
+        executor.shutdown();
 
     }
 

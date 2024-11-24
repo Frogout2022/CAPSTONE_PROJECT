@@ -17,9 +17,6 @@
         android:theme="@style/Theme.MyProyect"
         tools:targetApi="31">
         <activity
-            android:name=".actividades.actividades.TestRv"
-            android:exported="false" />
-        <activity
             android:name=".actividades.actividades.admin.ListaReservas_ADM_Activity"
             android:exported="false" />
         <activity
@@ -27,9 +24,6 @@
             android:exported="false" />
         <activity
             android:name=".actividades.actividades.admin.MantenimientoLosas_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".actividades.actividades.admin.ListarUsers_Admin_Activity"
             android:exported="false" />
         <activity
             android:name=".actividades.actividades.admin.ListarReservasADMIN_Activity"
@@ -105,7 +99,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".actividades.actividades.admin.ListaU"
+            android:name=".actividades.actividades.admin.ListaUsuarios_Activity"
             android:exported="false">
 
 
