@@ -12,10 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.ListaTablasBD;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
@@ -138,7 +137,7 @@ public class Losa4Fragment extends Fragment {
     }
 
     private void regresar() {
-        Intent iBienvenido = new Intent(getContext(), BienvenidoActivity.class);
+        Intent iBienvenido = new Intent(getContext(), Bienvenido_Activity.class);
         iBienvenido.putExtra("nombre","Luiggi");
         startActivity(iBienvenido);
         getActivity().finish();

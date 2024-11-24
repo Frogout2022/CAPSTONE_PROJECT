@@ -3,8 +3,6 @@ package com.example.myproyect.actividades.actividades.admin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,8 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.Login_Activity;
-import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
 import com.example.myproyect.actividades.clases.adapters.ListarRsv_Adapter;
 import com.example.myproyect.actividades.entidades.CanchaDeportiva;
 import com.example.myproyect.actividades.entidades.Reserva;
@@ -76,7 +73,7 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(this, BienvenidoActivity.class );
+            Intent intent = new Intent(this, Bienvenido_Activity.class );
             startActivity(intent);
             this.finish();
             super.onBackPressed();

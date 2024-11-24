@@ -1,4 +1,4 @@
-package com.example.myproyect.actividades.actividades.usuario;
+package com.example.myproyect.actividades.actividades;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.myproyect.R;
+import com.example.myproyect.actividades.actividades.usuario.Registro_Activity;
 
-public class TerminosActivity extends AppCompatActivity implements View.OnClickListener{
+public class Terminos_Activity extends AppCompatActivity implements View.OnClickListener{
 
     Button btnRegresar;
 
@@ -33,7 +34,7 @@ public class TerminosActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void regresar() {
-        Intent iRegistro = new Intent(this, RegistroActivity.class);
+        Intent iRegistro = new Intent(this, Registro_Activity.class);
         startActivity(iRegistro);
         finish();
     }

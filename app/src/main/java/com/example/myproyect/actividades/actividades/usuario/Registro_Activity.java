@@ -14,14 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.Login_Activity;
-import com.example.myproyect.actividades.actividades.usuario.TerminosActivity;
-import com.example.myproyect.actividades.actividades.usuario.pago.Tarjeta_Activity;
+import com.example.myproyect.actividades.actividades.Terminos_Activity;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.clases.PasswordEncryptor;
 import com.example.myproyect.actividades.entidades.Usuario;
 import com.example.myproyect.actividades.modelos.DAO_Cliente;
 
-public class RegistroActivity extends AppCompatActivity implements View.OnClickListener {
+public class Registro_Activity extends AppCompatActivity implements View.OnClickListener {
     EditText txtNombre, txtApellido, txtCorreo, txtClave,txtClave2, txtFechaNac, txtDni, txtCel;
     Button btnContinuar, btnRegresar;
     CheckBox chkTerminos;
@@ -212,7 +211,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void cargarTerminos() {
-        Intent iTerminos = new Intent(this, TerminosActivity.class);
+        Intent iTerminos = new Intent(this, Terminos_Activity.class);
         startActivity(iTerminos);
     }
 

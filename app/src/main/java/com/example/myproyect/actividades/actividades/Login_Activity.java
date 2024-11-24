@@ -18,9 +18,9 @@ import android.widget.Toast;
 import com.example.myproyect.BuildConfig;
 import com.example.myproyect.R;
 import com.example.myproyect.actividades.actividades.admin.MenuAdmin_Activity;
-import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
 import com.example.myproyect.actividades.actividades.usuario.RecuperarPassword_Activity;
-import com.example.myproyect.actividades.actividades.usuario.RegistroActivity;
+import com.example.myproyect.actividades.actividades.usuario.Registro_Activity;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.entidades.App;
 import com.example.myproyect.actividades.entidades.Usuario;
@@ -81,7 +81,7 @@ public class Login_Activity extends AppCompatActivity {
         btnSalir = findViewById(R.id.logBtnSalir);
 
         lblRegistrate.setOnClickListener(view -> {
-            Intent intent = new Intent(this, RegistroActivity.class);
+            Intent intent = new Intent(this, Registro_Activity.class);
             startActivity(intent);
         });
 
@@ -314,7 +314,7 @@ public class Login_Activity extends AppCompatActivity {
 
 
     private void cargarActividadRegistrate() {
-        Intent iRegistro = new Intent(this, RegistroActivity.class);
+        Intent iRegistro = new Intent(this, Registro_Activity.class);
         startActivity(iRegistro);
         finish();
     }
@@ -360,7 +360,7 @@ public class Login_Activity extends AppCompatActivity {
                             App.uploadDatos(getApplicationContext(), false, null, null);
                         }
 
-                        Intent intent = new Intent(getApplicationContext(), BienvenidoActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), Bienvenido_Activity.class);
                         startActivity(intent);
                     });
 
@@ -423,7 +423,7 @@ public class Login_Activity extends AppCompatActivity {
                 }
                 App.uploadDatos(this, false, null, null);
             }
-            Intent intent = new Intent(this, BienvenidoActivity.class);
+            Intent intent = new Intent(this, Bienvenido_Activity.class);
             startActivity(intent);
             this.finish();
         }else{

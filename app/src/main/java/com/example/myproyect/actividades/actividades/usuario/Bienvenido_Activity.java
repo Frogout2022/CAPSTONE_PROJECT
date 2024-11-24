@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class BienvenidoActivity extends AppCompatActivity implements InterfaceMenu {
+public class Bienvenido_Activity extends AppCompatActivity implements InterfaceMenu {
 
     TextView lblSaludo,txtvHora;
     Button btnSalida,btnReservar, btnActualizarDatos, btnConsultar;

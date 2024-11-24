@@ -54,28 +54,28 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".actividades.actividades.usuario.BienvenidoActivity"
+            android:name=".actividades.actividades.usuario.Bienvenido_Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".actividades.actividades.usuario.TerminosActivity"
+            android:name=".actividades.actividades.Terminos_Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".actividades.actividades.usuario.RegistroActivity"
+            android:name=".actividades.actividades.usuario.Registro_Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".actividades.actividades.CargaActivity"
+            android:name=".actividades.actividades.Carga_Activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

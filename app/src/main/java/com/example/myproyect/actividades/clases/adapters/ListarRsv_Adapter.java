@@ -3,9 +3,6 @@ package com.example.myproyect.actividades.clases.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.StrictMode;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.CargaActivity;
-import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.entidades.Pago;
 import com.example.myproyect.actividades.entidades.Reserva;
 import com.example.myproyect.actividades.modelos.DAO_Pago;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListarRsv_Adapter extends RecyclerView.Adapter<ListarRsv_Adapter.ViewHolder> {

@@ -5,28 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.Login_Activity;
-import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
-import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.Reservar;
-import com.example.myproyect.actividades.entidades.Pago;
-import com.example.myproyect.actividades.entidades.Reserva;
-import com.example.myproyect.actividades.modelos.DAO_Pago;
-import com.example.myproyect.actividades.modelos.DAO_Reserva;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Yape_Activity extends AppCompatActivity implements View.OnClickListener {
     TextView txtvSalir, txtvPagar;
@@ -122,7 +109,7 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
                     // Cerrar la actividad manualmente
                     Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
                     Reservar.realizar("borrar");
-                    Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                    Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
                     startActivity(iBienvenido);
                     //limpiar selecciones previas
                     TablaReservaUser_Activity.listaChkS.clear();
@@ -146,7 +133,7 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
         }else{
             if(validarCodigo() && validarTelefono()){
                 insertarReserva();
-                Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
                 startActivity(iBienvenido);
                 finish();
             }//else Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();

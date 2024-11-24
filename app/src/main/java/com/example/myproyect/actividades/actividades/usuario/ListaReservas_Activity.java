@@ -3,7 +3,6 @@ package com.example.myproyect.actividades.actividades.usuario;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -75,7 +74,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
-            Intent intent = new Intent(this, BienvenidoActivity.class );
+            Intent intent = new Intent(this, Bienvenido_Activity.class );
             startActivity(intent);
             this.finish();
             super.onBackPressed();

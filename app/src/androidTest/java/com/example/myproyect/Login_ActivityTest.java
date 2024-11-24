@@ -3,10 +3,10 @@ package com.example.myproyect;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
 import com.example.myproyect.actividades.actividades.Login_Activity;
 import com.example.myproyect.actividades.actividades.usuario.RecuperarPassword_Activity;
-import com.example.myproyect.actividades.actividades.usuario.RegistroActivity;
+import com.example.myproyect.actividades.actividades.usuario.Registro_Activity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,13 +24,13 @@ public class Login_ActivityTest {
     @Test
     public void testRegistroActivity() {
 
-        ActivityScenario<RegistroActivity> scenario = ActivityScenario.launch(RegistroActivity.class);
+        ActivityScenario<Registro_Activity> scenario = ActivityScenario.launch(Registro_Activity.class);
         // Aquí puedes interactuar con la actividad y realizar las pruebas necesarias
     }
     @Test
     public void testBienvenidoActivity() {
 
-        ActivityScenario<BienvenidoActivity> scenario = ActivityScenario.launch(BienvenidoActivity.class);
+        ActivityScenario<Bienvenido_Activity> scenario = ActivityScenario.launch(Bienvenido_Activity.class);
         // Aquí puedes interactuar con la actividad y realizar las pruebas necesarias
     }
 

@@ -14,7 +14,7 @@ import com.example.myproyect.actividades.conexion.ConexionMySQL;
 
 import java.sql.Connection;
 
-public class CargaActivity extends AppCompatActivity {
+public class Carga_Activity extends AppCompatActivity {
 
     TextView txtvVersion;
     boolean pass1 = false, pass2 = false, pass3=false;

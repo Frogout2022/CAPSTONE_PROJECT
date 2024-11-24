@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myproyect.R;
-import com.example.myproyect.actividades.actividades.usuario.BienvenidoActivity;
+import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity;
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
@@ -222,7 +222,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
                     Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
                     Reservar.realizar("borrar");
-                    Intent iBienvenido = new Intent(this, BienvenidoActivity.class);
+                    Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
                     startActivity(iBienvenido);
                     //limpiar selecciones previas
                     TablaReservaUser_Activity.listaChkS.clear();
@@ -280,7 +280,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
                         String msg = Reservar.realizar("aprobado", "tarjeta");
                         System.out.println("msg: " +msg);
                         //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                        Intent iBienvenido = new Intent(context, BienvenidoActivity.class);
+                        Intent iBienvenido = new Intent(context, Bienvenido_Activity.class);
                         startActivity(iBienvenido);
                         TablaReservaUser_Activity.listaChkS.clear(); //limpiar listado
         finish();

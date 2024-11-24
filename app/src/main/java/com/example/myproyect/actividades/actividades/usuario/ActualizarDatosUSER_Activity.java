@@ -48,7 +48,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
         txtCel = findViewById(R.id.txtCelular_ActualizarDatos_Actv);
         btnSalir = findViewById(R.id.btnSALIR_ActDatos_Actv);
         btnSalir.setOnClickListener(view -> {
-            Intent intent = new Intent(this, BienvenidoActivity.class);
+            Intent intent = new Intent(this, Bienvenido_Activity.class);
             startActivity(intent);
             this.finish();
         });
