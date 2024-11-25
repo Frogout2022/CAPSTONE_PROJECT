@@ -72,10 +72,12 @@ public class ListaReservas_Activity extends AppCompatActivity {
 
     private void botones(){
         btnUpdate.setOnClickListener(view -> {
+            btnUpdate.setEnabled(false);
             rvListarRsv.setVisibility(View.INVISIBLE);
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
+            btnRegresar.setEnabled(false);
             boolean b = Login_Activity.isAdmin;
             if(b){
                 Intent intent = new Intent(this, MenuAdmin_Activity.class );
@@ -150,6 +152,7 @@ public class ListaReservas_Activity extends AppCompatActivity {
             });
         });
 
+        btnUpdate.setEnabled(true);
         // Cerrar el ExecutorService
         executor.shutdown();
     }

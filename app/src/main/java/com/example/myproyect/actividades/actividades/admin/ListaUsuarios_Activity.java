@@ -55,10 +55,12 @@ public class ListaUsuarios_Activity extends AppCompatActivity {
     }
     private void botones(){
         btnUpdate.setOnClickListener(view -> {
+            btnUpdate.setEnabled(false);
             rvListaUsers.setVisibility(View.INVISIBLE);
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
+            btnRegresar.setEnabled(false);
             Intent intent = new Intent(this,MenuAdmin_Activity.class );
             startActivity(intent);
             this.finish();
@@ -89,6 +91,7 @@ public class ListaUsuarios_Activity extends AppCompatActivity {
 
                         // Ocultar el ProgressBar después de que la tarea esté completada
                         progressBar.setVisibility(View.INVISIBLE);
+                        btnUpdate.setEnabled(true);
                     }
 
                 });

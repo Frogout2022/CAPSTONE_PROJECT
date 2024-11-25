@@ -86,9 +86,11 @@ public class Losa2Fragment extends Fragment {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.car2BtnRegresar:
+                        btnReg.setEnabled(false);
                         regresar();
                         break;
                     case R.id.car2BtnAceptar:
+                        btnReg.setEnabled(false);
                         tablaAceptar();
                         break;
                 }
@@ -100,9 +102,11 @@ public class Losa2Fragment extends Fragment {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.car2BtnRegresar:
+                        btnAceptar.setEnabled(false);
                         regresar();
                         break;
                     case R.id.car2BtnAceptar:
+                        btnAceptar.setEnabled(false);
                         tablaAceptar();
                         break;
                 }

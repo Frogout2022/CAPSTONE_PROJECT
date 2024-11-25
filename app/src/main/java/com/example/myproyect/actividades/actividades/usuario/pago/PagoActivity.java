@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,9 +21,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class PagoActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView txtContinuar, txtvSalir;
+    TextView txtContinuar, txtvSalir,txtvTimer;
     RadioGroup rgOpcion;
-
+    private long timeLeftInMillis;
 
 
     @Override
@@ -30,10 +31,42 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pago);
         asignarReferencias();
+        startTimer(180000);
 
 
     }
+    private void startTimer(long millisInFuture) {
+        new CountDownTimer(millisInFuture, 1000) { // 1000 milisegundos = 1 segundo
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+                // Calculamos los minutos y segundos restantes
+                int minutes = (int) (millisUntilFinished / 1000) / 60;
+                int seconds = (int) (millisUntilFinished / 1000) % 60;
+                String timeLeft = String.format("%02d:%02d", minutes, seconds);
+                txtvTimer.setText(timeLeft); // Actualizamos el TextView con el tiempo restante
+                if(timeLeftInMillis<=3000){
+                    txtContinuar.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                // Acción cuando el temporizador llega a 0
+                txtvTimer.setText("00:00"); // Opcional: mostrar 00:00
+                onTimerFinished(); // Llamada a la función que deseas ejecutar al finalizar
+            }
+        }.start();
+    }
+    private void onTimerFinished() {
+        // Aquí realizas la acción que quieras al terminar el tiempo (por ejemplo, mostrar un Toast)
+        Toast.makeText(this, "¡Tiempo agotado!", Toast.LENGTH_SHORT).show();
+        // Puedes agregar más acciones aquí
+        cancelar();
+    }
+
     private void asignarReferencias(){
+        txtvTimer = findViewById(R.id.txtv_timer_Pago);
         rgOpcion = findViewById(R.id.rgPay);
         txtContinuar = findViewById(R.id.txtvContinuarPay);
         txtContinuar.setOnClickListener(view -> {
@@ -41,6 +74,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
         });
         txtvSalir = findViewById(R.id.txtvSalirPay);
         txtvSalir.setOnClickListener(view -> {
+            txtvSalir.setEnabled(false);
             regresarMenu();
         });
     }
@@ -83,6 +117,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent iTarjeta= new Intent(this, Tarjeta_Activity.class);
         iTarjeta.putExtra("MontoPagar", cantidadPagar);
+        iTarjeta.putExtra("TIME_LEFT", timeLeftInMillis);
         startActivity(iTarjeta);
         finish();
     }
@@ -93,11 +128,27 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent iYape = new Intent(this, Yape_Activity.class);
         iYape.putExtra("MontoPagar", cantidadPagar);
+        iYape.putExtra("TIME_LEFT", timeLeftInMillis);
         startActivity(iYape);
         finish();
     }
 
 
+    private void cancelar(){
+        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Reservar.realizar("borrar");
+        });
+        Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
+        startActivity(iBienvenido);
+        //limpiar selecciones previas
+        TablaReservaUser_Activity.listaChkS.clear();
+        TablaReservaUser_Activity.preReserva = false;
+        // Cerrar la actividad manualmente
+        finish();
+    }
     private void regresarMenu() {
         //CANCELAR COMPRA
 
@@ -107,19 +158,7 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                 .setMessage("¿Estás seguro de que quieres salir?")
                 .setPositiveButton("Sí", (dialog, which) -> {
 
-                    Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-
-                    Executor executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> {
-                        Reservar.realizar("borrar");
-                    });
-                    Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
-                    startActivity(iBienvenido);
-                    //limpiar selecciones previas
-                    TablaReservaUser_Activity.listaChkS.clear();
-                    TablaReservaUser_Activity.preReserva = false;
-                    // Cerrar la actividad manualmente
-                    finish();
+                    cancelar();
                 })
                 .setNegativeButton("No", null)
                 .show();

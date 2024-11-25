@@ -73,6 +73,7 @@ public class FallaLoad_Activity extends AppCompatActivity {
 
 
         btnRefresh.setOnClickListener(view -> {
+            btnRefresh.setEnabled(false);
             Intent intent1 = new Intent(this, Carga_Activity.class);
             startActivity(intent1);
             this.finish();

@@ -62,6 +62,7 @@ public class MenuAdmin_Activity extends AppCompatActivity {
 
         btnSalir = findViewById(R.id.imgbtn_exit_adm);
         btnSalir.setOnClickListener(view -> {
+            btnSalir.setEnabled(false);
             Intent intent = new Intent(this, Login_Activity.class);
             startActivity(intent);
             finish();
@@ -69,6 +70,7 @@ public class MenuAdmin_Activity extends AppCompatActivity {
 
         btnListarUsers = findViewById(R.id.imgbtn_listusers_adm);
         btnListarUsers.setOnClickListener(view -> {
+            btnListarUsers.setEnabled(false);
             Intent intent = new Intent(this, ListaUsuarios_Activity.class);
             startActivity(intent);
             finish();
@@ -76,6 +78,7 @@ public class MenuAdmin_Activity extends AppCompatActivity {
 
         btnListarRsv = findViewById(R.id.imgbtn_listRsv_adm);
         btnListarRsv.setOnClickListener(view -> {
+            btnListarRsv.setEnabled(false);
             Intent intent = new Intent(this, ListaReservas_ADM_Activity.class);
             startActivity(intent);
             finish();
@@ -84,6 +87,7 @@ public class MenuAdmin_Activity extends AppCompatActivity {
 
         btnMante = findViewById(R.id.imgbtn_mante_adm);
         btnMante.setOnClickListener(view -> {
+            btnMante.setEnabled(false);
             Intent intent = new Intent(this, MantenimientoLosas_Activity.class);
             startActivity(intent);
             finish();

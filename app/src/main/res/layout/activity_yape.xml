@@ -85,6 +85,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/txtv_timer_yape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="25dp"
+            android:background="#4CAF50"
+            android:backgroundTint="#4CAF50"
+            android:drawableLeft="@drawable/icon_reloj_timer"
+            android:drawablePadding="10dp"
+            android:padding="5dp"
+            android:text="3:00"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
         <ProgressBar
             android:id="@+id/pb_load_yape"
             style="?android:attr/progressBarStyleHorizontal"

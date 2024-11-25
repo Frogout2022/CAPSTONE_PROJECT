@@ -42,12 +42,14 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
         txtFechaR = findViewById(R.id.txtvFecha_registro_ActualizarDatosCLI);
         btnBaja = findViewById(R.id.btnDeleteUser_ActualizarDatos_Actv);
         btnBaja.setOnClickListener(view -> {
+            btnBaja.setEnabled(false);
             delete();
         });
         txtCorreo = findViewById(R.id.txtCorreo_ActualizarDatos_Actv);
         txtCel = findViewById(R.id.txtCelular_ActualizarDatos_Actv);
         btnSalir = findViewById(R.id.btnSALIR_ActDatos_Actv);
         btnSalir.setOnClickListener(view -> {
+            btnSalir.setEnabled(false);
             Intent intent = new Intent(this, Bienvenido_Activity.class);
             startActivity(intent);
             this.finish();
@@ -62,6 +64,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
         txtNOMBRES = findViewById(R.id.txtvNOMBRES_ActualizarDatos_Actv);
         btnReset = findViewById(R.id.btnResetclave_ActDatos_Actv);
         btnReset.setOnClickListener(view -> {
+            btnReset.setEnabled(false);
             Intent intent = new Intent(this, RecuperarPassword_Activity.class);
             intent.putExtra("login",false);
             intent.putExtra("dni", usuario.getDNI());
@@ -71,6 +74,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
 
 
         btnUpdate.setOnClickListener(view -> {
+            btnUpdate.setEnabled(false);
             update();
         });
 
@@ -166,6 +170,7 @@ public class ActualizarDatosUSER_Activity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "Correo no valido", Toast.LENGTH_SHORT).show();
         }
+        btnUpdate.setEnabled(true);
 
 
     }

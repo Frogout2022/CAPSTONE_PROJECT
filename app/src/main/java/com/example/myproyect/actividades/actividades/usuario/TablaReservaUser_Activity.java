@@ -39,7 +39,8 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     CheckBox chkS1, chkS2,chkS3;
     TextView lblSemana, lblCantidadPagar, lblTarifa;
     TextView txtv_cl1,txtv_cl2,txtv_cl3,txtv_cl4,txtv_cl5,txtv_cl6;
-    Button btnReservar,btnVolver;
+    Button btnReservar;
+    Button   btnVolver;
 
     List<CheckBox> listaChk = new ArrayList<>();
     List<TextView> listaTxtv = new ArrayList<>();
@@ -232,7 +233,11 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
         btnVolver = findViewById(R.id.btnRegresar_TRU);
         btnVolver.setOnClickListener(view -> {
-            listaChkS.clear();
+            btnVolver.setEnabled(false);
+            listaChkS.clear(); //limpiar selecciones
+            Intent intent = new Intent(getApplicationContext(),Bienvenido_Activity.class);
+            startActivity(intent);
+            this.finish();
         });
         btnReservar = findViewById(R.id.btnReservarTablaUser);
         btnReservar.setOnClickListener(view -> {

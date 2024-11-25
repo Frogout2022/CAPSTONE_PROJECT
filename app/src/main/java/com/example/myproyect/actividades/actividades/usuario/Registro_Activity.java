@@ -199,9 +199,11 @@ public class Registro_Activity extends AppCompatActivity implements View.OnClick
                 cargarTerminos();
                 break;
             case R.id.regBtnContinuar:
+                btnContinuar.setEnabled(false);
                 registrar();
                 break;
             case R.id.regBtnRegresar:
+                btnRegresar.setEnabled(false);
                 regresar();
                 break;
             case R.id.regLblIniciar:

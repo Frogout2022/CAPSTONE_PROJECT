@@ -23,6 +23,8 @@ import com.example.myproyect.actividades.modelos.DAO_Losa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MantenimientoLosas_Activity extends AppCompatActivity {
     Spinner spnLosas;
@@ -44,6 +46,7 @@ public class MantenimientoLosas_Activity extends AppCompatActivity {
     private void referencias(){
         btnSalir = findViewById(R.id.btnSalir_ManteLosas_Admin);
         btnSalir.setOnClickListener(view -> {
+            btnSalir.setEnabled(false);
             Intent intent = new Intent(this, MenuAdmin_Activity.class);
             startActivity(intent);
             finish();
@@ -55,6 +58,7 @@ public class MantenimientoLosas_Activity extends AppCompatActivity {
         spnFun();
         btnGuardar = findViewById(R.id.btnGuardar_AdminLosas);
         btnGuardar.setOnClickListener(view -> {
+            btnGuardar.setEnabled(false);
             funGuardar();
         });
         radioGroup = findViewById(R.id.rg_nmgLosas);
@@ -74,23 +78,27 @@ public class MantenimientoLosas_Activity extends AppCompatActivity {
 
     private void funGuardar(){
         int i = spnLosas.getSelectedItemPosition();
-        //Toast.makeText(this, "index: "+i, Toast.LENGTH_SHORT).show();
-        boolean mante = false;
-        if(rbtnSi.isChecked()) mante = true;
-        if(rbtnNo.isChecked()) mante = false;
+
         double precio = Double.parseDouble(txtPrecio.getText().toString());
 
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            boolean mante = false;
+            if(rbtnSi.isChecked()) mante = true;
+            if(rbtnNo.isChecked()) mante = false;
+            final boolean b = DAO_Losa.editarLosas(i+1,mante, precio);
+            runOnUiThread(() -> {
+                if(b){
+                    Toast.makeText(this, "Se actualizó", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
+                }
+                updateVista();
 
+            });
+        });
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        if(DAO_Losa.editarLosas(i+1,mante, precio)){
-            Toast.makeText(this, "Se actualizó", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
-        }
-        updateVista();
-
+        btnGuardar.setEnabled(true);
 
 
     }

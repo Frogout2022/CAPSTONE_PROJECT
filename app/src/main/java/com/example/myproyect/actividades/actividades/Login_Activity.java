@@ -96,6 +96,7 @@ public class Login_Activity extends AppCompatActivity {
             validarFormulario();
         });
         btnSalir.setOnClickListener(view -> {
+            btnSalir.setEnabled(false);
             finishAffinity();
             finish();
         });

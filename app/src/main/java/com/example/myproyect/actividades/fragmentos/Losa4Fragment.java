@@ -88,10 +88,11 @@ public class Losa4Fragment extends Fragment {
                 switch (view.getId()) {
 
                     case R.id.car4BtnRegresar:
-                        Log.d("tag", "test");
+                        btnReg.setEnabled(false);
                         regresar();
                         break;
                     case R.id.car4BtnAceptar:
+                        btnReg.setEnabled(false);
                         tablaAceptar();
                         break;
                 }
@@ -104,10 +105,11 @@ public class Losa4Fragment extends Fragment {
                 switch (view.getId()) {
 
                     case R.id.car4BtnRegresar:
-                        Log.d("tag", "test");
+                        btnAceptar.setEnabled(false);
                         regresar();
                         break;
                     case R.id.car4BtnAceptar:
+                        btnAceptar.setEnabled(false);
                         tablaAceptar();
                         break;
                 }

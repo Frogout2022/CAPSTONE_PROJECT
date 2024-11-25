@@ -28,7 +28,8 @@ public class Terminos_Activity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.termBtnRegresar:
-            regresar();
+            btnRegresar.setEnabled(false);
+                regresar();
             break;
         }
     }

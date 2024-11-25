@@ -82,14 +82,15 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
     }
     private void botones(){
         btnUpdate.setOnClickListener(view -> {
+            btnUpdate.setEnabled(false);
             rvListarRsv.setVisibility(View.INVISIBLE);
             listar();
         });
         btnRegresar.setOnClickListener(view -> {
+            btnRegresar.setEnabled(false);
             Intent intent = new Intent(this, MenuAdmin_Activity.class );
             startActivity(intent);
             this.finish();
-            super.onBackPressed();
         });
         swLista.setOnClickListener(view -> {
             listar();
@@ -181,6 +182,7 @@ public class ListaReservas_ADM_Activity extends AppCompatActivity {
                     rvListarRsv.setVisibility(View.GONE);
                     txtvCantidad.setText("No hay reservas disponibles.");
                 }
+                btnUpdate.setEnabled(true);
             });
         });
 

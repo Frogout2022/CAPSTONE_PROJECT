@@ -30,10 +30,12 @@ public class RecuperarPassword_Activity extends AppCompatActivity {
     void asignarReferencias(){
         btnConfirmar = findViewById(R.id.btnConfirmar_RecupPass);
         btnConfirmar.setOnClickListener(view -> {
+            btnConfirmar.setEnabled(false);
             validarConfirmacion();
         });
         btnSalir = findViewById(R.id.btnSalir_RecupPass);
         btnSalir.setOnClickListener(view -> {
+            btnSalir.setEnabled(false);
             boolean b = getIntent().getBooleanExtra("login",false);
             if(b ){
                 Intent intent = new Intent(this, Login_Activity.class);
@@ -106,6 +108,7 @@ public class RecuperarPassword_Activity extends AppCompatActivity {
                 }
             }else{
                 Toast.makeText(this,"Rellene los campos", Toast.LENGTH_SHORT).show();
+                btnSalir.setEnabled(true);
             }
 
         }

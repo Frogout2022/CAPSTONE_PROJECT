@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 
@@ -28,11 +29,11 @@ import java.util.concurrent.Executors;
 public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickListener {
 
     EditText txtNombre, txtApellido, txtCorreo, txtNumeroTarjeta, txtCvv, txtVencimiento;
-    TextView txtvMontoPago, txtvSalir;
+    TextView txtvMontoPago, txtvSalir, txtvTimer;
     Button btnTest;
     double total = 0.0;
-    Context context= null;
     ProgressBar progressBar;
+    private long timeLeftInMillis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,10 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_tarjeta);
 
         asignarReferencias();
+        // Obtenemos el tiempo restante de la actividad anterior
+        timeLeftInMillis = getIntent().getLongExtra("TIME_LEFT", 0);
+        startTimer(timeLeftInMillis);
+
         Intent retorno = getIntent();
         total = retorno.getDoubleExtra("MontoPagar", 0.0);
         txtvMontoPago.setText("Pagar S/ "+total);
@@ -52,8 +57,39 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
 
     }
-    private void focosDeCampos(){
+    private void startTimer(long millisInFuture) {
+        new CountDownTimer(millisInFuture, 1000) { // 1000 milisegundos = 1 segundo
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Calculamos los minutos y segundos restantes
+                int minutes = (int) (millisUntilFinished / 1000) / 60;
+                int seconds = (int) (millisUntilFinished / 1000) % 60;
+                String timeLeft = String.format("%02d:%02d", minutes, seconds);
+                txtvTimer.setText(timeLeft); // Actualizamos el TextView con el tiempo restante
+                if(timeLeftInMillis<=3000){
+                    txtvMontoPago.setEnabled(false);
+                }
+            }
 
+            @Override
+            public void onFinish() {
+                // Acción cuando el temporizador llega a 0
+                txtvTimer.setText("00:00"); // Opcional: mostrar 00:00
+                onTimerFinished(); // Llamada a la función que deseas ejecutar al finalizar
+            }
+        }.start();
+    }
+    private void onTimerFinished() {
+        // Aquí realizas la acción que quieras al terminar el tiempo (por ejemplo, mostrar un Toast)
+        Toast.makeText(this, "¡Tiempo agotado!", Toast.LENGTH_SHORT).show();
+        // Puedes agregar más acciones aquí
+        cancelar();
+
+
+    }
+
+
+    private void focosDeCampos(){
         txtNumeroTarjeta.setOnFocusChangeListener(new View.OnFocusChangeListener(){
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -216,6 +252,20 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
         });
 
     }
+    private void cancelar(){
+        Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Reservar.realizar("borrar");
+        });
+        Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
+        startActivity(iBienvenido);
+        //limpiar selecciones previas
+        TablaReservaUser_Activity.listaChkS.clear();
+        TablaReservaUser_Activity.preReserva = false;
+        // Cerrar la actividad manualmente
+        finish();
+    }
 
     private void regresar(){
         //CANCELAR COMPRA
@@ -224,19 +274,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
                 .setTitle("CANCELAR COMPRA")
                 .setMessage("¿Estás seguro de que quieres salir?")
                 .setPositiveButton("Sí", (dialog, which) -> {
-
-                    Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-                    Executor executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> {
-                        Reservar.realizar("borrar");
-                    });
-                    Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
-                    startActivity(iBienvenido);
-                    //limpiar selecciones previas
-                    TablaReservaUser_Activity.listaChkS.clear();
-                    TablaReservaUser_Activity.preReserva = false;
-                    // Cerrar la actividad manualmente
-                    finish();
+                    cancelar();
                 })
                 .setNegativeButton("No", null)
                 .show();
@@ -245,6 +283,8 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     private void asignarReferencias(){
+
+        txtvTimer = findViewById(R.id.txtv_timer_tarjeta);
 
         progressBar = findViewById(R.id.pb_tarjeta_pay);
         progressBar.setVisibility(View.GONE);
@@ -266,6 +306,7 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
         });
         txtvSalir = findViewById(R.id.btnSalirPAY);
         txtvSalir.setOnClickListener(view -> {
+            txtvSalir.setEnabled(false);
             regresar();
         });
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -23,29 +24,68 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Yape_Activity extends AppCompatActivity implements View.OnClickListener {
-    TextView txtvSalir, txtvPagar;
+    TextView txtvSalir, txtvPagar,txtvTimer;
     EditText txtTelefono, txtCodigo;
     ProgressBar progressBar;
     double total;
+    private long timeLeftInMillis;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yape);
 
         asignarReferencias();
-
         Intent retorno = getIntent();
+        long timeLeftInMillis = retorno.getLongExtra("TIME_LEFT", 0);
+        startTimer(timeLeftInMillis);
+
+
         total = retorno.getDoubleExtra("MontoPagar", 0.0);
         txtvPagar.setText("Pagar S/ "+total);
 
     }
 
+    private void startTimer(long millisInFuture) {
+        new CountDownTimer(millisInFuture, 1000) { // 1000 milisegundos = 1 segundo
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+                // Calculamos los minutos y segundos restantes
+                int minutes = (int) (millisUntilFinished / 1000) / 60;
+                int seconds = (int) (millisUntilFinished / 1000) % 60;
+                String timeLeft = String.format("%02d:%02d", minutes, seconds);
+                txtvTimer.setText(timeLeft); // Actualizamos el TextView con el tiempo restante
+                if(timeLeftInMillis<=3000){
+                    txtvPagar.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                // Acción cuando el temporizador llega a 0
+                txtvTimer.setText("00:00"); // Opcional: mostrar 00:00
+                onTimerFinished(); // Llamada a la función que deseas ejecutar al finalizar
+            }
+        }.start();
+    }
+    private void onTimerFinished() {
+        // Aquí realizas la acción que quieras al terminar el tiempo (por ejemplo, mostrar un Toast)
+        Toast.makeText(this, "¡Tiempo agotado!", Toast.LENGTH_SHORT).show();
+        // Puedes agregar más acciones aquí
+        cancelar();
+    }
+
+
     private void asignarReferencias(){
+        txtvTimer = findViewById(R.id.txtv_timer_yape);
+
         progressBar = findViewById(R.id.pb_load_yape);
         progressBar.setVisibility(View.GONE);
         txtvSalir = findViewById(R.id.txtvSalirYape);
         txtvPagar = findViewById(R.id.txtvPayYape);
         txtvSalir.setOnClickListener(view -> {
+            txtvSalir.setEnabled(false);
             salir();
         });
         txtvPagar.setOnClickListener(view -> {
@@ -110,6 +150,22 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private void cancelar(){
+        // Cerrar la actividad manualmente
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Reservar.realizar("borrar");
+            runOnUiThread(() -> {
+                //limpiar selecciones previas
+                TablaReservaUser_Activity.listaChkS.clear();
+                TablaReservaUser_Activity.preReserva = false;
+                Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
+                Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
+                startActivity(iBienvenido);
+                finish();
+            });
+        });
+    }
     private void salir(){
         //CANCELAR COMPRA
         // Mostrar un diálogo de confirmación
@@ -117,15 +173,7 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
                 .setTitle("Cancelar compra")
                 .setMessage("¿Estás seguro de que quieres salir?")
                 .setPositiveButton("Sí", (dialog, which) -> {
-                    // Cerrar la actividad manualmente
-                    Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-                    Reservar.realizar("borrar");
-                    Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
-                    startActivity(iBienvenido);
-                    //limpiar selecciones previas
-                    TablaReservaUser_Activity.listaChkS.clear();
-                    TablaReservaUser_Activity.preReserva = false;
-                    finish();
+                   cancelar();
                 })
                 .setNegativeButton("No", null)
                 .show();
