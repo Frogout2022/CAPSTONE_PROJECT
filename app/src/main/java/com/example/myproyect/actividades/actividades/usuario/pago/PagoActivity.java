@@ -16,6 +16,9 @@ import com.example.myproyect.actividades.actividades.usuario.Bienvenido_Activity
 import com.example.myproyect.actividades.actividades.usuario.TablaReservaUser_Activity;
 import com.example.myproyect.actividades.clases.Reservar;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class PagoActivity extends AppCompatActivity implements View.OnClickListener {
     TextView txtContinuar, txtvSalir;
     RadioGroup rgOpcion;
@@ -105,7 +108,11 @@ public class PagoActivity extends AppCompatActivity implements View.OnClickListe
                 .setPositiveButton("Sí", (dialog, which) -> {
 
                     Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-                    Reservar.realizar("borrar");
+
+                    Executor executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        Reservar.realizar("borrar");
+                    });
                     Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
                     startActivity(iBienvenido);
                     //limpiar selecciones previas

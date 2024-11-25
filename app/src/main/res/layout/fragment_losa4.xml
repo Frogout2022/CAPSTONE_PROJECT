@@ -74,6 +74,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/car4BtnRegresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:backgroundTint="#B3FF5722"
+                android:hint="@string/car4BtnRegresar"
+                android:textAllCaps="false"
+                android:textColorHint="@color/white" />
+
             <Button
                 android:id="@+id/car4BtnAceptar"
                 android:layout_width="match_parent"
@@ -86,19 +100,6 @@
                 android:layout_marginTop="10dp"
                 android:textColorHint="@color/white"
                 android:hint="@string/car4BtnAceptar"/>
-
-            <Button
-                android:id="@+id/car4BtnRegresar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="30dp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/btnRegOrange"
-                android:textColorHint="@color/white"
-                android:layout_marginTop="10dp"
-                android:hint="@string/car4BtnRegresar"/>
 
         </LinearLayout>
     </LinearLayout>

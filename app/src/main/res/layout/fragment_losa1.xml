@@ -77,6 +77,20 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/car1BtnRegresar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:backgroundTint="#B3FF5722"
+
+                android:hint="@string/car1BtnRegresar"
+                android:textAllCaps="false"
+                android:textColorHint="@color/white" />
+
+            <Button
                 android:id="@+id/car1BtnAceptar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,20 +101,6 @@
 
                 android:backgroundTint="@color/btnRegOrange"
                 android:hint="@string/car1BtnAceptar"
-                android:textAllCaps="false"
-                android:textColorHint="@color/white" />
-
-            <Button
-                android:id="@+id/car1BtnRegresar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/btnRegOrange"
-
-                android:hint="@string/car1BtnRegresar"
                 android:textAllCaps="false"
                 android:textColorHint="@color/white" />
 

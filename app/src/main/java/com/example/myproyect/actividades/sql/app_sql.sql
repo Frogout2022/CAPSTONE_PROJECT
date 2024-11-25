@@ -234,25 +234,6 @@ END //
 DELIMITER ;
 
 
-### ------------ REALIZAR UNA RESERVA e INSERCCION DE PAGO ### -> CLIENTE COMPRA
-DELIMITER //
-CREATE PROCEDURE sp_RESERVAR2(IN tabla varchar(50), IN dia CHAR(10),IN hora char(5), IN dni_user CHAR(8) )
-BEGIN
-	DECLARE mensaje varchar(255);
-    -- Crear la consulta dinámica
-    SET @query =
-		CONCAT(
-        'UPDATE ', tabla, ' SET ', hora, ' = ',
-        IF(dni_user IS NULL, 'NULL', CONCAT('\'', dni_user, '\'')),
-        ' WHERE fecha_rsv = \'', dia, '\''
-    );
-	PREPARE stmt FROM @query;
-	EXECUTE stmt;
-    SELECT ROW_COUNT() AS filas_afectadas;
-	DEALLOCATE PREPARE stmt;
-END //
-DELIMITER ;
-
 DELIMITER //
 CREATE PROCEDURE sp_RESERVAR(
     IN tabla VARCHAR(50), 
@@ -353,6 +334,551 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 END //
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE EVENT actualizar_rsv_losa1
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    -- Declaramos variables para almacenar la fecha_insercion y las filas afectadas
+    DECLARE fecha_insercion_a_eliminar DATETIME;
+    DECLARE filas_afectadas INT;
+
+    -- Para las columnas '7pm', '5pm' y '3pm', ejecutamos la misma lógica
+    -- Realizamos el UPDATE y DELETE para cada columna
+
+    -- *** Para la columna '7pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa1 a
+    JOIN reserva_losa1 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`7pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa1
+    UPDATE reserva_losa1 r
+    JOIN auditoria_losa1 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`7pm` = NULL
+    WHERE 
+        r.`7pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa1
+        DELETE FROM auditoria_losa1
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '5pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa1 a
+    JOIN reserva_losa1 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`5pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa1
+    UPDATE reserva_losa1 r
+    JOIN auditoria_losa1 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`5pm` = NULL
+    WHERE 
+        r.`5pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa1
+        DELETE FROM auditoria_losa1
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '3pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa1 a
+    JOIN reserva_losa1 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`3pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa1
+    UPDATE reserva_losa1 r
+    JOIN auditoria_losa1 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`3pm` = NULL
+    WHERE 
+        r.`3pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa1
+        DELETE FROM auditoria_losa1
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+END $$
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE EVENT actualizar_rsv_losa2
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    -- Declaramos variables para almacenar la fecha_insercion y las filas afectadas
+    DECLARE fecha_insercion_a_eliminar DATETIME;
+    DECLARE filas_afectadas INT;
+
+    -- *** Para la columna '7pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa2 a
+    JOIN reserva_losa2 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`7pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa2
+    UPDATE reserva_losa2 r
+    JOIN auditoria_losa2 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`7pm` = NULL
+    WHERE 
+        r.`7pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa2
+        DELETE FROM auditoria_losa2
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '5pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa2 a
+    JOIN reserva_losa2 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`5pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa2
+    UPDATE reserva_losa2 r
+    JOIN auditoria_losa2 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`5pm` = NULL
+    WHERE 
+        r.`5pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa2
+        DELETE FROM auditoria_losa2
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '3pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa2 a
+    JOIN reserva_losa2 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`3pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa2
+    UPDATE reserva_losa2 r
+    JOIN auditoria_losa2 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`3pm` = NULL
+    WHERE 
+        r.`3pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa2
+        DELETE FROM auditoria_losa2
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+END $$
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE EVENT actualizar_rsv_losa3
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    -- Declaramos variables para almacenar la fecha_insercion y las filas afectadas
+    DECLARE fecha_insercion_a_eliminar DATETIME;
+    DECLARE filas_afectadas INT;
+
+    -- *** Para la columna '7pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa3 a
+    JOIN reserva_losa3 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`7pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa3
+    UPDATE reserva_losa3 r
+    JOIN auditoria_losa3 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`7pm` = NULL
+    WHERE 
+        r.`7pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa3
+        DELETE FROM auditoria_losa3
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '5pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa3 a
+    JOIN reserva_losa3 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`5pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa3
+    UPDATE reserva_losa3 r
+    JOIN auditoria_losa3 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`5pm` = NULL
+    WHERE 
+        r.`5pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa3
+        DELETE FROM auditoria_losa3
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '3pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa3 a
+    JOIN reserva_losa3 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`3pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa3
+    UPDATE reserva_losa3 r
+    JOIN auditoria_losa3 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`3pm` = NULL
+    WHERE 
+        r.`3pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa3
+        DELETE FROM auditoria_losa3
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE EVENT actualizar_rsv_losa4
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    -- Declaramos variables para almacenar la fecha_insercion y las filas afectadas
+    DECLARE fecha_insercion_a_eliminar DATETIME;
+    DECLARE filas_afectadas INT;
+
+    -- *** Para la columna '7pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa4 a
+    JOIN reserva_losa4 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`7pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa4
+    UPDATE reserva_losa4 r
+    JOIN auditoria_losa4 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`7pm` = NULL
+    WHERE 
+        r.`7pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa4
+        DELETE FROM auditoria_losa4
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '5pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa4 a
+    JOIN reserva_losa4 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`5pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa4
+    UPDATE reserva_losa4 r
+    JOIN auditoria_losa4 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`5pm` = NULL
+    WHERE 
+        r.`5pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa4
+        DELETE FROM auditoria_losa4
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+    -- *** Para la columna '3pm' ***
+    -- Almacenamos la fecha_insercion correspondiente a la fila de auditoria que fue actualizada
+    SELECT a.fecha_insercion
+    INTO fecha_insercion_a_eliminar
+    FROM auditoria_losa4 a
+    JOIN reserva_losa4 r
+        ON r.fecha_rsv = a.fecha_reserva
+    WHERE r.`3pm` = '11111111' 
+    LIMIT 1;
+
+    -- Realizar el UPDATE en la tabla reserva_losa4
+    UPDATE reserva_losa4 r
+    JOIN auditoria_losa4 a
+        ON r.fecha_rsv = a.fecha_reserva
+    SET 
+        r.`3pm` = NULL
+    WHERE 
+        r.`3pm` = '11111111'
+        AND TIMESTAMPDIFF(MINUTE, a.fecha_insercion, NOW()) >= 3;
+
+    -- Guardamos el número de filas afectadas por el UPDATE
+    SET filas_afectadas = ROW_COUNT();
+
+    -- Si el UPDATE afectó al menos una fila, realizamos el DELETE
+    IF filas_afectadas > 0 THEN
+        -- Eliminar la fila correspondiente de la tabla auditoria_losa4
+        DELETE FROM auditoria_losa4
+        WHERE fecha_insercion = fecha_insercion_a_eliminar;
+    END IF;
+
+END $$
+
+DELIMITER ;
+
+ #-----------------------------------### TABLAS AUDITORIAS-PRESERVA #### ----------------------------------
+ 
+CREATE TABLE auditoria_losa1 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_reserva VARCHAR(10),  -- La fecha de la reserva en formato 'YYYY-MM-DD'
+    hora_reserva VARCHAR(6),    -- La hora de la reserva en formato '3pm', '5pm', '7pm', etc.
+    fecha_insercion DATETIME DEFAULT CURRENT_TIMESTAMP  -- Fecha y hora de inserción, con valor por defecto de la fecha y hora actual
+);
+CREATE TABLE auditoria_losa2 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_reserva VARCHAR(10),  -- La fecha de la reserva en formato 'YYYY-MM-DD'
+    hora_reserva VARCHAR(6),    -- La hora de la reserva en formato '3pm', '5pm', '7pm', etc.
+    fecha_insercion DATETIME DEFAULT CURRENT_TIMESTAMP  -- Fecha y hora de inserción, con valor por defecto de la fecha y hora actual
+);
+CREATE TABLE auditoria_losa3 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_reserva VARCHAR(10),  -- La fecha de la reserva en formato 'YYYY-MM-DD'
+    hora_reserva VARCHAR(6),    -- La hora de la reserva en formato '3pm', '5pm', '7pm', etc.
+    fecha_insercion DATETIME DEFAULT CURRENT_TIMESTAMP  -- Fecha y hora de inserción, con valor por defecto de la fecha y hora actual
+);
+CREATE TABLE auditoria_losa4 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_reserva VARCHAR(10),  -- La fecha de la reserva en formato 'YYYY-MM-DD'
+    hora_reserva VARCHAR(6),    -- La hora de la reserva en formato '3pm', '5pm', '7pm', etc.
+    fecha_insercion DATETIME DEFAULT CURRENT_TIMESTAMP  -- Fecha y hora de inserción, con valor por defecto de la fecha y hora actual
+);
+
+#--------------------------------##### TRIGGERS ####--------------
+
+DELIMITER $$
+CREATE TRIGGER after_reserva_update1
+AFTER UPDATE ON reserva_losa1
+FOR EACH ROW
+BEGIN
+    -- Validar si la columna `3pm` ha cambiado de NULL a '0000000'
+    IF OLD.`3pm` IS NULL AND NEW.`3pm` = '11111111' THEN
+        INSERT INTO auditoria_losa1 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '3pm');
+    END IF;
+
+    -- Validar si la columna `5pm` ha cambiado de NULL a '0000000'
+    IF OLD.`5pm` IS NULL AND NEW.`5pm` = '11111111' THEN
+        INSERT INTO auditoria_losa1 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '5pm');
+    END IF;
+
+    -- Validar si la columna `7pm` ha cambiado de NULL a '0000000'
+    IF OLD.`7pm` IS NULL AND NEW.`7pm` = '11111111' THEN
+        INSERT INTO auditoria_losa1 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '7pm');
+    END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER after_reserva_update2
+AFTER UPDATE ON reserva_losa2
+FOR EACH ROW
+BEGIN
+    -- Validar si la columna `3pm` ha cambiado de NULL a '0000000'
+    IF OLD.`3pm` IS NULL AND NEW.`3pm` = '11111111' THEN
+        INSERT INTO auditoria_losa2 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '3pm');
+    END IF;
+
+    -- Validar si la columna `5pm` ha cambiado de NULL a '0000000'
+    IF OLD.`5pm` IS NULL AND NEW.`5pm` = '11111111' THEN
+        INSERT INTO auditoria_losa2 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '5pm');
+    END IF;
+
+    -- Validar si la columna `7pm` ha cambiado de NULL a '0000000'
+    IF OLD.`7pm` IS NULL AND NEW.`7pm` = '11111111' THEN
+        INSERT INTO auditoria_losa2 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '7pm');
+    END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER after_reserva_update3
+AFTER UPDATE ON reserva_losa3
+FOR EACH ROW
+BEGIN
+    -- Validar si la columna `3pm` ha cambiado de NULL a '0000000'
+    IF OLD.`3pm` IS NULL AND NEW.`3pm` = '11111111' THEN
+        INSERT INTO auditoria_losa3 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '3pm');
+    END IF;
+
+    -- Validar si la columna `5pm` ha cambiado de NULL a '0000000'
+    IF OLD.`5pm` IS NULL AND NEW.`5pm` = '11111111' THEN
+        INSERT INTO auditoria_losa3 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '5pm');
+    END IF;
+
+    -- Validar si la columna `7pm` ha cambiado de NULL a '0000000'
+    IF OLD.`7pm` IS NULL AND NEW.`7pm` = '11111111' THEN
+        INSERT INTO auditoria_losa3 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '7pm');
+    END IF;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER after_reserva_update4
+AFTER UPDATE ON reserva_losa4
+FOR EACH ROW
+BEGIN
+    -- Validar si la columna `3pm` ha cambiado de NULL a '0000000'
+    IF OLD.`3pm` IS NULL AND NEW.`3pm` = '11111111' THEN
+        INSERT INTO auditoria_losa4 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '3pm');
+    END IF;
+
+    -- Validar si la columna `5pm` ha cambiado de NULL a '0000000'
+    IF OLD.`5pm` IS NULL AND NEW.`5pm` = '11111111' THEN
+        INSERT INTO auditoria_losa4 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '5pm');
+    END IF;
+
+    -- Validar si la columna `7pm` ha cambiado de NULL a '0000000'
+    IF OLD.`7pm` IS NULL AND NEW.`7pm` = '11111111' THEN
+        INSERT INTO auditoria_losa4 (fecha_reserva, hora_reserva)
+        VALUES (NEW.fecha_rsv, '7pm');
+    END IF;
+END $$
 DELIMITER ;
 
 

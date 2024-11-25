@@ -39,15 +39,14 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
     CheckBox chkS1, chkS2,chkS3;
     TextView lblSemana, lblCantidadPagar, lblTarifa;
     TextView txtv_cl1,txtv_cl2,txtv_cl3,txtv_cl4,txtv_cl5,txtv_cl6;
+    Button btnReservar,btnVolver;
+
+    List<CheckBox> listaChk = new ArrayList<>();
+    List<TextView> listaTxtv = new ArrayList<>();
 
     public static Double cantidadPagar=0.0, precio_hora=0.0;
-
     public static ArrayList<Reserva> listaSemanal = new ArrayList<>();
-
-    Button btnReservar,btnVolver;
-    List<CheckBox> listaChk = new ArrayList<>();
     public static List<Integer> listaChkS = new ArrayList<>();
-    List<TextView> listaTxtv = new ArrayList<>();
     public static String tabla;
     public static String nombre_losa;
     public static boolean preReserva = false;
@@ -57,8 +56,6 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabla);
 
-        //listaSemanal = new ArrayList<>();
-        //listaChkS = new ArrayList<>();
         asginarReferencias();
 
         agregarListaChk();
@@ -200,15 +197,22 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
 
     }
     private void reservar(){
-        if (cantidadPagar==0)
+        if (cantidadPagar==0){
             Toast.makeText(TablaReservaUser_Activity.this, "Elija almenos un horario", Toast.LENGTH_SHORT).show();
-        else{
+            btnReservar.setEnabled(true);
+        } else{
             preReserva = true;
-            Reservar.realizar("separar");
-            Intent iPago= new Intent(this, PagoActivity.class);
-            iPago.putExtra("MontoPagar",cantidadPagar);
-            startActivity(iPago);
-            this.finish();
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                Reservar.realizar("separar");
+                runOnUiThread(() -> {
+                    Intent iPago= new Intent(this, PagoActivity.class);
+                    iPago.putExtra("MontoPagar",cantidadPagar);
+                    startActivity(iPago);
+                    btnReservar.setEnabled(true);
+                    this.finish();
+                });
+            });
         }
     }
 
@@ -229,11 +233,10 @@ public class TablaReservaUser_Activity extends AppCompatActivity {
         btnVolver = findViewById(R.id.btnRegresar_TRU);
         btnVolver.setOnClickListener(view -> {
             listaChkS.clear();
-            super.onBackPressed();
-
         });
         btnReservar = findViewById(R.id.btnReservarTablaUser);
         btnReservar.setOnClickListener(view -> {
+            btnReservar.setEnabled(false);
             reservar();
         });
 

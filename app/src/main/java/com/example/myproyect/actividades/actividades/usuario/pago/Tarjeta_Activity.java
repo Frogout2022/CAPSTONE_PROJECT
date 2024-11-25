@@ -219,7 +219,6 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
     private void regresar(){
         //CANCELAR COMPRA
-
         // Mostrar un diálogo de confirmación
         new AlertDialog.Builder(this)
                 .setTitle("CANCELAR COMPRA")
@@ -227,7 +226,10 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
                 .setPositiveButton("Sí", (dialog, which) -> {
 
                     Toast.makeText(this, "Compra cancelada", Toast.LENGTH_SHORT).show();
-                    Reservar.realizar("borrar");
+                    Executor executor = Executors.newSingleThreadExecutor();
+                    executor.execute(() -> {
+                        Reservar.realizar("borrar");
+                    });
                     Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
                     startActivity(iBienvenido);
                     //limpiar selecciones previas
