@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,9 @@ import com.example.myproyect.actividades.clases.Fecha;
 import com.example.myproyect.actividades.clases.MostrarMensaje;
 import com.example.myproyect.actividades.clases.Reservar;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 
 public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,6 +32,8 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     Button btnTest;
     double total = 0.0;
     Context context= null;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,6 +243,10 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     private void asignarReferencias(){
+
+        progressBar = findViewById(R.id.pb_tarjeta_pay);
+        progressBar.setVisibility(View.GONE);
+
         txtNombre = findViewById(R.id.txtNomPAY);
         txtCorreo = findViewById(R.id.txtEmailPAY);
         txtApellido = findViewById(R.id.txtApellidoPAY);
@@ -247,6 +257,8 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
         txtvMontoPago = findViewById(R.id.txtvPagarPAY);
 
         txtvMontoPago.setOnClickListener(view -> {
+            //boton pagar
+            txtvMontoPago.setEnabled(false);
             validarPago();
 
         });
@@ -255,10 +267,6 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
             regresar();
         });
 
-        btnTest = findViewById(R.id.btnTestRsvPay);
-        btnTest.setOnClickListener(view -> {
-            reservarBD();
-        });
 
     }
     private void validarPago(){
@@ -271,20 +279,27 @@ public class Tarjeta_Activity extends AppCompatActivity implements View.OnClickL
 
         if(num.isEmpty() || fecha.isEmpty() || nom.isEmpty() || ape.isEmpty() || email.isEmpty()){
             Toast.makeText(Tarjeta_Activity.this, "Rellene todos los campos", Toast.LENGTH_SHORT).show();
+            txtvMontoPago.setEnabled(true);
         }else reservarBD();
 
     }
     private void reservarBD(){
+        Executor executor = Executors.newSingleThreadExecutor();
+        progressBar.setVisibility(View.VISIBLE);
+        executor.execute(() -> {
+            //Hilo Secundario (No usar Toast, ni ocultar mostrar elementos)
+            String msg = Reservar.realizar("aprobado", "tarjeta");
+            System.out.println("msg: " +msg);
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                TablaReservaUser_Activity.listaChkS.clear(); //limpiar listado
+                Intent iBienvenido = new Intent(getApplicationContext(), Bienvenido_Activity.class);
+                startActivity(iBienvenido);
 
-                //Toast.makeText(context, msg2, Toast.LENGTH_SHORT).show();
-                        String msg = Reservar.realizar("aprobado", "tarjeta");
-                        System.out.println("msg: " +msg);
-                        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                        Intent iBienvenido = new Intent(context, Bienvenido_Activity.class);
-                        startActivity(iBienvenido);
-                        TablaReservaUser_Activity.listaChkS.clear(); //limpiar listado
-        finish();
+                finish();
+            });
+        });
     }
-
 
 }

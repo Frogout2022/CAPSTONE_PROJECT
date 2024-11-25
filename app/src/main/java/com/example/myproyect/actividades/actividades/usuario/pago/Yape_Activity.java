@@ -144,13 +144,8 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
             txtvPagar.setEnabled(true);
         }else{
             if(validarCodigo() && validarTelefono()){
-                txtvPagar.setEnabled(true);
+                txtvPagar.setEnabled(false);
                 insertarReserva();
-
-                Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
-                startActivity(iBienvenido);
-                finish();
-
             }else{
                 Toast.makeText(this, "Datos ingresados incorrectos.", Toast.LENGTH_SHORT).show();
                 txtvPagar.setEnabled(true);
@@ -168,6 +163,10 @@ public class Yape_Activity extends AppCompatActivity implements View.OnClickList
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
                 TablaReservaUser_Activity.listaChkS.clear();
+
+                Intent iBienvenido = new Intent(this, Bienvenido_Activity.class);
+                startActivity(iBienvenido);
+                finish();
             });
 
         });
